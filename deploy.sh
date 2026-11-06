@@ -11,9 +11,10 @@ H="${HOME:-}"
 if [ -z "$H" ] || [ ! -d "$H" ]; then H="$(cd "$REPO/../.." && pwd)"; fi
 
 DEST=""
-if [ -s "$H/.invora-deploy" ]; then
-  DEST="$(head -n1 "$H/.invora-deploy" | tr -d '\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e 's:/*$::')"
-  echo "مقصد از ~/.invora-deploy: $DEST"
+CFG="$H/.invora-deploy"; [ -s "$CFG" ] || CFG="$REPO/.invora-deploy"
+if [ -s "$CFG" ]; then
+  DEST="$(head -n1 "$CFG" | tr -d '\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e 's:/*$::')"
+  echo "مقصد از $CFG: $DEST"
 elif [ -d "$H/invora" ]; then
   DEST="$H/invora"
 else

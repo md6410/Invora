@@ -1,6 +1,4 @@
 ---
-# استقرار خودکار در سی‌پنل (Git Version Control ← Pull or Deploy ← Deploy HEAD Commit)
-# همه‌ی کار در deploy.sh است؛ توضیح مسیر مقصد هم همان‌جاست.
 deployment:
   tasks:
-    - /bin/bash ./deploy.sh
+    - /bin/bash deploy.sh
