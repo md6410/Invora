@@ -34,10 +34,15 @@ fi
 [ -d "$DEST" ] || { echo "خطا: پوشه‌ی مقصد ($DEST) وجود ندارد." >&2; exit 1; }
 
 cd "$REPO"
-mkdir -p "$DEST/inc"
-cp -f app.html index.php api.php d.php "$DEST/"
-cp -f inc/.htaccess inc/lib.php inc/crypto.php inc/config.php "$DEST/inc/"
-
+# copy every file listed in deploy-files.txt (except .htaccess, merged below)
+while IFS= read -r f || [ -n "$f" ]; do
+  f="$(printf '%s' "$f" | tr -d '\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+  case "$f" in ""|\#*|.htaccess) continue ;; esac
+  case "$f" in *..*|/*|inc/config.local.php) echo "مسیر نامعتبر: $f" >&2; exit 1 ;; esac
+  mkdir -p "$DEST/$(dirname "$f")"
+  cp -f "$f" "$DEST/$f"
+  chmod 644 "$DEST/$f"
+done < deploy-files.txt
 # .htaccess: rules of the app + keep blocks that cPanel/LiteSpeed generated (# BEGIN … # END …)
 TMP="$DEST/.htaccess.invora.$$"
 {
@@ -48,5 +53,10 @@ TMP="$DEST/.htaccess.invora.$$"
   fi
 } > "$TMP"
 mv -f "$TMP" "$DEST/.htaccess"
-chmod 644 "$DEST"/*.php "$DEST/app.html" "$DEST/.htaccess" "$DEST"/inc/*.php "$DEST/inc/.htaccess"
+chmod 644 "$DEST/.htaccess"
+# record which commit is installed (shown in the app and used by the auto-updater)
+SHA="$(git rev-parse HEAD 2>/dev/null || echo '')"
+VER="$(grep -o '<meta name="app-version" content="[^"]*"' app.html | head -n1 | sed 's/.*content="//;s/"$//')"
+printf '{"sha":"%s","version":"%s","at":%s,"by":"cpanel"}\n' "$SHA" "$VER" "$(date +%s)" > "$DEST/inc/release.json"
+chmod 644 "$DEST/inc/release.json"
 echo "Invora در $DEST مستقر شد."

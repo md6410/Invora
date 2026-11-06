@@ -1,0 +1,11 @@
+# فایل‌هایی که روی هاست نصب می‌شوند (deploy.sh و به‌روزرسانی خودکار هر دو از همین فهرست استفاده می‌کنند)
+app.html
+index.php
+api.php
+d.php
+.htaccess
+inc/.htaccess
+inc/lib.php
+inc/crypto.php
+inc/config.php
+inc/update.php

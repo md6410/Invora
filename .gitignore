@@ -8,3 +8,4 @@
 .DS_Store
 /inc/config.local.php
 /.invora-deploy
+/inc/release.json

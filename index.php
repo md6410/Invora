@@ -5,10 +5,20 @@ declare(strict_types=1);
 define('DF', 1);
 require __DIR__ . '/inc/lib.php';
 
+/* used by the auto-updater to verify the site still works after installing a new version */
+
 df_headers('app');
 if (!df_crypto_ok()) { http_response_code(500); df_page('دفتر فاکتور', '<h1>نیاز به OpenSSL</h1><div class="err">برای رمزنگاری اطلاعات، افزونه‌ی openssl در PHP لازم است (با پشتیبانی aes-256-gcm). در سی‌پنل از «Select PHP Version» آن را فعال کنید.</div>'); exit; }
 df_session_start();
 $users = df_users();
+/* health check used by the self-updater after installing a new version */
+if (isset($_GET['df_health'])) {
+    header('Content-Type: text/plain; charset=utf-8'); header('Cache-Control: no-store');
+    $a = (string)@file_get_contents(__DIR__ . '/app.html');
+    $ok = $a !== '' && stripos($a, '</head>') !== false && df_app_version($a) !== '' && is_writable(df_data_dir());
+    if (!$ok) http_response_code(500);
+    echo ($ok ? 'ok ' : 'fail ') . df_app_version($a); exit;
+}
 $err = '';
 $mode = (string)($_GET['m'] ?? '');
 

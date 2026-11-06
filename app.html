@@ -3,7 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>دفتر فاکتور</title>
+<title>Invora — دفتر فاکتور</title>
+<meta name="app-version" content="2.5.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Cdefs%3E%3ClinearGradient id="ivg" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="#2f9a8a"/%3E%3Cstop offset=".55" stop-color="#1e5a55"/%3E%3Cstop offset="1" stop-color="#123b37"/%3E%3C/linearGradient%3E%3ClinearGradient id="ivp" x1="0" y1="0" x2="0" y2="1"%3E%3Cstop offset="0" stop-color="#ffffff"/%3E%3Cstop offset="1" stop-color="#e2f0ec"/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="64" height="64" rx="15" fill="url(#ivg)"/%3E%3Cpath d="M19 11.5H38.5L47 20V51L43.4 48.6 39.8 51 36.2 48.6 32.6 51 29 48.6 25.4 51 21.8 48.6 19 51z" fill="url(#ivp)"/%3E%3Cpath d="M38.5 11.5V18a2 2 0 0 0 2 2H47z" fill="#a9d3ca"/%3E%3Crect x="24" y="25.5" width="4.4" height="16" rx="2.2" fill="#1e5a55"/%3E%3Ccircle cx="26.2" cy="19.8" r="2.7" fill="#eaa53a"/%3E%3Cpath d="M33 27.5h9M33 33h9M33 38.5h5.5" stroke="#1e5a55" stroke-width="2.6" stroke-linecap="round" opacity=".5"/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<meta name="theme-color" content="#1e5a55">
+<script>try{var t=localStorage.getItem('df-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=Noto+Naskh+Arabic:wght@400;700&family=Noto+Sans+Arabic:wght@400;600;700&family=Markazi+Text:wght@400;600;700&family=Amiri:wght@400;700&family=Lalezar&family=Reem+Kufi:wght@400;700&family=Mirza:wght@400;700&family=Harmattan:wght@400;700&family=El+Messiri:wght@400;700&family=Cairo:wght@400;700&display=swap">
@@ -35,8 +40,8 @@ h1,h2,h3{margin:0;text-wrap:balance}
 .brand{display:flex;align-items:center;gap:10px}
 .brand b{font-size:17px;font-weight:800;display:block;line-height:1.2}
 .brand small{color:var(--muted);font-size:12px}
-.mark{width:34px;height:34px;border-radius:9px;background:var(--accent);display:grid;place-items:center;flex:none}
-.mark svg{width:20px;height:20px;stroke:var(--accent-ink);fill:none;stroke-width:1.8}
+.mark{width:38px;height:38px;flex:none;filter:drop-shadow(0 2px 4px rgba(18,59,55,.25))}
+.mark svg{width:100%;height:100%;display:block}
 .tabs{display:flex;gap:2px;flex-wrap:wrap}
 .tabs button{border:0;background:none;padding:6px 12px;border-radius:8px;cursor:pointer;color:var(--muted);font-weight:500}
 .tabs button:hover{background:var(--surface-2);color:var(--fg)}
@@ -191,13 +196,22 @@ legend{font-weight:700;padding:0 6px;font-size:14px}
 @media (max-width:640px){.g4,.g3{grid-template-columns:repeat(2,minmax(0,1fr))}.g2{grid-template-columns:minmax(0,1fr)}.span3{grid-column:1/-1}.imgs{grid-template-columns:minmax(0,1fr)}.brand small{display:none}}
 @media (prefers-reduced-motion:no-preference){.btn,.tabs button,.chip{transition:background .15s,border-color .15s}}
 
+/* theme toggle, version & changes */
+#themeBtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.chg{display:flex;flex-direction:column;gap:12px}
+.chg-v{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface)}
+.chg-v.cur{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.chg-v.new{border-color:var(--ok)}
+.chg-h{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px}
+.chg-h b{font-size:15px}.chg-h .muted{color:var(--muted);font-size:12.5px}
+.chg-v ul{margin:0;padding-inline-start:20px;font-size:13.5px;line-height:1.9}
 /* lock screen */
 body.locked>header,body.locked>main,body.locked #banner{visibility:hidden}
 #lockScr{position:fixed;inset:0;z-index:200;background:var(--bg);display:grid;place-items:center;padding:16px;overflow:auto}
 .lock-box{width:min(420px,100%);background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 40px rgba(0,0,0,.08)}
 .lock-box h2{margin:0;font-size:19px}.lock-box p{margin:0;font-size:13.5px;line-height:1.9}.lock-box .muted{color:var(--muted);font-size:12.5px}
-.lock-brand{display:flex;align-items:center;gap:10px;font-size:16px}.lock-brand .brand-ico{width:34px;height:34px;border-radius:9px;background:var(--accent);display:grid;place-items:center}
-.lock-brand svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.7}
+.lock-brand{display:flex;align-items:center;gap:10px;font-size:16px}.lock-brand .brand-ico{width:40px;height:40px;display:block}.lock-brand .brand-ico svg{width:100%;height:100%;stroke:none}
+
 .lock-alt{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:10px;font-size:12.5px;color:var(--muted)}
 .lock-code{direction:ltr;text-align:center;font:700 19px/1.6 ui-monospace,Consolas,monospace;letter-spacing:.06em;background:var(--surface-2);border-radius:8px;padding:12px;user-select:all}
 /* address labels designer */
@@ -245,8 +259,20 @@ body.locked>header,body.locked>main,body.locked #banner{visibility:hidden}
 .paper .sign img.sig{position:absolute;max-height:15mm;max-width:34mm;left:22%;top:58%;transform:translate(-50%,-50%)}
 .paper .notes{white-space:pre-line;font-size:.92em}
 .paper .notes b{display:block;font-family:var(--ft),var(--fb),sans-serif;margin-bottom:.4mm}
+.qlist{max-height:420px;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.qrow{display:flex;gap:10px;align-items:flex-start;border-bottom:1px solid var(--line,#e3e8e6);padding:6px 2px}
+.qrow .qtx{flex:1;line-height:1.8}
+.qrow .qar{font-family:'Amiri','Noto Naskh Arabic',inherit;font-size:1.08em}
+.bank-card{border:1px solid var(--line,#dde3e0);border-radius:10px;padding:10px 12px;background:var(--bg2,transparent)}
+.bank-card .card-h{margin-bottom:6px}
 .paper .bank{font-size:.9em;display:flex;flex-wrap:wrap;gap:.6mm 5mm}
 .paper .bank span{color:#666}
+.paper .bank .acc{display:contents}
+.paper .bank.multi{flex-direction:column;gap:1mm}
+.paper .bank.multi .acc{display:flex;flex-wrap:wrap;gap:.4mm 5mm}
+.paper .bank.multi .acc+.acc{border-top:.2mm dashed #bbb;padding-top:1mm}
+.paper .fq-ar{font-family:'Amiri','Noto Naskh Arabic',var(--fb);font-size:1.08em}
+.paper .fq-ref{opacity:.75;font-size:.92em;white-space:nowrap}
 .paper .valid{font-size:.92em;font-weight:600;color:var(--c)}
 .paper .push{margin-top:auto}
 
@@ -380,8 +406,8 @@ body.locked>header,body.locked>main,body.locked #banner{visibility:hidden}
 <body>
 <header class="top">
   <div class="brand">
-    <div class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-2-1.2-2 1.2-2-1.2-2 1.2-2-1.2L6 21z"/><path d="M9 9h6M9 12.5h6M9 16h3.5"/></svg></div>
-    <div><b>دفتر فاکتور</b><small>فاکتور و پیش‌فاکتور برای چند شرکت</small></div>
+    <div class="mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="ivg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f9a8a"/><stop offset=".55" stop-color="#1e5a55"/><stop offset="1" stop-color="#123b37"/></linearGradient><linearGradient id="ivp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e2f0ec"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#ivg)"/><path d="M19 11.5H38.5L47 20V51L43.4 48.6 39.8 51 36.2 48.6 32.6 51 29 48.6 25.4 51 21.8 48.6 19 51z" fill="url(#ivp)"/><path d="M38.5 11.5V18a2 2 0 0 0 2 2H47z" fill="#a9d3ca"/><rect x="24" y="25.5" width="4.4" height="16" rx="2.2" fill="#1e5a55"/><circle cx="26.2" cy="19.8" r="2.7" fill="#eaa53a"/><path d="M33 27.5h9M33 33h9M33 38.5h5.5" stroke="#1e5a55" stroke-width="2.6" stroke-linecap="round" opacity=".5"/></svg></div>
+    <div><b>Invora</b><small>دفتر فاکتور و پیش‌فاکتور</small></div>
   </div>
   <nav class="tabs" role="tablist" id="tabs">
     <button role="tab" data-view="editor" aria-selected="true">صدور تکی</button>
@@ -395,6 +421,8 @@ body.locked>header,body.locked>main,body.locked #banner{visibility:hidden}
   </nav>
   <span class="spacer"></span>
   <div class="top-actions">
+    <button class="pill btnpill" id="verPill" data-act="ver-show" title="نسخه و تغییرات">نسخه …</button>
+    <button class="btn sm icon" id="themeBtn" data-act="theme" title="حالت روز و شب"></button>
     <button class="pill btnpill" id="todayPill" data-act="clock-sync" title="برای گرفتن دوباره‌ی تاریخ کلیک کنید">امروز …</button>
     <span class="pill" id="saveState">در حال بارگذاری…</span>
     <button class="btn sm" data-act="export" title="فایل پشتیبان رمزشده (.dfbak) که در نسخه‌ی آفلاین و تحت وب باز می‌شود">پشتیبان رمزشده</button>
@@ -602,20 +630,80 @@ const DEF_DATED=`1405/01/25 شهادت امام جعفر صادق
 const SETTING_KEYS=['currency','vatRate','digits','showWords','holidayRule','thursdayOff','proformaValidityDays','proformaGapDays','defaultNotes','defaultTerms','refDateMode','refDateMin','refDateMax','refPriceMode','refPriceDir','refPriceMin','refPriceMax','refPricePerItem','refPriceRound'];
 function defaultSettings(){return{currency:'IRR',vatRate:10,digits:'fa',showWords:true,holidayRule:'next',thursdayOff:false,proformaValidityDays:7,proformaGapDays:1,defaultNotes:'',defaultTerms:'',refDateMode:'after',refDateMin:1,refDateMax:3,refPriceMode:'none',refPriceDir:'up',refPriceMin:3,refPriceMax:8,refPricePerItem:true,refPriceRound:1}}
 function uid(){return Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4)}
-function newCompany(name){return{id:uid(),sample:false,name:name||'شرکت جدید',nationalId:'',economicCode:'',regNo:'',postalCode:'',address:'',phone:'',fax:'',mobile:'',email:'',website:'',bankName:'',accountHolder:'',accountNo:'',sheba:'',cardNo:'',logo:'',stamp:'',signature:'',headerText:'',footerText:'',invoiceTitle:'',proformaTitle:'',template:'formal',color:'#1f4e79',titleFont:'Vazirmatn',bodyFont:'Vazirmatn',fontSize:10,showBank:true,showStamp:true,showSignature:true,showWatermark:true,showSellerInfo:true,followGlobal:true,batchMode:'invoice',showBankPf:true,vatOwn:'inherit',vatOwnRate:10,officialOn:false,sellerKind:'legal',memoryId:'',branchCode:'',province:'',city:'',offTitle:'',settings:defaultSettings(),numbering:{invPattern:'{Y}-{N}',pfPattern:'P{Y}-{N}',offPattern:'{Y}{N}',pad:4,start:1,resetYearly:true,counters:{}}}}
+function newCompany(name){return{id:uid(),sample:false,name:name||'شرکت جدید',nationalId:'',economicCode:'',regNo:'',postalCode:'',address:'',phone:'',fax:'',mobile:'',email:'',website:'',bankName:'',accountHolder:'',accountNo:'',sheba:'',cardNo:'',banks:[],footerMode:'text',quoteCats:['quran','prophet','imam','elders'],quoteFixed:'',quoteTr:true,logo:'',stamp:'',signature:'',headerText:'',footerText:'',invoiceTitle:'',proformaTitle:'',template:'formal',color:'#1f4e79',titleFont:'Vazirmatn',bodyFont:'Vazirmatn',fontSize:10,showBank:true,showStamp:true,showSignature:true,showWatermark:true,showSellerInfo:true,followGlobal:true,batchMode:'invoice',showBankPf:true,vatOwn:'inherit',vatOwnRate:10,officialOn:false,sellerKind:'legal',memoryId:'',branchCode:'',province:'',city:'',offTitle:'',settings:defaultSettings(),numbering:{invPattern:'{Y}-{N}',pfPattern:'P{Y}-{N}',offPattern:'{Y}{N}',pad:4,start:1,resetYearly:true,counters:{}}}}
+/* ---------- footer quotes (prebuilt) ---------- */
+const QCAT={quran:'قرآن کریم',prophet:'پیامبر اکرم (ص)',imam:'امامان (ع)',elders:'بزرگان و شاعران'};
+const QUOTES=[
+ {id:'q1',cat:'quran',ar:'وَأَوْفُوا الْكَيْلَ إِذَا كِلْتُمْ وَزِنُوا بِالْقِسْطَاسِ الْمُسْتَقِيمِ ذَٰلِكَ خَيْرٌ وَأَحْسَنُ تَأْوِيلًا',fa:'و هرگاه پیمانه می‌کنید، پیمانه را کامل دهید و با ترازوی درست وزن کنید؛ این بهتر و سرانجامش نیکوتر است.',ref:'سوره‌ی اسراء، آیه‌ی ۳۵'},
+ {id:'q2',cat:'quran',ar:'يَا أَيُّهَا الَّذِينَ آمَنُوا أَوْفُوا بِالْعُقُودِ',fa:'ای کسانی که ایمان آورده‌اید، به قراردادهای خود وفا کنید.',ref:'سوره‌ی مائده، آیه‌ی ۱'},
+ {id:'q3',cat:'quran',ar:'وَأَحَلَّ اللَّهُ الْبَيْعَ وَحَرَّمَ الرِّبَا',fa:'و خداوند داد و ستد را حلال و ربا را حرام کرده است.',ref:'سوره‌ی بقره، آیه‌ی ۲۷۵'},
+ {id:'q4',cat:'quran',ar:'يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا تَدَايَنْتُمْ بِدَيْنٍ إِلَىٰ أَجَلٍ مُسَمًّى فَاكْتُبُوهُ',fa:'ای کسانی که ایمان آورده‌اید، هرگاه به یکدیگر تا مدتی معین وام دادید، آن را بنویسید.',ref:'سوره‌ی بقره، آیه‌ی ۲۸۲'},
+ {id:'q5',cat:'quran',ar:'وَيْلٌ لِلْمُطَفِّفِينَ',fa:'وای بر کم‌فروشان.',ref:'سوره‌ی مطففین، آیه‌ی ۱'},
+ {id:'q6',cat:'quran',ar:'إِنَّ اللَّهَ يَأْمُرُ بِالْعَدْلِ وَالْإِحْسَانِ',fa:'همانا خداوند به عدل و نیکوکاری فرمان می‌دهد.',ref:'سوره‌ی نحل، آیه‌ی ۹۰'},
+ {id:'q7',cat:'quran',ar:'وَأَوْفُوا بِالْعَهْدِ إِنَّ الْعَهْدَ كَانَ مَسْئُولًا',fa:'و به پیمان وفا کنید که از پیمان پرسیده خواهد شد.',ref:'سوره‌ی اسراء، آیه‌ی ۳۴'},
+ {id:'q8',cat:'quran',ar:'وَأَنْ لَيْسَ لِلْإِنْسَانِ إِلَّا مَا سَعَىٰ',fa:'و اینکه برای انسان جز حاصل تلاش خودش نیست.',ref:'سوره‌ی نجم، آیه‌ی ۳۹'},
+ {id:'q9',cat:'quran',ar:'فَإِنَّ مَعَ الْعُسْرِ يُسْرًا',fa:'پس به‌راستی با دشواری، آسانی است.',ref:'سوره‌ی شرح، آیه‌ی ۵'},
+ {id:'q10',cat:'quran',ar:'وَمَنْ يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ',fa:'و هر که بر خدا توکل کند، خدا او را بس است.',ref:'سوره‌ی طلاق، آیه‌ی ۳'},
+ {id:'q11',cat:'quran',ar:'وَمَنْ يَتَّقِ اللَّهَ يَجْعَلْ لَهُ مَخْرَجًا وَيَرْزُقْهُ مِنْ حَيْثُ لَا يَحْتَسِبُ',fa:'و هر که از خدا پروا کند، برایش راه برون‌رفتی قرار می‌دهد و از جایی که گمان نمی‌برد روزی‌اش می‌دهد.',ref:'سوره‌ی طلاق، آیه‌های ۲ و ۳'},
+ {id:'q12',cat:'quran',ar:'لَئِنْ شَكَرْتُمْ لَأَزِيدَنَّكُمْ',fa:'اگر سپاس گزارید، [نعمت] شما را افزون می‌کنم.',ref:'سوره‌ی ابراهیم، آیه‌ی ۷'},
+ {id:'q13',cat:'quran',ar:'وَقُلْ رَبِّ زِدْنِي عِلْمًا',fa:'و بگو: پروردگارا، بر دانشم بیفزای.',ref:'سوره‌ی طه، آیه‌ی ۱۱۴'},
+ {id:'q14',cat:'quran',ar:'يَا أَيُّهَا الَّذِينَ آمَنُوا لَا تَأْكُلُوا أَمْوَالَكُمْ بَيْنَكُمْ بِالْبَاطِلِ إِلَّا أَنْ تَكُونَ تِجَارَةً عَنْ تَرَاضٍ مِنْكُمْ',fa:'ای کسانی که ایمان آورده‌اید، اموال یکدیگر را به ناروا نخورید، مگر داد و ستدی که با رضایت خودتان باشد.',ref:'سوره‌ی نساء، آیه‌ی ۲۹'},
+ {id:'q15',cat:'quran',ar:'وَيَا قَوْمِ أَوْفُوا الْمِكْيَالَ وَالْمِيزَانَ بِالْقِسْطِ وَلَا تَبْخَسُوا النَّاسَ أَشْيَاءَهُمْ',fa:'و ای قوم من، پیمانه و ترازو را به عدالت تمام دهید و از اجناس مردم نکاهید.',ref:'سوره‌ی هود، آیه‌ی ۸۵'},
+ {id:'q16',cat:'quran',ar:'إِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ الْمُحْسِنِينَ',fa:'همانا خداوند پاداش نیکوکاران را تباه نمی‌کند.',ref:'سوره‌ی توبه، آیه‌ی ۱۲۰'},
+ {id:'q17',cat:'quran',ar:'رِجَالٌ لَا تُلْهِيهِمْ تِجَارَةٌ وَلَا بَيْعٌ عَنْ ذِكْرِ اللَّهِ',fa:'مردانی که هیچ تجارت و داد و ستدی آنان را از یاد خدا غافل نمی‌کند.',ref:'سوره‌ی نور، آیه‌ی ۳۷'},
+ {id:'q18',cat:'quran',ar:'فَإِذَا قُضِيَتِ الصَّلَاةُ فَانْتَشِرُوا فِي الْأَرْضِ وَابْتَغُوا مِنْ فَضْلِ اللَّهِ',fa:'و چون نماز به پایان رسید، در زمین پراکنده شوید و از فضل خدا روزی بجویید.',ref:'سوره‌ی جمعه، آیه‌ی ۱۰'},
+ {id:'q19',cat:'quran',ar:'وَأَقِيمُوا الْوَزْنَ بِالْقِسْطِ وَلَا تُخْسِرُوا الْمِيزَانَ',fa:'و وزن را به عدالت برپا دارید و از ترازو نکاهید.',ref:'سوره‌ی الرحمن، آیه‌ی ۹'},
+ {id:'q20',cat:'quran',ar:'إِنَّ اللَّهَ يَأْمُرُكُمْ أَنْ تُؤَدُّوا الْأَمَانَاتِ إِلَىٰ أَهْلِهَا',fa:'همانا خداوند به شما فرمان می‌دهد که امانت‌ها را به صاحبانشان بازگردانید.',ref:'سوره‌ی نساء، آیه‌ی ۵۸'},
+ {id:'q21',cat:'quran',ar:'وَالَّذِينَ هُمْ لِأَمَانَاتِهِمْ وَعَهْدِهِمْ رَاعُونَ',fa:'و آنان که امانت‌ها و پیمان خود را پاس می‌دارند.',ref:'سوره‌ی مؤمنون، آیه‌ی ۸'},
+ {id:'p1',cat:'prophet',ar:'إِنَّمَا بُعِثْتُ لِأُتَمِّمَ مَكَارِمَ الْأَخْلَاقِ',fa:'من تنها برای کامل کردن مکارم اخلاق برانگیخته شدم.',ref:'پیامبر اکرم (ص)'},
+ {id:'p2',cat:'prophet',ar:'التَّاجِرُ الصَّدُوقُ الْأَمِينُ مَعَ النَّبِيِّينَ وَالصِّدِّيقِينَ وَالشُّهَدَاءِ',fa:'بازرگان راستگو و امانت‌دار، همنشین پیامبران و راستان و شهیدان است.',ref:'پیامبر اکرم (ص)'},
+ {id:'p3',cat:'prophet',ar:'رَحِمَ اللَّهُ رَجُلًا سَمْحًا إِذَا بَاعَ وَإِذَا اشْتَرَى وَإِذَا اقْتَضَى',fa:'خدا رحمت کند کسی را که در فروختن و خریدن و طلب حق خود آسان‌گیر است.',ref:'پیامبر اکرم (ص)'},
+ {id:'p4',cat:'prophet',ar:'مَنْ غَشَّنَا فَلَيْسَ مِنَّا',fa:'هر که با ما فریبکاری کند، از ما نیست.',ref:'پیامبر اکرم (ص)'},
+ {id:'p5',cat:'prophet',ar:'الْعِبَادَةُ سَبْعُونَ جُزْءًا أَفْضَلُهَا طَلَبُ الْحَلَالِ',fa:'عبادت هفتاد بخش است و برترین آن، به دست آوردن روزی حلال است.',ref:'پیامبر اکرم (ص)'},
+ {id:'p6',cat:'prophet',ar:'طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ',fa:'دانش‌جویی بر هر مسلمانی واجب است.',ref:'پیامبر اکرم (ص)'},
+ {id:'i1',cat:'imam',ar:'وَلْيَكُنِ الْبَيْعُ بَيْعًا سَمْحًا بِمَوَازِينِ عَدْلٍ وَأَسْعَارٍ لَا تُجْحِفُ بِالْفَرِيقَيْنِ مِنَ الْبَائِعِ وَالْمُبْتَاعِ',fa:'داد و ستد باید آسان، با ترازوهای درست و نرخ‌هایی باشد که به هیچ‌یک از فروشنده و خریدار ستم نکند.',ref:'امام علی (ع)، نهج‌البلاغه، نامه‌ی ۵۳'},
+ {id:'i2',cat:'imam',ar:'قِيمَةُ كُلِّ امْرِئٍ مَا يُحْسِنُهُ',fa:'ارزش هر کس به کاری است که آن را نیکو انجام می‌دهد.',ref:'امام علی (ع)، نهج‌البلاغه'},
+ {id:'i3',cat:'imam',ar:'الْفُرْصَةُ تَمُرُّ مَرَّ السَّحَابِ فَانْتَهِزُوا فُرَصَ الْخَيْرِ',fa:'فرصت چون ابر می‌گذرد؛ پس فرصت‌های نیک را غنیمت شمارید.',ref:'امام علی (ع)، نهج‌البلاغه'},
+ {id:'i4',cat:'imam',ar:'لَا غِنَى كَالْعَقْلِ وَلَا فَقْرَ كَالْجَهْلِ',fa:'هیچ ثروتی چون خرد و هیچ فقری چون نادانی نیست.',ref:'امام علی (ع)، نهج‌البلاغه'},
+ {id:'i5',cat:'imam',ar:'مَنْ أَصْلَحَ مَا بَيْنَهُ وَبَيْنَ اللَّهِ أَصْلَحَ اللَّهُ مَا بَيْنَهُ وَبَيْنَ النَّاسِ',fa:'هر که میان خود و خدا را سامان دهد، خداوند میان او و مردم را سامان می‌دهد.',ref:'امام علی (ع)، نهج‌البلاغه'},
+ {id:'i6',cat:'imam',ar:'يَا مَعْشَرَ التُّجَّارِ، الْفِقْهَ ثُمَّ الْمَتْجَرَ',fa:'ای بازرگانان! نخست احکام داد و ستد را بیاموزید، سپس تجارت کنید.',ref:'امام علی (ع)'},
+ {id:'i7',cat:'imam',ar:'تِسْعَةُ أَعْشَارِ الرِّزْقِ فِي التِّجَارَةِ',fa:'نُه‌دهم روزی در تجارت است.',ref:'امام صادق (ع)'},
+ {id:'i8',cat:'imam',ar:'لَا تَنْظُرُوا إِلَى طُولِ رُكُوعِ الرَّجُلِ وَسُجُودِهِ… وَلَكِنِ انْظُرُوا إِلَى صِدْقِ حَدِيثِهِ وَأَدَاءِ أَمَانَتِهِ',fa:'به درازی رکوع و سجود کسی ننگرید؛ به راستگویی و امانت‌داری‌اش بنگرید.',ref:'امام صادق (ع)'},
+ {id:'i9',cat:'imam',ar:'إِنْ لَمْ يَكُنْ لَكُمْ دِينٌ وَكُنْتُمْ لَا تَخَافُونَ الْمَعَادَ فَكُونُوا أَحْرَارًا فِي دُنْيَاكُمْ',fa:'اگر دین ندارید و از روز بازپسین نمی‌ترسید، دست‌کم در دنیای خود آزاده باشید.',ref:'امام حسین (ع)'},
+ {id:'i10',cat:'imam',ar:'مَنْ لَمْ يَشْكُرِ الْمُنْعِمَ مِنَ الْمَخْلُوقِينَ لَمْ يَشْكُرِ اللَّهَ عَزَّ وَجَلَّ',fa:'هر که از نیکی آفریدگان سپاس نگزارد، خدا را سپاس نگزارده است.',ref:'امام رضا (ع)'},
+ {id:'e1',cat:'elders',ar:'',fa:'توانگری به هنر است نه به مال، و بزرگی به عقل است نه به سال.',ref:'سعدی، گلستان'},
+ {id:'e2',cat:'elders',ar:'',fa:'مشک آن است که خود ببوید، نه آنکه عطار بگوید.',ref:'سعدی، گلستان'},
+ {id:'e3',cat:'elders',ar:'',fa:'بنی‌آدم اعضای یکدیگرند / که در آفرینش ز یک گوهرند',ref:'سعدی، گلستان'},
+ {id:'e4',cat:'elders',ar:'',fa:'توانا بود هر که دانا بود / ز دانش دل پیر برنا بود',ref:'فردوسی، شاهنامه'},
+ {id:'e5',cat:'elders',ar:'',fa:'درخت دوستی بنشان که کام دل به بار آرد / نهال دشمنی برکن که رنج بی‌شمار آرد',ref:'حافظ'},
+ {id:'e6',cat:'elders',ar:'',fa:'از محبت تلخ‌ها شیرین شود / از محبت مس‌ها زرین شود',ref:'مولوی، مثنوی معنوی'}
+];
+function allQuotes(){return QUOTES.concat((S&&S.quotes)||[])}
+function quoteOn(q){return !((S&&S.quoteOff)||[]).includes(q.id)}
+function quoteById(id){return id?allQuotes().find(q=>q.id===id)||null:null}
+function quotePool(co){const cats=co&&Array.isArray(co.quoteCats)&&co.quoteCats.length?co.quoteCats:Object.keys(QCAT);return allQuotes().filter(q=>quoteOn(q)&&cats.includes(q.cat))}
+function strHash(x){let h=2166136261;for(const ch of String(x)){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function pickQuote(co,seed){if(!co||co.footerMode==='text'||!co.footerMode)return '';if(co.quoteFixed&&quoteById(co.quoteFixed))return co.quoteFixed;const p=quotePool(co);if(!p.length)return '';return p[seed!=null?strHash(seed)%p.length:Math.floor(Math.random()*p.length)].id}
+function docQuote(doc,co){if(!co||!co.footerMode||co.footerMode==='text')return null;if(co.quoteFixed){const f=quoteById(co.quoteFixed);if(f)return f}const q=quoteById(doc.quoteId);if(q)return q;const id=pickQuote(co,doc.id);return quoteById(id)}
+function quoteHtml(q,co,D){if(!q)return '';const tr=co.quoteTr!==false;const ar=String(q.ar||'').trim();return `<span class="fq">${ar?`<span class="fq-ar">«${esc(ar)}»</span>`:''}${ar&&tr&&q.fa?' ':''}${(!ar||tr)&&q.fa?`<span class="fq-fa">${ar?'':'«'}${esc(q.fa)}${ar?'':'»'}</span>`:''} <span class="fq-ref">(${esc(D(q.ref||''))})</span></span>`}
+function footHtml(c){const co=c.co;const m=co.footerMode||'text';const parts=[];if(m!=='quote'&&String(co.footerText||'').trim())parts.push(esc(co.footerText));if(m!=='text'){const q=docQuote(c.doc,co);if(q)parts.push(quoteHtml(q,co,c.D))}return parts.join('<br>')}
+/* ---------- bank accounts ---------- */
+function newBank(o){return Object.assign({id:uid(),bankName:'',brName:'',brCode:'',accountHolder:'',accountNo:'',sheba:'',cardNo:'',def:true},o||{})}
+function bankLabel(b){return [b.bankName,b.brName&&('شعبه‌ی '+b.brName)].filter(Boolean).join(' ')||'حساب بی‌نام'}
+function docBanks(doc,co){const bs=(co&&co.banks)||[];if(Array.isArray(doc.bankIds)){return doc.bankIds.map(id=>bs.find(b=>b.id===id)).filter(Boolean)}const d=bs.filter(b=>b.def);return d.length?d:bs.slice(0,1)}
 function newItem(){return{id:uid(),name:'',desc:'',code:'',qty:1,unit:'عدد',price:0,discType:'amount',disc:0,taxable:true}}
 function emptyBuyer(){return{name:'',kind:'legal',nationalId:'',economicCode:'',regNo:'',postalCode:'',province:'',city:'',address:'',phone:''}}
 
 let S=null;
 function defaultState(){
   const g=Object.assign(defaultSettings(),{holidaysFixed:DEF_FIXED,holidaysDated:DEF_DATED,dateSource:'auto',holAuto:true,holTried:{},fxRound:1000,autoLockMin:15});
-  const st={app:'daftar-factor',version:1,savedAt:0,global:g,companies:[],customers:[],products:[],documents:[],draft:null,refId:'',refAuto:false,batches:[],activeBatch:'',trash:[],fx:{rate:0,at:0,src:'',manual:false}};
+  const st={app:'daftar-factor',version:1,savedAt:0,global:g,companies:[],customers:[],products:[],documents:[],draft:null,refId:'',refAuto:false,batches:[],activeBatch:'',trash:[],quotes:[],quoteOff:[],fx:{rate:0,at:0,src:'',manual:false}};
   const specs=[
     ['شرکت نمونه یک','formal','#1f4e79','Vazirmatn','Vazirmatn'],
     ['شرکت نمونه دو','band','#0f6b62','Lalezar','Vazirmatn'],
     ['شرکت نمونه سه','minimal','#8a3b12','Markazi Text','Noto Naskh Arabic'],
     ['شرکت نمونه چهار','frame','#4f3a86','Reem Kufi','Noto Sans Arabic']];
-  specs.forEach((s,i)=>{const c=newCompany(s[0]);Object.assign(c,{sample:true,template:s[1],color:s[2],titleFont:s[3],bodyFont:s[4],headerText:'تأمین تجهیزات اداری و رایانه‌ای',address:'تهران، خیابان نمونه، پلاک '+(10+i),postalCode:'1234567890',phone:'021-8800000'+i,economicCode:'41111111111'+i,nationalId:'1010123456'+i,regNo:'4560'+i,email:'info@example.com',bankName:'بانک نمونه',accountNo:'0101234567'+i,sheba:'IR000000000000000000000000',footerText:'از اعتماد شما سپاسگزاریم.'});st.companies.push(c)});
+  specs.forEach((s,i)=>{const c=newCompany(s[0]);Object.assign(c,{sample:true,template:s[1],color:s[2],titleFont:s[3],bodyFont:s[4],headerText:'تأمین تجهیزات اداری و رایانه‌ای',address:'تهران، خیابان نمونه، پلاک '+(10+i),postalCode:'1234567890',phone:'021-8800000'+i,economicCode:'41111111111'+i,nationalId:'1010123456'+i,regNo:'4560'+i,email:'info@example.com',footerText:'از اعتماد شما سپاسگزاریم.',footerMode:i===0?'both':'text',banks:[newBank({bankName:'بانک نمونه',brName:'مرکزی',brCode:'100'+i,accountNo:'0101234567'+i,sheba:'IR000000000000000000000000'})]});st.companies.push(c)});
   st.customers.push({id:uid(),sample:true,name:'مشتری نمونه',nationalId:'',economicCode:'',postalCode:'',address:'تهران',phone:''});
   st.products.push({id:uid(),sample:true,name:'رایانه رومیزی',unit:'دستگاه',price:450000000,desc:''},{id:uid(),sample:true,name:'چاپگر لیزری',unit:'دستگاه',price:185000000,desc:''});
   return st;
@@ -624,13 +712,13 @@ function migrate(d){
   const base=defaultState();
   const st=Object.assign({},base,d);
   st.global=Object.assign({},base.global,d.global||{});
-  st.companies=(d.companies||[]).map(c=>{const n=newCompany();const o=Object.assign(n,c);o.settings=Object.assign(defaultSettings(),c.settings||{});o.numbering=Object.assign(newCompany().numbering,c.numbering||{});o.numbering.counters=Object.assign({},(c.numbering||{}).counters||{});return o});
-  st.customers=d.customers||[];st.products=d.products||[];
+  st.companies=(d.companies||[]).map(c=>{const n=newCompany();const o=Object.assign(n,c);o.settings=Object.assign(defaultSettings(),c.settings||{});o.numbering=Object.assign(newCompany().numbering,c.numbering||{});o.numbering.counters=Object.assign({},(c.numbering||{}).counters||{});if(!Array.isArray(c.banks)){o.banks=[];if(['bankName','accountHolder','accountNo','sheba','cardNo'].some(k=>String(c[k]||'').trim()))o.banks.push(newBank({bankName:c.bankName||'',accountHolder:c.accountHolder||'',accountNo:c.accountNo||'',sheba:c.sheba||'',cardNo:c.cardNo||''}))}else o.banks=c.banks.map(b=>newBank(b));if(!Array.isArray(o.quoteCats))o.quoteCats=Object.keys(QCAT);return o});
+  st.customers=d.customers||[];st.products=d.products||[];st.quotes=Array.isArray(d.quotes)?d.quotes:[];st.quoteOff=Array.isArray(d.quoteOff)?d.quoteOff:[];
   st.documents=(d.documents||[]).map(fixDoc);
   st.draft=d.draft?fixDoc(d.draft):null;st.refAuto=false;st.fx=Object.assign({rate:0,at:0,src:'',manual:false},d.fx||{});st.trash=(d.trash||[]).map(t=>({doc:fixDoc(t.doc||{}),deletedAt:t.deletedAt||Date.now()}));
   return st;
 }
-function fixDoc(x){const t={id:uid(),companyId:'',type:'invoice',number:'',seq:0,counterKey:'',manualNumber:false,committed:false,date:jStr(todayJdn()),validDays:7,currency:'IRR',vatOn:true,vatRate:10,discType:'amount',disc:0,extraLabel:'هزینه حمل و نقل',extra:0,buyer:emptyBuyer(),items:[],notes:'',terms:'',linkedId:'',official:false,offKind:'type1',offSubject:'main',offRef:'',offCanceled:'',settle:'cash',taxId:'',taxStatus:'none',createdAt:Date.now(),updatedAt:Date.now()};const o=Object.assign(t,x);o.buyer=Object.assign(emptyBuyer(),x.buyer||{});o.items=(x.items||[]).map(i=>Object.assign(newItem(),i));return o}
+function fixDoc(x){const t={id:uid(),companyId:'',type:'invoice',number:'',seq:0,counterKey:'',manualNumber:false,committed:false,date:jStr(todayJdn()),validDays:7,currency:'IRR',vatOn:true,vatRate:10,discType:'amount',disc:0,extraLabel:'هزینه حمل و نقل',extra:0,buyer:emptyBuyer(),items:[],notes:'',terms:'',linkedId:'',official:false,offKind:'type1',offSubject:'main',offRef:'',offCanceled:'',settle:'cash',taxId:'',taxStatus:'none',bankIds:null,quoteId:'',createdAt:Date.now(),updatedAt:Date.now()};const o=Object.assign(t,x);o.buyer=Object.assign(emptyBuyer(),x.buyer||{});o.items=(x.items||[]).map(i=>Object.assign(newItem(),i));return o}
 
 /* ---------- helpers ---------- */
 const $=(s,r=document)=>r.querySelector(s);
@@ -1047,6 +1135,7 @@ function newDoc(companyId,type,noRef){
   const r=applyRule(todayJdn(),cfg.holidayRule==='warn'?Object.assign({},cfg,{holidayRule:'next'}):cfg);
   const d=fixDoc({id:uid(),companyId:co.id,type:type||'invoice',date:jStr(r.jdn),validDays:cfg.proformaValidityDays,currency:cfg.currency,vatOn:Number(cfg.vatRate)>0,vatRate:cfg.vatRate,items:[newItem()],notes:cfg.defaultNotes||'',terms:cfg.defaultTerms||''});
   const rf=refDoc();if(false&&!noRef&&S.refAuto&&rf){fillFromRef(rf,d,true,true,true);d.autoRef=true}
+  d.quoteId=pickQuote(co);
   return d;
 }
 function seqType(d){return d.official?'official':d.type}
@@ -1062,13 +1151,13 @@ function syncDraftNumber(doc){if(!doc.committed&&!doc.manualNumber)doc.number=pr
 function commitDoc(doc,keepView){
   const co=coById(doc.companyId);const jdn=parseJ(doc.date)||todayJdn();
   if(!doc.manualNumber||!doc.number){const seq=peekSeq(co,seqType(doc),jdn);doc.seq=seq;doc.counterKey=counterKey(co,seqType(doc),jdn);doc.number=fmtDocNumber(patOf(co,seqType(doc)),seq,co.numbering.pad,jdn);co.numbering.counters[doc.counterKey]=seq+1;doc.manualNumber=false}
-  doc.committed=true;doc.updatedAt=Date.now();
+  doc.committed=true;doc.updatedAt=Date.now();if(!doc.quoteId)doc.quoteId=pickQuote(co,doc.id);
   if(!S.documents.includes(doc))S.documents.push(doc);if(S.draft===doc)S.draft=null;if(!keepView)curId=doc.id;
   if(doc.linkedId){const o=S.documents.find(d=>d.id===doc.linkedId);if(o&&!o.linkedId)o.linkedId=doc.id}
   if(doc.official&&doc.offSubject==='cancel'&&doc.offRef){const o=S.documents.find(d=>d.id===doc.offRef);if(o)o.offCanceled=doc.id}
 }
 function dupNumber(doc){return doc.number&&S.documents.some(d=>d.id!==doc.id&&d.companyId===doc.companyId&&seqType(d)===seqType(doc)&&d.number===doc.number)}
-function cloneDoc(src,over){const c=JSON.parse(JSON.stringify(src));c.id=uid();c.items.forEach(i=>i.id=uid());Object.assign(c,{number:'',seq:0,counterKey:'',manualNumber:false,committed:false,linkedId:'',autoRef:false,offSubject:'main',offRef:'',offCanceled:'',taxId:'',taxStatus:'none',createdAt:Date.now(),updatedAt:Date.now()},over||{});return c}
+function cloneDoc(src,over){const c=JSON.parse(JSON.stringify(src));c.id=uid();c.items.forEach(i=>i.id=uid());Object.assign(c,{number:'',seq:0,counterKey:'',manualNumber:false,committed:false,linkedId:'',autoRef:false,offSubject:'main',offRef:'',offCanceled:'',taxId:'',taxStatus:'none',quoteId:'',createdAt:Date.now(),updatedAt:Date.now()},over||{});if(!(over&&over.quoteId))c.quoteId=pickQuote(coById(c.companyId));return c}
 function validUntil(doc){const j=parseJ(doc.date);if(j==null)return null;return j+Math.max(0,parseInt(doc.validDays)||0)}
 function docStatus(d){
   if(!d.committed)return['پیش‌نویس','draft'];
@@ -1273,7 +1362,7 @@ function tOfficial(c){
   <div class="f-words">مبلغ قابل پرداخت: ${f(t.total)} ریال${c.words?' — به حروف: '+esc(c.words):''}${doc.vatOn?' · نرخ مالیات و عوارض: '+D(doc.vatRate)+'٪':''}</div>
   <div class="f-notes"><div>شرایط و نحوه‌ی فروش: نقدی ${chk(doc.settle!=='credit')} غیرنقدی ${chk(doc.settle!=='cash')}</div>${notesHtml(c)}${bankHtml(c)}</div>
   <div class="push"></div>${signsHtml(c)}
-  ${co.footerText?`<footer class="f-foot">${esc(co.footerText)}</footer>`:''}`;
+  ${c.foot?`<footer class="f-foot">${c.foot}</footer>`:''}`;
 }
 
 /* ---------- paper rendering ---------- */
@@ -1312,13 +1401,13 @@ function itemsTable(c,withFoot){
   return h+'</table>';
 }
 function notesHtml(c){const {doc}=c;let h='';if(String(doc.notes||'').trim())h+=`<div class="notes"><b>توضیحات</b>${esc(doc.notes)}</div>`;if(String(doc.terms||'').trim())h+=`<div class="notes"><b>شرایط و ملاحظات</b>${esc(doc.terms)}</div>`;return h}
-function bankHtml(c){const co=c.co;if(!co.showBank||(c.isPf&&co.showBankPf===false))return '';const a=[['بانک',co.bankName],['صاحب حساب',co.accountHolder],['شماره حساب',co.accountNo],['شماره شبا',co.sheba],['شماره کارت',co.cardNo]].filter(x=>String(x[1]||'').trim());if(!a.length)return '';return `<div class="bank">${a.map(x=>`<div><span>${x[0]}:</span> <b class="ltr">${esc(c.D(x[1]))}</b></div>`).join('')}</div>`}
+function bankHtml(c){const co=c.co;if(!co.showBank||(c.isPf&&co.showBankPf===false))return '';const bs=docBanks(c.doc,co);const rows=bs.map(b=>{const bank=[b.bankName,b.brName&&('شعبه‌ی '+b.brName),b.brCode&&('کد شعبه '+b.brCode)].filter(x=>String(x||'').trim()).join(' — ');const a=[['صاحب حساب',b.accountHolder],['شماره حساب',b.accountNo],['شماره شبا',b.sheba],['شماره کارت',b.cardNo]].filter(x=>String(x[1]||'').trim());if(!bank&&!a.length)return '';return `<div class="acc">${bank?`<div><span>بانک:</span> <b>${esc(c.D(bank))}</b></div>`:''}${a.map(x=>`<div><span>${x[0]}:</span> <b class="ltr">${esc(c.D(x[1]))}</b></div>`).join('')}</div>`}).filter(Boolean);if(!rows.length)return '';return `<div class="bank${rows.length>1?' multi':''}">${rows.join('')}</div>`}
 function validHtml(c){return c.isPf&&c.v!=null?`<div class="valid">این پیش‌فاکتور تا تاریخ ${c.D(jStr(c.v))} (${c.D(c.doc.validDays)} روز) معتبر است.</div>`:''}
 function signsHtml(c){const co=c.co;return `<div class="signs"><div class="sign"><div class="lab">مهر و امضای فروشنده</div>${co.showStamp&&co.stamp?`<img class="stamp" src="${co.stamp}" alt="">`:''}${co.showSignature&&co.signature?`<img class="sig" src="${co.signature}" alt="">`:''}</div><div class="sign"><div class="lab">مهر و امضای خریدار</div></div></div>`}
 function wm(c){return c.isPf&&c.co.showWatermark?`<div class="wm">${esc(c.co.proformaTitle||'پیش‌فاکتور')}</div>`:''}
 function styleVars(co){const q=s=>`'${String(s||'Vazirmatn').replace(/'/g,'')}'`;return `--c:${esc(co.color||'#1f4e79')};--ft:${esc(q(co.titleFont))};--fb:${esc(q(co.bodyFont))};--fs:${(Number(co.fontSize)||10)}pt`}
 function renderPaper(doc){
-  const c=buildCtx(doc);
+  const c=buildCtx(doc);c.foot=footHtml(c);
   if(doc.official)return `<div class="paper t-formal t-off" style="${styleVars(c.co)}">${doc.offCanceled&&S.documents.some(x=>x.id===doc.offCanceled)?'<div class="wm">ابطال شده</div>':''}${tOfficial(c)}</div>`;const fn={formal:tFormal,band:tBand,minimal:tMinimal,frame:tFrame}[c.co.template]||tFormal;
   return `<div class="paper t-${{formal:'formal',band:'band',minimal:'min',frame:'frame'}[c.co.template]||'formal'}" style="${styleVars(c.co)}">${wm(c)}${fn(c)}</div>`;
 }
@@ -1335,7 +1424,7 @@ function tFormal(c){
   ${c.words?`<div class="f-words">مبلغ به حروف: ${esc(c.words)}</div>`:''}
   ${notesHtml(c)||bankHtml(c)||validHtml(c)?`<div class="f-notes">${validHtml(c)}${notesHtml(c)}${bankHtml(c)}</div>`:''}
   <div class="push"></div>${signsHtml(c)}
-  ${co.footerText||c.contact.length?`<footer class="f-foot">${co.footerText?esc(co.footerText)+'<br>':''}${esc(D(c.contact.join(' · ')))}</footer>`:''}`;
+  ${c.foot||c.contact.length?`<footer class="f-foot">${c.foot?c.foot+'<br>':''}${esc(D(c.contact.join(' · ')))}</footer>`:''}`;
 }
 function totalsBox(c,cls){return `<div class="${cls}">${c.rows.map(r=>`<div class="row"><span>${esc(r[0])}</span><b>${r[1]}</b></div>`).join('')}<div class="row grand"><span>${esc(c.grand[0])}</span><b>${c.grand[1]}</b></div></div>`}
 function tBand(c){
@@ -1348,7 +1437,7 @@ function tBand(c){
   ${itemsTable(c,false)}
   <div class="b-sum"><div class="b-left">${c.words?`<div class="b-words">مبلغ به حروف: ${esc(c.words)}</div>`:''}${validHtml(c)}${notesHtml(c)}${bankHtml(c)}</div>${totalsBox(c,'b-totals')}</div>
   <div class="push"></div>${signsHtml(c)}</div>
-  <footer class="b-foot"><span>${esc(D(c.contact.join(' · ')))}</span>${co.footerText?`<span>${esc(co.footerText)}</span>`:''}</footer>`;
+  <footer class="b-foot"><span>${esc(D(c.contact.join(' · ')))}</span>${c.foot?`<span>${c.foot}</span>`:''}</footer>`;
 }
 function tMinimal(c){
   const {co,doc,D}=c;
@@ -1359,7 +1448,7 @@ function tMinimal(c){
   ${itemsTable(c,false)}
   <div class="m-sum"><div class="stack" style="gap:2.4mm">${c.words?`<div class="m-words">${esc(c.words)}</div>`:''}${validHtml(c)}${notesHtml(c)}${bankHtml(c)}</div>${totalsBox(c,'m-totals')}</div>
   <div class="push"></div>${signsHtml(c)}
-  ${co.footerText?`<footer class="m-foot">${esc(co.footerText)}</footer>`:''}`;
+  ${c.foot?`<footer class="m-foot">${c.foot}</footer>`:''}`;
 }
 function tFrame(c){
   const {co,doc,D}=c;
@@ -1370,7 +1459,7 @@ function tFrame(c){
   ${itemsTable(c,false)}
   <div class="fr-bottom"><div class="fr-left">${c.words?`<div class="fr-words">مبلغ به حروف: ${esc(c.words)}</div>`:''}${validHtml(c)}${notesHtml(c)}${bankHtml(c)}</div>${totalsBox(c,'fr-totals')}</div>
   <div class="push"></div>${signsHtml(c)}
-  ${co.footerText||c.contact.length?`<footer class="fr-foot">${co.footerText?esc(co.footerText)+'<br>':''}${esc(D(c.contact.join(' · ')))}</footer>`:''}</div>`;
+  ${c.foot||c.contact.length?`<footer class="fr-foot">${c.foot?c.foot+'<br>':''}${esc(D(c.contact.join(' · ')))}</footer>`:''}</div>`;
 }
 
 /* ---------- preview scaling & printing ---------- */
@@ -1396,6 +1485,8 @@ function renderAll(){fillLists();renderBanner();renderView()}
 function fillLists(){$('#unitList').innerHTML=UNITS.map(u=>`<option value="${esc(u)}">`).join('');$('#prodList').innerHTML=S.products.map(p=>`<option value="${esc(p.name)}">`).join('');$('#fontList').innerHTML=FONTS.map(f=>`<option value="${esc(f)}">`).join('')}
 function renderBanner(){
   const b=$('#banner');let h='';
+  if(SRV&&UPD_NOTICE)h+=`<div class="notice ok">نسخه‌ی تازه‌ی برنامه (${faVer(UPD_NOTICE)}) روی سرور نصب شد. برای استفاده، صفحه را تازه کنید.<button class="btn sm pri" data-act="srv-reload">تازه‌سازی صفحه</button></div>`;
+  if(!SRV&&OFF_NEW)h+=`<div class="notice info">نسخه‌ی تازه‌ی برنامه (${faVer(OFF_NEW.v)}) منتشر شده است؛ شما نسخه‌ی ${faVer(APP_VERSION)} را دارید.<button class="btn sm pri" data-act="off-dl">دانلود نسخه‌ی تازه</button></div>`;
   if(SRV&&srvConflict)h+=`<div class="notice warn">اطلاعات روی سرور در این فاصله از جای دیگری (کاربر یا پنجره‌ی دیگر) تغییر کرده و تغییرات شما ذخیره نشد.<button class="btn sm pri" data-act="srv-reload">بارگذاری نسخه‌ی سرور</button><button class="btn sm danger" data-act="srv-force">نسخه‌ی من جایگزین شود</button></div>`;
   if(!SRV&&dirHandle&&!dirOk)h+=`<div class="notice warn">پوشه‌ی داده «${esc(dirHandle.name)}» متصل است ولی مرورگر برای دسترسی دوباره اجازه می‌خواهد.<button class="btn sm pri" data-act="reconnect">بارگذاری از پوشه</button></div>`;
   if(S.companies.some(c=>c.sample)||S.documents.some(d=>d.sample))h+=`<div class="notice info">اطلاعات شرکت‌ها و سندها فعلاً نمونه هستند. اطلاعات واقعی شرکت‌هایتان را در بخش «شرکت‌ها» وارد کنید.<button class="btn sm" data-act="clearSamples">پاک کردن اطلاعات نمونه</button></div>`;
@@ -1431,6 +1522,7 @@ function renderEditor(){
    <label class="f"><span>واحد پول${isOff?' (فاکتور رسمی: ریال)':''}</span><select data-d="currency" ${isOff?'disabled':''}>${opt('IRR','ریال',doc.currency)}${opt('IRT','تومان',doc.currency)}${opt('USD','دلار',doc.currency)}</select></label>
    <label class="f span-all"><span>نام فایل سند (اختیاری — اگر خالی بماند از نام خریدار و تاریخ ساخته می‌شود)</span><input data-d="fileName" value="${esc(doc.fileName||'')}" placeholder="${esc(autoFileName(doc))}"><small class="note" id="fileNote">${esc(fileNoteText(doc))}</small></label>
    ${isPf?`<label class="f"><span>مدت اعتبار (روز)</span><input data-d="validDays" data-type="int" class="ltr" value="${esc(doc.validDays)}"><small class="note" id="validNote"></small></label>`:'<div></div>'}
+   ${edExtrasHtml(doc,co)}
   </div></div>
   <div class="card"><div class="card-h"><h3>خریدار</h3><div class="inline"><select id="custPick" style="width:auto;min-width:190px"><option value="">انتخاب از فهرست مشتریان…</option>${S.customers.map(c=>opt(c.id,c.name,'')).join('')}</select><button class="btn sm" data-act="ed-saveCust">افزودن به فهرست</button></div></div>
    <div class="grid g3">
@@ -1502,12 +1594,17 @@ function updateEdNotices(){
   const vn=$('#validNote');if(vn){const v=validUntil(doc);vn.textContent=v!=null?'معتبر تا '+toFa(jStr(v))+' ('+WD[pIdx(v)]+')':''}
 }
 let pvT=null;
+function edExtrasHtml(doc,co){if(!co)return '';let h='';
+  const bs=co.banks||[];if(co.showBank&&bs.length>1&&!(doc.type==='proforma'&&co.showBankPf===false)){const sel=new Set(docBanks(doc,co).map(b=>b.id));h+=`<div class="f span-all"><span>حساب‌های بانکی که در این سند چاپ می‌شوند</span><div class="inline" style="flex-wrap:wrap;gap:4px 16px">${bs.map(b=>`<label class="chk" style="margin:0"><input type="checkbox" data-bk="${esc(b.id)}" ${sel.has(b.id)?'checked':''}>${esc(bankLabel(b))}${b.accountNo||b.sheba?` <small class="muted ltr">${esc(String(b.accountNo||b.sheba).slice(-6))}…</small>`:''}</label>`).join('')}</div></div>`}
+  if(co.footerMode&&co.footerMode!=='text'){const q=docQuote(doc,co);if(co.quoteFixed&&quoteById(co.quoteFixed))h+=`<div class="f span-all"><span>سخن پانویس</span><small class="note">این شرکت سخن ثابت دارد: ${esc((q&&(q.fa||q.ar)||'').slice(0,90))} — ${esc(q?q.ref:'')}</small></div>`;
+   else{const pool=quotePool(co);const cur=q&&!pool.some(x=>x.id===q.id)?[q]:[];h+=`<label class="f span-all"><span>سخن پانویس</span><div class="inline"><select id="edQuote">${Object.entries(QCAT).map(([k,l])=>{const qs=cur.concat(pool).filter(x=>x.cat===k);return qs.length?`<optgroup label="${esc(l)}">${qs.map(x=>opt(x.id,(x.fa||x.ar).slice(0,80)+' — '+x.ref,q?q.id:'')).join('')}</optgroup>`:''}).join('')}</select><button class="btn icon" data-act="ed-quote" title="یک سخن دیگر">${IC.re}</button></div></label>`}}
+  return h}
 function renderEdPreview(){clearTimeout(pvT);pvT=setTimeout(()=>{const w=$('#edPv');const d=curDoc();if(w&&d)mountPreview(w,renderPaper(d))},90)}
 function docChanged(){const d=curDoc();if(!d)return;d.updatedAt=Date.now();batchHook(d);const fi=$('[data-d="fileName"]');if(fi)fi.placeholder=autoFileName(d);updateSummary();updateEdNotices();renderEdPreview();save()}
 function onDocField(el){
   const doc=curDoc();const k=el.dataset.d;let v=readVal(el);
   if(k!=='companyId'&&k!=='type')doc.autoRef=false;
-  if(k==='companyId'){doc.companyId=v;if(!coById(v).officialOn)doc.official=false;const cfg=cfgOf(coById(v));Object.assign(doc,{currency:cfg.currency,vatRate:cfg.vatRate,vatOn:Number(cfg.vatRate)>0});if(doc.type==='proforma')doc.validDays=cfg.proformaValidityDays;if(!String(doc.notes).trim())doc.notes=cfg.defaultNotes||'';if(!String(doc.terms).trim())doc.terms=cfg.defaultTerms||'';
+  if(k==='companyId'){doc.companyId=v;doc.bankIds=null;doc.quoteId=pickQuote(coById(v));if(!coById(v).officialOn)doc.official=false;const cfg=cfgOf(coById(v));Object.assign(doc,{currency:cfg.currency,vatRate:cfg.vatRate,vatOn:Number(cfg.vatRate)>0});if(doc.type==='proforma')doc.validDays=cfg.proformaValidityDays;if(!String(doc.notes).trim())doc.notes=cfg.defaultNotes||'';if(!String(doc.terms).trim())doc.terms=cfg.defaultTerms||'';
     const rf=refDoc();if(doc.autoRef&&!doc.committed&&rf&&rf.id!==doc.id){const n=fillFromRef(rf,doc,true,true,true);toast('اقلام، خریدار و تاریخ طبق قاعده‌ی این شرکت از مرجع گرفته شد.'+n,4500)}
     syncDraftNumber(doc);save();renderEditor();return}
   if(k==='type'&&v==='official'){if(makeOfficial(doc,true)){syncDraftNumber(doc);save()}renderEditor();return}
@@ -1564,6 +1661,7 @@ function edAction(a,btn){
     case 'ed-print':printDocs([doc]);break;
     case 'ed-share':openShareModal(doc);break;
     case 'ed-del':{if(doc.committed){if(!confirm('سند '+iso(toFa(doc.number))+' به سطل بازیافت منتقل شود؟ (از بخش «اسناد» قابل بازیابی است)'))return;trashDocs([doc]);curId=null;S.draft=null}else{if(!confirm('پیش‌نویس دور انداخته شود؟'))return;S.draft=null}save();renderEditor();break}
+    case 'ed-quote':{const co=coById(doc.companyId);const pool=quotePool(co).filter(q=>q.id!==doc.quoteId);if(!pool.length){toast('سخن دیگری در دسته‌های این شرکت نیست');return}doc.quoteId=pool[Math.floor(Math.random()*pool.length)].id;doc.updatedAt=Date.now();save();renderEditor();break}
     case 'ed-autonum':doc.manualNumber=false;if(doc.committed){if(!confirm('شماره‌ی تازه از شمارنده گرفته شود؟'))return;const co=coById(doc.companyId);const jdn=parseJ(doc.date)||todayJdn();const seq=peekSeq(co,seqType(doc),jdn);doc.seq=seq;doc.counterKey=counterKey(co,seqType(doc),jdn);doc.number=fmtDocNumber(patOf(co,seqType(doc)),seq,co.numbering.pad,jdn);co.numbering.counters[doc.counterKey]=seq+1}else syncDraftNumber(doc);save();renderEditor();break;
     case 'ed-saveCust':{const b=doc.buyer;if(!String(b.name).trim()){toast('نام خریدار را وارد کنید');return}const ex=S.customers.find(c=>c.name.trim()===b.name.trim());if(ex)Object.assign(ex,JSON.parse(JSON.stringify(b)));else S.customers.push(Object.assign({id:uid()},JSON.parse(JSON.stringify(b))));save();renderEditor();toast(ex?'اطلاعات مشتری به‌روز شد':'به فهرست مشتریان اضافه شد');break}
     case 'it-add':doc.autoRef=false;doc.items.push(newItem());renderItems();docChanged();{const r=$$('#itemsBody tr');const last=r[r.length-1];last&&last.querySelector('input').focus()}break;
@@ -1705,8 +1803,19 @@ function renderCompanies(){
   const nb=co.numbering;const today=todayJdn();
   $('#v-companies').innerHTML=`<div class="stack"><div class="chips">${chips}</div><div class="co-wrap"><div class="stack">
   <fieldset><legend>مشخصات شرکت</legend><div class="grid g3">${f('name','نام شرکت / فروشگاه','span2')}${f('regNo','شماره ثبت','','class="ltr"')}${f('nationalId','شناسه ملی','','class="ltr"')}${f('economicCode','کد اقتصادی','','class="ltr"')}${f('headerText','زیرعنوان سربرگ (شعار یا حوزه‌ی فعالیت)','')}<label class="f"><span>مالیات بر ارزش افزوده‌ی این شرکت</span><select data-c="vatOwn">${opt('inherit','طبق تنظیمات ('+toFa((co.followGlobal?S.global:co.settings).vatRate)+'٪)',co.vatOwn)}${opt('custom','نرخ اختصاصی',co.vatOwn)}${opt('exempt','معاف (بدون مالیات)',co.vatOwn)}</select></label>${co.vatOwn==='custom'?`<label class="f"><span>نرخ مالیات این شرکت (٪)</span><input class="num" data-dec="1" data-c="vatOwnRate" value="${esc(fmtInput(co.vatOwnRate,1))}"></label>`:''}</div><small class="note">نرخ مالیات روی سندهای جدید و سندهای ثبت‌نشده‌ی این شرکت اعمال می‌شود؛ سندهای ثبت‌شده تغییر نمی‌کنند.</small></fieldset>
-  <fieldset><legend>نشانی و تماس</legend><div class="grid g3">${f('address','نشانی','span-all')}${f('postalCode','کد پستی','','class="ltr"')}${f('phone','تلفن','','class="ltr"')}${f('fax','نمابر','','class="ltr"')}${f('mobile','تلفن همراه','','class="ltr"')}${f('email','ایمیل','','class="ltr"')}${f('website','وب‌سایت','','class="ltr"')}${f('footerText','متن پانویس','span-all')}</div></fieldset>
-  <fieldset><legend>اطلاعات بانکی</legend><div class="grid g3">${f('bankName','نام بانک و شعبه')}${f('accountHolder','صاحب حساب')}${f('accountNo','شماره حساب','','class="ltr"')}${f('sheba','شماره شبا','span2','class="ltr" placeholder="IR…"')}${f('cardNo','شماره کارت','','class="ltr"')}<label class="chk"><input type="checkbox" data-c="showBank" ${co.showBank?'checked':''}>اطلاعات بانکی در فاکتور چاپ شود</label><label class="chk span2"><input type="checkbox" data-c="showBankPf" ${co.showBankPf!==false?'checked':''} ${co.showBank?'':'disabled'}>در پیش‌فاکتور هم چاپ شود</label></div></fieldset>
+  <fieldset><legend>نشانی و تماس</legend><div class="grid g3">${f('address','نشانی','span-all')}${f('postalCode','کد پستی','','class="ltr"')}${f('phone','تلفن','','class="ltr"')}${f('fax','نمابر','','class="ltr"')}${f('mobile','تلفن همراه','','class="ltr"')}${f('email','ایمیل','','class="ltr"')}${f('website','وب‌سایت','','class="ltr"')}</div></fieldset>
+  <fieldset><legend>حساب‌های بانکی <small>(هر تعداد حساب؛ حساب‌های «پیش‌فرض» در سندهای تازه چاپ می‌شوند و در هر سند می‌توانید انتخاب را تغییر دهید)</small></legend>
+   <div class="stack" style="gap:10px">${(co.banks||[]).map((b,i)=>{const bf=(k,l,cls='',extra='')=>`<label class="f ${cls}"><span>${l}</span><input data-c="banks.${i}.${k}" value="${esc(b[k]||'')}" ${extra}></label>`;return `<div class="bank-card"><div class="card-h"><b>حساب ${toFa(i+1)}${b.bankName?' — '+esc(bankLabel(b)):''}</b><div class="inline"><label class="chk" style="margin:0"><input type="checkbox" data-c="banks.${i}.def" ${b.def?'checked':''}>پیش‌فرض</label>${i?`<button class="btn sm" data-act="co-bankUp" data-i="${i}" title="بالاتر">▲</button>`:''}<button class="btn sm danger" data-act="co-bankDel" data-i="${i}">حذف</button></div></div><div class="grid g3">${bf('bankName','نام بانک','','placeholder="مثلاً بانک ملت"')}${bf('brName','نام شعبه')}${bf('brCode','کد شعبه','','class="ltr"')}${bf('accountHolder','صاحب حساب')}${bf('accountNo','شماره حساب','','class="ltr"')}${bf('cardNo','شماره کارت','','class="ltr"')}${bf('sheba','شماره شبا','span2','class="ltr" placeholder="IR…"')}</div></div>`}).join('')||'<div class="muted">هنوز حسابی ثبت نشده است.</div>'}
+   <div class="btns"><button class="btn sm" data-act="co-bankAdd">${IC.plus} افزودن حساب</button></div>
+   <div class="grid g2"><label class="chk"><input type="checkbox" data-c="showBank" ${co.showBank?'checked':''}>اطلاعات بانکی در فاکتور چاپ شود</label><label class="chk"><input type="checkbox" data-c="showBankPf" ${co.showBankPf!==false?'checked':''} ${co.showBank?'':'disabled'}>در پیش‌فاکتور هم چاپ شود</label></div></div></fieldset>
+  <fieldset><legend>پانویس سند</legend><div class="grid g3">
+   <label class="f"><span>محتوای پانویس</span><select data-c="footerMode">${opt('text','فقط متن ثابت',co.footerMode||'text')}${opt('quote','فقط سخن بزرگان / آیه',co.footerMode)}${opt('both','متن ثابت + سخن بزرگان / آیه',co.footerMode)}</select></label>
+   ${co.footerMode&&co.footerMode!=='text'?`<label class="f span2"><span>سخن ثابت (اگر خالی بماند، برای هر سند یکی از دسته‌های انتخاب‌شده برداشته می‌شود)</span><select data-c="quoteFixed"><option value="">— تصادفی از دسته‌های انتخاب‌شده —</option>${Object.entries(QCAT).map(([k,l])=>`<optgroup label="${esc(l)}">${allQuotes().filter(q=>q.cat===k&&quoteOn(q)).map(q=>opt(q.id,(q.fa||q.ar).slice(0,70)+' — '+q.ref,co.quoteFixed)).join('')}</optgroup>`).join('')}</select></label>
+   <div class="span-all"><span class="muted">دسته‌ها برای این شرکت:</span> ${Object.entries(QCAT).map(([k,l])=>`<label class="chk" style="display:inline-flex;margin-inline-end:14px"><input type="checkbox" data-qc="${k}" ${(co.quoteCats||[]).includes(k)?'checked':''}>${esc(l)} <small class="muted">(${toFa(allQuotes().filter(q=>q.cat===k&&quoteOn(q)).length)})</small></label>`).join('')}</div>
+   <label class="chk span-all"><input type="checkbox" data-c="quoteTr" ${co.quoteTr!==false?'checked':''}>ترجمه‌ی فارسی آیه‌ها و روایت‌ها هم چاپ شود</label>
+   <small class="note span-all">فهرست سخن‌ها (و افزودن سخن تازه) در «تنظیمات» است. سخنِ هر سند هنگام ثبت ثابت می‌ماند تا چاپ دوباره همان باشد.</small>`:''}
+   ${co.footerMode!=='quote'?f('footerText','متن ثابت پانویس','span-all'):''}
+  </div></fieldset>
   <fieldset><legend>لوگو، مهر و امضا</legend><div class="imgs">${img('logo','لوگو')}${img('stamp','مهر')}${img('signature','امضا')}</div><div class="grid g2" style="margin-top:10px"><label class="chk"><input type="checkbox" data-c="showStamp" ${co.showStamp?'checked':''}>مهر در سند چاپ شود</label><label class="chk"><input type="checkbox" data-c="showSignature" ${co.showSignature?'checked':''}>امضا در سند چاپ شود</label></div><small class="note">برای مهر و امضا تصویر PNG با پس‌زمینه‌ی شفاف بهترین نتیجه را می‌دهد. تصاویر خودکار کوچک می‌شوند.</small></fieldset>
   <fieldset><legend>ظاهر سند</legend><div class="grid g3">
    <label class="f"><span>قالب</span><select data-c="template">${Object.entries(TPL).map(([k,l])=>opt(k,l,co.template)).join('')}</select></label>
@@ -1755,7 +1864,8 @@ function onCoField(el,ev){
   if(k==='numbering.pad')v=Math.min(8,Math.max(1,v));
   if(k==='fontSize')v=parseFloat(el.value)||10;
   setPath(co,k,v);co.sample=false;if(k==='vatOwn'||k==='vatOwnRate')applyCoVat(co);save();
-  if(['followGlobal','template','showBank','showBankPf','batchMode','vatOwn','officialOn'].includes(k)||(k==='name'&&ev==='change')||k.startsWith('numbering.')&&ev==='change'){renderCompanies();return}
+  if(['followGlobal','template','showBank','showBankPf','batchMode','vatOwn','officialOn','footerMode'].includes(k)||(k==='name'&&ev==='change')||k.startsWith('numbering.')&&ev==='change'){renderCompanies();return}
+  {const m=/^banks\.(\d+)\.(bankName|brName)$/.exec(k);if(m){const b=co.banks[+m[1]];const h=el.closest('.bank-card');const t=h&&h.querySelector('.card-h b');if(b&&t)t.textContent='حساب '+toFa(+m[1]+1)+(b.bankName?' — '+bankLabel(b):'')}}
   if(k==='name')$$('.chip[aria-pressed="true"]').forEach(c=>c.lastChild.textContent=v||'بی‌نام');
   renderCoPreview();
 }
@@ -1768,6 +1878,9 @@ function coAction(a,btn){
     case 'co-dupStyle':{const c=JSON.parse(JSON.stringify(co));Object.assign(c,{id:uid(),sample:false,name:co.name+' (کپی)',numbering:Object.assign({},co.numbering,{counters:{}})});S.companies.push(c);coSel=S.companies.length-1;save();renderCompanies();toast('شرکت کپی شد؛ مشخصات آن را اصلاح کنید');break}
     case 'co-del':{if(S.documents.some(d=>d.companyId===co.id)){toast('این شرکت سند ثبت‌شده دارد؛ ابتدا سندهایش را حذف کنید.',4000);return}if(!confirm('شرکت «'+co.name+'» حذف شود؟'))return;S.companies.splice(coSel,1);coSel=0;if(S.draft&&S.draft.companyId===co.id)S.draft=null;save();renderCompanies();break}
     case 'co-img':imgTarget=btn.dataset.k;$('#imgFile').value='';$('#imgFile').click();break;
+    case 'co-bankAdd':{co.banks=co.banks||[];co.banks.push(newBank({def:!co.banks.length}));save();renderCompanies();break}
+    case 'co-bankDel':{const i=+btn.dataset.i;const b=co.banks[i];if(!b)return;if((b.accountNo||b.sheba||b.cardNo)&&!confirm('حساب «'+bankLabel(b)+'» حذف شود؟'))return;co.banks.splice(i,1);S.documents.forEach(d=>{if(d.companyId===co.id&&Array.isArray(d.bankIds)&&!d.committed)d.bankIds=d.bankIds.filter(x=>x!==b.id)});save();renderCompanies();break}
+    case 'co-bankUp':{const i=+btn.dataset.i;if(i>0){const t=co.banks[i];co.banks[i]=co.banks[i-1];co.banks[i-1]=t;save();renderCompanies()}break}
     case 'co-imgrm':co[btn.dataset.k]='';save();renderCompanies();break;
     case 'co-copyFromGlobal':SETTING_KEYS.forEach(k=>co.settings[k]=S.global[k]);save();renderCompanies();toast('تنظیمات عمومی در این شرکت کپی شد');break;
     case 'co-copyToAll':if(!confirm('تنظیمات مالی این شرکت برای همه‌ی شرکت‌ها اعمال شود؟'))return;S.companies.forEach(c=>{if(c!==co){c.followGlobal=false;SETTING_KEYS.forEach(k=>c.settings[k]=co.settings[k])}});save();renderCompanies();toast('برای همه‌ی شرکت‌ها اعمال شد');break;
@@ -1811,6 +1924,17 @@ function crudAction(a,btn){
 
 /* ===== global settings ===== */
 function upcomingHolidays(){const out=[];const t=todayJdn();for(let j=t;j<t+200&&out.length<10;j++){const s=jStr(j);const n=HOL.dated[s]||HOL.fixed[s.slice(5)];if(n)out.push([s,n,j])}return out}
+let qFilter='quran';
+function quotesCardHtml(){const qs=allQuotes().filter(q=>q.cat===qFilter);const custom=new Set((S.quotes||[]).map(q=>q.id));
+ return `<div class="card"><div class="card-h"><h3>سخن‌های پانویس <small>آیه‌ها، روایت‌ها و سخن بزرگان برای پانویس سندها؛ انتخاب برای هر شرکت در صفحه‌ی «شرکت‌ها»</small></h3></div>
+ <div class="chips" style="margin-bottom:8px">${Object.entries(QCAT).map(([k,l])=>`<button class="chip" data-act="q-cat" data-k="${k}" aria-pressed="${k===qFilter}">${esc(l)} <small>(${toFa(allQuotes().filter(q=>q.cat===k).length)})</small></button>`).join('')}</div>
+ <div class="qlist">${qs.map(q=>`<div class="qrow"><label class="chk" style="margin:0" title="فعال"><input type="checkbox" data-qon="${esc(q.id)}" ${quoteOn(q)?'checked':''}></label><div class="qtx">${q.ar?`<div class="qar">${esc(q.ar)}</div>`:''}${q.fa?`<div>${esc(q.fa)}</div>`:''}<small class="muted">${esc(q.ref)}</small></div>${custom.has(q.id)?`<button class="btn sm danger" data-act="q-del" data-id="${esc(q.id)}">حذف</button>`:''}</div>`).join('')||'<div class="muted">موردی نیست.</div>'}</div>
+ <details style="margin-top:10px"><summary>افزودن سخن تازه</summary><div class="grid g3" style="margin-top:8px">
+  <label class="f"><span>دسته</span><select id="qNewCat">${Object.entries(QCAT).map(([k,l])=>opt(k,l,qFilter)).join('')}</select></label>
+  <label class="f span2"><span>منبع (سوره و آیه، یا گوینده و کتاب)</span><input id="qNewRef" placeholder="مثلاً سوره‌ی بقره، آیه‌ی ۲۸۲"></label>
+  <label class="f span-all"><span>متن اصلی عربی (اختیاری)</span><input id="qNewAr" dir="rtl"></label>
+  <label class="f span-all"><span>متن فارسی یا ترجمه</span><input id="qNewFa"></label>
+  <div class="btns span-all"><button class="btn sm" data-act="q-add">${IC.plus} افزودن</button></div></div></details></div>`}
 function renderSettings(){
   const g=S.global;const up=upcomingHolidays();
   $('#v-settings').innerHTML=`<div class="stack" style="max-width:1100px">
@@ -1818,6 +1942,7 @@ function renderSettings(){
    ${settingsFields('data-s',g)}
    <div class="notice info">شرکت‌های پیرو: ${S.companies.filter(c=>c.followGlobal).map(c=>esc(c.name)).join('، ')||'هیچ‌کدام'}</div></div>
   ${fxCardHtml()}
+  ${quotesCardHtml()}
   ${SRV?`<div class="card"><h3>تاریخ امروز</h3><div class="notice ${CLOCK.online?'ok':'warn'}" id="clockInfo">${esc(clockText())}<button class="btn sm" data-act="clock-sync">گرفتن دوباره</button></div><small class="note">در نسخه‌ی تحت وب، تاریخ و ساعت از ساعت سرور گرفته می‌شود و تعطیلات از طریق سرور از سرویس‌های ایرانی دریافت می‌شود.</small></div>`:`<div class="card"><h3>تاریخ امروز</h3><div class="grid g2">
    <label class="f"><span>منبع تاریخ امروز</span><select data-s="dateSource">${opt('auto','از اینترنت (اگر وصل نبود، ساعت رایانه)',g.dateSource)}${opt('system','فقط ساعت رایانه',g.dateSource)}</select></label>
    <div class="notice ${CLOCK.online?'ok':'info'}" id="clockInfo">${esc(clockText())}<button class="btn sm" data-act="clock-sync">گرفتن دوباره</button></div>
@@ -1843,10 +1968,11 @@ function renderSettings(){
    <div class="grid g3"><label class="f"><span>قفل خودکار بعد از بی‌کاری</span><select data-s="autoLockMin">${[[0,'خاموش'],[5,'۵ دقیقه'],[10,'۱۰ دقیقه'],[15,'۱۵ دقیقه'],[30,'۳۰ دقیقه'],[60,'۱ ساعت'],[120,'۲ ساعت']].map(x=>opt(x[0],x[1],g.autoLockMin??15)).join('')}</select></label></div>
    <small class="note">${VAULT&&VAULT.ring.rcAt?'آخرین کد بازیابی: '+fmtTs(VAULT.ring.rcAt)+'. ':''}اگر رمز را فراموش کنید، فقط با کد بازیابی می‌شود اطلاعات را باز کرد؛ بدون رمز و کد بازیابی، اطلاعات برای همیشه قابل خواندن نیست.</small></div>`}
   </div>`;
-  if(SRV)loadUsers();
+  if(SRV){loadUsers();renderUpdBox();if(!UPD)updTick()}
 }
 function srvCardsHtml(){
-  return `<div class="card"><h3>حساب کاربری و امنیت <small>واردشده با نام «${esc(SRV.user)}»${SRV.admin?' (مدیر)':''}</small></h3>
+  return `<div class="card"><h3>به‌روزرسانی برنامه</h3><div id="updBox" class="stack" style="gap:10px"></div></div>
+  <div class="card"><h3>حساب کاربری و امنیت <small>واردشده با نام «${esc(SRV.user)}»${SRV.admin?' (مدیر)':''}</small></h3>
    <div class="grid g3"><label class="f"><span>رمز فعلی</span><input type="password" id="pwOld" class="ltr" autocomplete="current-password"></label><label class="f"><span>رمز جدید (دست‌کم ۸ نویسه)</span><input type="password" id="pwNew" class="ltr" autocomplete="new-password"></label><label class="f"><span>تکرار رمز جدید</span><input type="password" id="pwNew2" class="ltr" autocomplete="new-password"></label></div>
    <div class="btns"><button class="btn pri" data-act="pw-change">تغییر رمز</button><button class="btn" data-act="logout">خروج از حساب</button></div>
    <small class="note">بعد از تغییر رمز، همه‌ی ورودهای دیگرِ این حساب (روی رایانه‌ها و گوشی‌های دیگر) بسته می‌شوند.</small></div>
@@ -1892,7 +2018,7 @@ function onGlobalField(el,ev){
 function onCoSettingField(el){const co=S.companies[coSel];const k=el.dataset.cs;let v=readVal(el);if(k==='proformaGapDays')v=Math.max(1,v);co.settings[k]=v;if(k==='vatRate'&&co.vatOwn==='inherit')applyCoVat(co);save();renderCoPreview()}
 function clearSamples(){
   if(!confirm('اطلاعات نمونه (نام و مشخصات شرکت‌های نمونه، مشتری و کالاهای نمونه) پاک شود؟ قالب و رنگ‌ها می‌مانند.'))return;
-  S.companies.forEach((c,i)=>{if(c.sample){['nationalId','economicCode','regNo','postalCode','address','phone','fax','mobile','email','website','bankName','accountHolder','accountNo','sheba','cardNo','headerText','footerText'].forEach(k=>c[k]='');c.name='شرکت '+toFa(i+1);c.sample=false}});
+  S.companies.forEach((c,i)=>{if(c.sample){['nationalId','economicCode','regNo','postalCode','address','phone','fax','mobile','email','website','bankName','accountHolder','accountNo','sheba','cardNo','headerText','footerText'].forEach(k=>c[k]='');c.banks=[];c.footerMode='text';c.name='شرکت '+toFa(i+1);c.sample=false}});
   S.customers=S.customers.filter(c=>!c.sample);S.products=S.products.filter(p=>!p.sample);S.documents=S.documents.filter(d=>!d.sample);
   save();renderAll();toast('اطلاعات نمونه پاک شد');
 }
@@ -2565,7 +2691,7 @@ function askPassword(title,msg,confirmNew){
 let LOCKED=false,lastAct=Date.now();
 function lockShell(inner){
   let o=$('#lockScr');if(!o){o=document.createElement('div');o.id='lockScr';document.body.appendChild(o)}
-  o.innerHTML=`<div class="lock-box"><div class="lock-brand"><span class="brand-ico"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-2-1.2-2 1.2-2-1.2-2 1.2-2-1.2L6 21z"/><path d="M9 9h6M9 12.5h6M9 16h3.5"/></svg></span><b>دفتر فاکتور</b></div>${inner}</div>`;
+  o.innerHTML=`<div class="lock-box"><div class="lock-brand"><span class="brand-ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="ivg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f9a8a"/><stop offset=".55" stop-color="#1e5a55"/><stop offset="1" stop-color="#123b37"/></linearGradient><linearGradient id="ivp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e2f0ec"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#ivg)"/><path d="M19 11.5H38.5L47 20V51L43.4 48.6 39.8 51 36.2 48.6 32.6 51 29 48.6 25.4 51 21.8 48.6 19 51z" fill="url(#ivp)"/><path d="M38.5 11.5V18a2 2 0 0 0 2 2H47z" fill="#a9d3ca"/><rect x="24" y="25.5" width="4.4" height="16" rx="2.2" fill="#1e5a55"/><circle cx="26.2" cy="19.8" r="2.7" fill="#eaa53a"/><path d="M33 27.5h9M33 33h9M33 38.5h5.5" stroke="#1e5a55" stroke-width="2.6" stroke-linecap="round" opacity=".5"/></svg></span><b>Invora</b> <small style="color:var(--muted)">دفتر فاکتور</small></div>${inner}</div>`;
   o.hidden=false;document.body.classList.add('locked');
   const f=o.querySelector('input');if(f)setTimeout(()=>f.focus(),30);
   return o;
@@ -2681,6 +2807,146 @@ async function exportBackup(){
   toast('پشتیبان رمزشده ساخته شد ('+toFa(S.documents.length)+' سند، '+toFa(S.companies.length)+' شرکت). در هر دو نسخه با «بازیابی از فایل» و همین رمز باز می‌شود.',6000);
 }
 
+
+/* ---------- version, changes, theme ---------- */
+const APP_VERSION=(document.querySelector('meta[name="app-version"]')||{}).content||'0';
+const APP_CHANGES=[
+ {v:'2.5.0',d:'1405/08/15',t:'چند حساب بانکی و سخن بزرگان در پانویس',items:[
+  'هر شرکت می‌تواند چند حساب بانکی داشته باشد؛ با نام بانک، نام شعبه، کد شعبه، صاحب حساب، شماره حساب، شبا و کارت.',
+  'حساب‌های «پیش‌فرض» در سندهای تازه چاپ می‌شوند و در هر سند می‌شود حساب‌های چاپی را تیک زد.',
+  'حساب قبلی هر شرکت خودکار به فهرست حساب‌ها منتقل شد.',
+  'پانویس سند می‌تواند متن ثابت، سخن بزرگان، یا هر دو باشد.',
+  'فهرست آماده: ۲۱ آیه‌ی قرآن با ترجمه و نشانی سوره و آیه، سخنانی از پیامبر اکرم (ص) و امامان (ع)، و بیت‌ها و سخنانی از سعدی، فردوسی، حافظ و مولوی.',
+  'برای هر شرکت می‌توانید دسته‌ها را انتخاب کنید یا یک سخن ثابت بگذارید؛ در هر سند هم می‌شود سخن را عوض کرد.',
+  'سخن هر سند هنگام ثبت ثابت می‌ماند تا چاپ دوباره همان باشد.',
+  'افزودن سخن تازه و غیرفعال کردن هر سخن در «تنظیمات».',
+  'لوگو و آیکون در صفحه‌های ورود و دریافت فاکتور.']},
+ {v:'2.4.0',d:'1405/08/15',t:'به‌روزرسانی خودکار، نسخه و تغییرات، لوگو و حالت شب',items:[
+  'نسخه‌ی تحت وب خودش نسخه‌ی تازه را از گیت‌هاب می‌گیرد و نصب می‌کند؛ دیگر لازم نیست وارد سی‌پنل شوید.',
+  'پیش از نصب، نحو همه‌ی فایل‌ها بررسی و از نسخه‌ی فعلی پشتیبان گرفته می‌شود؛ اگر سایت بالا نیاید، نسخه‌ی قبلی برمی‌گردد.',
+  'نمایش شماره‌ی نسخه بالای صفحه و فهرست تغییرات هر نسخه؛ بعد از هر به‌روزرسانی «تازه‌های این نسخه» یک بار نشان داده می‌شود.',
+  'بخش «به‌روزرسانی برنامه» در تنظیمات عمومی: وضعیت، بررسی و نصب دستی، روشن/خاموش کردن نصب خودکار.',
+  'نسخه‌ی آفلاین هم انتشار نسخه‌ی تازه را خبر می‌دهد و فایل تازه را دانلود می‌کند.',
+  'لوگو و آیکون تازه‌ی Invora.',
+  'حالت روز و شب با یک دکمه (خودکار / روز / شب).']},
+ {v:'2.3.0',d:'1405/08/15',t:'گیت‌هاب و نصب روی زیردامنه',items:[
+  'کد در مخزن گیت‌هاب Invora.',
+  'استقرار با Git Version Control سی‌پنل؛ پیدا کردن خودکار پوشه‌ی زیردامنه و حفظ تنظیمات PHP سی‌پنل در .htaccess.',
+  'فایل inc/config.local.php برای تنظیمات اختصاصی هاست که با به‌روزرسانی پاک نمی‌شود.']},
+ {v:'2.2.0',d:'1405/08/15',t:'رمزنگاری نسخه‌ی آفلاین و پشتیبان رمزشده',items:[
+  'نسخه‌ی آفلاین با رمز باز می‌شود؛ حافظه‌ی مرورگر، پوشه‌ی داده، پشتیبان‌ها و فایل سندها همه رمزشده‌اند.',
+  'کد بازیابی، تغییر رمز، قفل خودکار بعد از بی‌کاری و دکمه‌ی قفل.',
+  'پشتیبان رمزشده (.dfbak) که هم در نسخه‌ی آفلاین و هم در نسخه‌ی تحت وب باز می‌شود.',
+  'حذف خروجی‌های خوانا (ZIP و فایل تکی سند).']},
+ {v:'2.1.0',d:'1405/08/15',t:'رمزنگاری سرور و گزارش لینک‌ها',items:[
+  'همه‌ی اطلاعات روی سرور با AES-256 رمز می‌شود؛ کلید فقط با رمز کاربران یا کد بازیابی باز می‌شود.',
+  'گزارش کامل هر لینک دانلود: آی‌پی، دفعات، مدل دستگاه، سیستم‌عامل، مرورگر و خروجی CSV.',
+  'بعد از ۵ رمز اشتباه فقط لینک غیرفعال می‌شود و فایل می‌ماند.',
+  'تعداد دفعات دریافت نرخ دلار در روز قابل تنظیم شد.']},
+ {v:'2.0.0',d:'1405/08/15',t:'نسخه‌ی تحت وب',items:[
+  'ورود با نام کاربری و رمز، چند کاربر، قفل ورود بعد از رمزهای اشتباه.',
+  'لینک دانلود فاکتور با مدت اعتبار، تعداد دانلود و رمز ۵ رقمی.',
+  'فاکتور رسمی (صورتحساب مالیاتی) با صورتحساب اصلاحی، ابطالی و برگشت از فروش.',
+  'کالا و خدمات دلاری با تبدیل خودکار به ریال و درصد افزایش.',
+  'منوی چاپ آدرس با طراحی برچسب، پاکت و برگه، لوگو و QR کد.']},
+ {v:'1.5.0',d:'1405/08/15',t:'صدور تکی و گروهی جدا، فایل هر سند',items:[
+  'جدا شدن صدور تکی از صدور گروهی.',
+  'ذخیره‌ی هر سند در پوشه‌ی شرکتش با نام خریدار و تاریخ، سطل بازیافت و بازیابی.']},
+ {v:'1.4.0',d:'1405/08/15',t:'سرویس‌های ایرانی و مالیات هر شرکت',items:[
+  'تاریخ و تعطیلات از سرویس‌های ایرانی.',
+  'نرخ مالیات جداگانه (یا معافیت) برای هر شرکت.']},
+ {v:'1.3.0',d:'1405/08/15',t:'صدور گروهی و تعطیلات',items:[
+  'صفحه‌ی صدور گروهی: فاکتور ۱ را می‌زنید و سند بقیه‌ی شرکت‌ها همزمان ساخته و یکجا چاپ می‌شود.',
+  'تعیین فاکتور، پیش‌فاکتور یا هر دو برای هر شرکت.',
+  'تاریخ امروز از اینترنت و دریافت تعطیلات رسمی هر سال.',
+  'امکان نیاوردن حساب بانکی در پیش‌فاکتور برای هر شرکت.']},
+ {v:'1.2.0',d:'1405/08/15',t:'تاریخ و قیمت نسبت به فاکتور ۱',items:[
+  'تاریخ سندهای دیگر جلوتر یا عقب‌تر از فاکتور ۱ با حداقل و حداکثر روز.',
+  'قیمت سندهای دیگر درصدی یا مبلغ ثابت بیشتر یا کمتر از فاکتور ۱.']},
+ {v:'1.1.0',d:'1405/08/15',t:'فاکتور مرجع',items:['کپی اقلام، قیمت‌ها و مشخصات خریدار از فاکتور ۱.']},
+ {v:'1.0.0',d:'1405/08/15',t:'نسخه‌ی پایه',items:['فاکتور و پیش‌فاکتور برای چند شرکت، تقویم شمسی، قالب‌های چاپ.']}
+];
+function cmpVer(a,b){const x=String(a).split('.').map(n=>parseInt(n)||0),y=String(b).split('.').map(n=>parseInt(n)||0);for(let i=0;i<Math.max(x.length,y.length);i++){const d=(x[i]||0)-(y[i]||0);if(d)return d>0?1:-1}return 0}
+const faVer=v=>toFa(String(v));
+function renderVerPill(){const el=$('#verPill');if(el)el.textContent='نسخه '+faVer(APP_VERSION)}
+function showChanges(sinceVer,title){
+  const list=sinceVer?APP_CHANGES.filter(c=>cmpVer(c.v,sinceVer)>0):APP_CHANGES;
+  const m=$('#modal');m.hidden=false;
+  m.innerHTML=`<div class="modal-box" style="width:min(720px,100%)"><div class="modal-h"><h3>${esc(title||'نسخه‌ها و تغییرات')}</h3><button class="btn" data-act="modal-close">بستن</button></div>
+  <div class="chg">${list.map(c=>`<div class="chg-v ${c.v===APP_VERSION?'cur':''}"><div class="chg-h"><b>نسخه ${faVer(c.v)}</b>${c.v===APP_VERSION?'<span class="badge acc">نسخه‌ی فعلی</span>':''}<span class="muted">${toFa(c.d)}</span><span>— ${esc(c.t)}</span></div><ul>${c.items.map(x=>'<li>'+esc(x)+'</li>').join('')}</ul></div>`).join('')}</div>
+  ${!sinceVer?`<small class="note">کد کامل و تاریخچه‌ی تغییرات در <span dir="ltr">github.com/md6410/Invora</span>.</small>`:''}</div>`;
+}
+function whatsNew(){
+  let seen=null;try{seen=localStorage.getItem('df-seen-ver')}catch(e){}
+  try{localStorage.setItem('df-seen-ver',APP_VERSION)}catch(e){}
+  if(seen&&cmpVer(APP_VERSION,seen)>0&&!LOCKED)showChanges(seen,'تازه‌های نسخه‌ی '+faVer(APP_VERSION));
+}
+const THEMES=['auto','light','dark'];
+const THEME_IC={auto:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 4v16" /><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor" stroke="none"/></svg>',
+  light:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+  dark:'<svg viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>'};
+function curTheme(){let t='auto';try{t=localStorage.getItem('df-theme')||'auto'}catch(e){}return THEMES.includes(t)?t:'auto'}
+function applyTheme(t){
+  if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);else document.documentElement.removeAttribute('data-theme');
+  const b=$('#themeBtn');if(b){b.innerHTML=THEME_IC[t];b.title={auto:'حالت روز و شب: خودکار (طبق سیستم)',light:'حالت روز',dark:'حالت شب'}[t]+' — برای تغییر کلیک کنید'}
+  const dark=t==='dark'||(t==='auto'&&typeof matchMedia==='function'&&matchMedia('(prefers-color-scheme: dark)').matches);
+  const mc=document.querySelector('meta[name="theme-color"]');if(mc)mc.content=dark?'#121615':'#1e5a55';
+}
+function cycleTheme(){const t=THEMES[(THEMES.indexOf(curTheme())+1)%THEMES.length];try{localStorage.setItem('df-theme',t)}catch(e){}applyTheme(t);toast({auto:'حالت خودکار (طبق تنظیم سیستم)',light:'حالت روز',dark:'حالت شب'}[t])}
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>applyTheme(curTheme()))}catch(e){}
+
+/* ---------- updates ---------- */
+let UPD=null,UPD_NOTICE='';
+async function updTick(){
+  if(!SRV||!S)return;
+  try{const j=await api('update_tick');UPD=j.upd;const iv=UPD.installed.version;
+    if(iv&&cmpVer(iv,APP_VERSION)>0&&UPD_NOTICE!==iv){UPD_NOTICE=iv;renderBanner()}
+    if(view==='settings'&&$('#updBox'))renderUpdBox();
+  }catch(e){}
+}
+function renderUpdBox(){
+  const box=$('#updBox');if(!box)return;if(!UPD){box.innerHTML='<div class="empty">در حال بارگذاری…</div>';return}
+  const u=UPD,ins=u.installed,lt=u.latest;const short=x=>x?x.slice(0,7):'—';
+  const upToDate=lt.sha&&ins.sha===lt.sha;const avail=lt.sha&&ins.sha!==lt.sha;
+  box.innerHTML=`<div class="grid g2">
+   <div class="notice ${avail?'warn':'ok'}"><span>نسخه‌ی نصب‌شده: <b>${faVer(ins.version||APP_VERSION)}</b> <small dir="ltr">(${short(ins.sha)})</small>${ins.at?' · '+fmtTs(ins.at)+(ins.by?' · '+esc(ins.by==='auto'?'خودکار':ins.by==='cpanel'?'از سی‌پنل':ins.by):''):''}<br>
+    ${lt.sha?(upToDate?'به‌روز است؛ آخرین نسخه‌ی گیت‌هاب همین است.':'نسخه‌ی تازه در گیت‌هاب: <b>'+faVer(lt.version||'?')+'</b> <small dir="ltr">('+short(lt.sha)+')</small>'+(lt.msg?'<br><small>'+esc(lt.msg)+'</small>':'')):'هنوز بررسی نشده است.'}
+    ${u.lastCheck?'<br><small>آخرین بررسی: '+fmtTs(u.lastCheck)+'</small>':''}</span></div>
+   <div class="stack" style="gap:8px">
+    <label class="chk"><input type="checkbox" id="updAuto" ${u.auto?'checked':''} ${SRV.admin?'':'disabled'}>نصب خودکار نسخه‌های تازه</label>
+    <label class="f"><span>هر چند دقیقه بررسی شود (وقتی برنامه باز است)</span><select id="updEvery" ${SRV.admin?'':'disabled'}>${[5,10,30,60,180,720].map(n=>opt(n,toFa(n)+' دقیقه',u.every)).join('')}</select></label>
+   </div></div>
+   ${u.lastError?`<div class="notice warn"><span>آخرین خطا (${fmtTs(u.lastErrorAt)}): ${esc(u.lastError)}</span></div>`:''}
+   ${!u.zip?'<div class="notice warn">افزونه‌ی zip در PHP فعال نیست؛ نصب خودکار کار نمی‌کند. در سی‌پنل: Select PHP Version ← Extensions ← zip.</div>':''}
+   <div class="btns"><button class="btn" data-act="upd-check" ${SRV.admin?'':'disabled'}>بررسی الان</button>${avail?`<button class="btn pri" data-act="upd-apply" ${SRV.admin?'':'disabled'}>نصب نسخه‌ی تازه</button>`:''}<button class="btn" data-act="ver-show">نسخه‌ها و تغییرات</button></div>
+   ${u.history&&u.history.length?`<div class="tbl-wrap"><table class="list"><thead><tr><th>زمان</th><th>از</th><th>به</th><th>توسط</th><th>نتیجه</th></tr></thead><tbody>${u.history.slice(0,6).map(h=>`<tr><td class="n">${fmtTs(h.at)}</td><td class="n">${faVer(h.from||'—')}</td><td class="n">${faVer(h.version||'—')}</td><td>${esc(h.by==='auto'?'خودکار':h.by)}</td><td>${h.ok?'<span class="badge ok">نصب شد</span>':'<span class="badge draft" title="'+esc(h.error)+'">ناموفق</span>'}</td></tr>`).join('')}</tbody></table></div>`:''}
+   <small class="note">نسخه‌ی تازه از مخزن <span dir="ltr">github.com/${esc(u.repo)}</span> گرفته می‌شود. پیش از نصب، از فایل‌های فعلی پشتیبان گرفته می‌شود و اگر سایت بعد از نصب بالا نیاید، نسخه‌ی قبلی خودکار برمی‌گردد. اطلاعات شما هیچ‌وقت دست نمی‌خورد.</small>`;
+}
+async function updAction(kind){
+  const b=$('[data-act="upd-'+kind+'"]');if(b){b.disabled=true;b.textContent=kind==='apply'?'در حال نصب…':'در حال بررسی…'}
+  try{const j=await api(kind==='apply'?'update_apply':'update_check');UPD=j.upd;
+    if(kind==='apply'&&j.r&&j.r.updated){UPD_NOTICE=j.r.version;renderBanner();toast('نسخه‌ی '+faVer(j.r.version)+' نصب شد. صفحه را تازه کنید.',6000)}
+    else if(kind==='check')toast(j.r&&j.r.available?'نسخه‌ی تازه موجود است':'برنامه به‌روز است');
+  }catch(e){if(e.data&&e.data.upd)UPD=e.data.upd;toast(e.message,6000)}
+  renderUpdBox();
+}
+async function updCfg(){try{const j=await api('update_cfg',{auto:$('#updAuto').checked,every:+$('#updEvery').value});UPD=j.upd;renderUpdBox();toast('ذخیره شد')}catch(e){toast(e.message)}}
+/* offline: tell the user when a newer app.html is published */
+let OFF_NEW=null;
+async function offlineUpdCheck(){
+  if(SRV)return;let last=0;try{last=+localStorage.getItem('df-upd-at')||0}catch(e){}
+  if(Date.now()-last<20*3600*1000){try{const v=localStorage.getItem('df-upd-ver');if(v&&cmpVer(v,APP_VERSION)>0){OFF_NEW={v};renderBanner()}}catch(e){}return}
+  try{const r=await fetch('https://raw.githubusercontent.com/md6410/Invora/main/app.html',{cache:'no-store'});if(!r.ok)return;const txt=await r.text();
+    const m=txt.match(/<meta name="app-version" content="([^"]+)"/);try{localStorage.setItem('df-upd-at',String(Date.now()));if(m)localStorage.setItem('df-upd-ver',m[1])}catch(e){}
+    if(m&&cmpVer(m[1],APP_VERSION)>0){OFF_NEW={v:m[1],txt};renderBanner()}}catch(e){}
+}
+async function offlineDownloadNew(){
+  let txt=OFF_NEW&&OFF_NEW.txt;
+  if(!txt){try{const r=await fetch('https://raw.githubusercontent.com/md6410/Invora/main/app.html',{cache:'no-store'});txt=await r.text()}catch(e){toast('دریافت از گیت‌هاب ممکن نشد');return}}
+  downloadBlob('app.html',new Blob([txt],{type:'text/html'}));
+  toast('فایل app.html تازه دانلود شد. آن را جای فایل قبلی بگذارید و باز کنید؛ اطلاعاتتان سر جایش می‌ماند.',8000);
+}
+
 /* ---------- global events ---------- */
 document.addEventListener('input',e=>{if(!S)return;const el=e.target;if(el.classList&&el.classList.contains('num'))formatNumInput(el);route(el,'input')});
 document.addEventListener('change',e=>{if(!S)return;const el=e.target;if(el.id==='fileImport'){if(el.files.length)importFiles(el.files);el.value='';return}if(el.id==='imgFile'){handleImage(el.files[0]);return}if(el.id==='lblImg'){const f=el.files[0];if(f&&lbImgEl)resizeImage(f,700).then(u=>{lbImgEl.img=u;save();renderLabels()},()=>toast('این تصویر قابل خواندن نیست'));return}route(el,'change')});
@@ -2696,9 +2962,14 @@ function route(el,ev){
   if(el.dataset.splan!==undefined){if(ev==='change'){const co=coById(el.dataset.splan);if(co){co.batchMode=el.value;save()}}return}
   if(el.id==='bCustPick'&&ev==='change'){const b=curBatch();const ref=b&&batchRef(b);const c=S.customers.find(x=>x.id===el.value);if(ref&&c){Object.assign(ref.buyer,{name:c.name||'',nationalId:c.nationalId||'',economicCode:c.economicCode||'',postalCode:c.postalCode||'',address:c.address||'',phone:c.phone||''});syncBatch(b);save();renderBatch()}return}
   if((el.id==='shExp'||el.id==='shPinMode')&&ev==='change'){$('#shDateWrap').hidden=$('#shExp').value!=='date';$('#shPinWrap').hidden=$('#shPinMode').value!=='manual';return}
+  if((el.id==='updAuto'||el.id==='updEvery')&&ev==='change'){updCfg();return}
   if(el.id==='fxPerDay'&&ev==='change'){setFxPerDay(+el.value);return}
   if(el.id==='bOrder'&&ev==='change'){const b=curBatch();if(b){b.printOrder=el.value;save();refreshBatch(true)}return}
   if(el.id==='bSwitch'&&ev==='change'){S.activeBatch=el.value;save();renderBatch();return}
+  if(el.dataset.qc!==undefined){if(ev!=='change')return;const co=S.companies[coSel];if(!co)return;const set=new Set(co.quoteCats||[]);el.checked?set.add(el.dataset.qc):set.delete(el.dataset.qc);co.quoteCats=Object.keys(QCAT).filter(k=>set.has(k));save();renderCompanies();return}
+  if(el.dataset.bk!==undefined){if(ev!=='change')return;const doc=curDoc();const co=doc&&coById(doc.companyId);if(!doc||!co)return;const cur=new Set(docBanks(doc,co).map(b=>b.id));el.checked?cur.add(el.dataset.bk):cur.delete(el.dataset.bk);doc.bankIds=(co.banks||[]).filter(b=>cur.has(b.id)).map(b=>b.id);doc.updatedAt=Date.now();save();renderEdPreview();return}
+  if(el.id==='edQuote'&&ev==='change'){const doc=curDoc();if(!doc)return;doc.quoteId=el.value;doc.updatedAt=Date.now();save();renderEdPreview();return}
+  if(el.dataset.qon!==undefined&&ev==='change'){const set=new Set(S.quoteOff||[]);el.checked?set.delete(el.dataset.qon):set.add(el.dataset.qon);S.quoteOff=[...set];save();return}
   if(el.dataset.d!==undefined){if(view==='editor')onDocField(el);return}
   if(el.dataset.f!==undefined&&el.closest('#itemsBody')){onItemField(el,ev);return}
   if(el.dataset.c!==undefined){onCoField(el,ev);return}
@@ -2743,6 +3014,11 @@ document.addEventListener('click',e=>{
     case 'clearSamples':clearSamples();break;
     case 'resetAll':if(!confirm('همه‌ی شرکت‌ها، سندها و تنظیمات پاک شود؟ پیش از این کار از اطلاعات خروجی بگیرید.'))return;if(!confirm('مطمئن هستید؟ این کار برگشت‌پذیر نیست.'))return;S=defaultState();S.companies.forEach((c,i)=>{c.sample=false;c.name='شرکت '+toFa(i+1);['headerText','address','postalCode','phone','economicCode','nationalId','regNo','email','bankName','accountNo','sheba','footerText'].forEach(k=>c[k]='')});S.customers=[];S.products=[];refreshHolidays();curId=null;saveNow();renderAll();toast('همه‌چیز پاک شد');break;
     case 'clock-sync':syncClock(true);break;
+    case 'ver-show':showChanges();break;
+    case 'theme':cycleTheme();break;
+    case 'upd-check':updAction('check');break;
+    case 'upd-apply':if(confirm('نسخه‌ی تازه از گیت‌هاب نصب شود؟'))updAction('apply');break;
+    case 'off-dl':offlineDownloadNew();break;
     case 'fx-manual':setFxManual();break;
     case 'fx-refresh':refreshFx(true);break;
     case 'srv-reload':location.reload();break;
@@ -2754,6 +3030,9 @@ document.addEventListener('click',e=>{
     case 'user-pass':setUserPass(b.dataset.u);break;
     case 'rc-new':newRecovery();break;
     case 'hol-fetch':{const y=parseInt(normDigits(b.dataset.year||($('#holYear')||{}).value||''));if(!(y>1300&&y<1600)){toast('سال را درست وارد کنید (مثلاً ۱۴۰۶)');return}fetchHolidaysUI(y,false);break}
+    case 'q-cat':qFilter=b.dataset.k;renderSettings();break;
+    case 'q-add':{const fa=$('#qNewFa').value.trim(),ar=$('#qNewAr').value.trim(),ref=$('#qNewRef').value.trim(),cat=$('#qNewCat').value;if(!fa&&!ar){toast('متن سخن را بنویسید');return}if(!ref){toast('منبع را بنویسید (برای آیه: سوره و شماره‌ی آیه)');return}S.quotes=S.quotes||[];S.quotes.push({id:'u'+uid(),cat,ar,fa,ref});qFilter=cat;save();renderSettings();toast('سخن اضافه شد');break}
+    case 'q-del':{const id=b.dataset.id;if(!confirm('این سخن حذف شود؟'))return;S.quotes=(S.quotes||[]).filter(q=>q.id!==id);S.companies.forEach(c=>{if(c.quoteFixed===id)c.quoteFixed=''});save();renderSettings();break}
     case 'set-allFollow':S.companies.forEach(c=>c.followGlobal=true);save();renderSettings();toast('همه‌ی شرکت‌ها از تنظیمات عمومی پیروی می‌کنند');break;
     case 'sh-create':createShare();break;
     case 'sh-del':delShare(b.dataset.id);break;
@@ -2771,6 +3050,7 @@ $('#modal').addEventListener('click',e=>{if(e.target.id==='modal'){$('#modal').h
 
 /* ---------- boot ---------- */
 (async function boot(){
+  applyTheme(curTheme());renderVerPill();
   let data=null;
   if(SRV){
     const ta=$('.top-actions');ta.insertAdjacentHTML('afterbegin',`<span class="pill" title="کاربر واردشده">${esc(SRV.user)}</span><button class="btn sm" data-act="logout">خروج</button>`);
@@ -2794,7 +3074,9 @@ $('#modal').addEventListener('click',e=>{if(e.target.id==='modal'){$('#modal').h
   if(!SRV&&dirOk){await migrateFolderPlain();writeFolder()}
   if(!SRV&&!dirOk)try{const h=await idb.get('dir');if(h){dirHandle=h;const p=await h.queryPermission({mode:'readwrite'});if(p==='granted'){dirOk=true;await migrateFolderPlain();const fd=await readFolderData();if(fd&&fd.app==='daftar-factor'&&(fd.savedAt||0)>(S.savedAt||0)){S=migrate(fd);refreshHolidays();curId=null}renderAll();setSaveState('ok')}else renderBanner()}}catch(e){}
   try{await document.fonts.ready;refitAll()}catch(e){}
+  whatsNew();
   renderToday();await syncClock(false);autoHolidays();loadFx();if(SRV)setInterval(loadFx,20*60*1000);
+  if(SRV){updTick();setInterval(updTick,5*60*1000)}else offlineUpdCheck();
   setInterval(renderToday,60000);setInterval(()=>syncClock(false),6*3600*1000);
 })();
 </script>

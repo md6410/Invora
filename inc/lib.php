@@ -8,6 +8,7 @@ mb_internal_encoding('UTF-8');
 const DF_DOCS_DIR = 'اسناد';
 define('DF_TRASH_DIR', 'حذف' . "\u{200C}" . 'شده');
 require __DIR__ . '/crypto.php';
+require __DIR__ . '/update.php';
 
 /* ---------------- storage ---------------- */
 function df_deny_htaccess(): string {
@@ -51,7 +52,7 @@ function df_write_atomic(string $path, string $content): void {
     if (!@rename($tmp, $path)) { @unlink($tmp); throw new RuntimeException('rename failed'); }
 }
 function df_write(string $name, $data): void {
-    df_write_atomic(df_path($name), json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+    df_write_atomic(df_path($name), json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE));
 }
 /* read-modify-write with an exclusive lock; $fn receives the data by reference */
 function df_update(string $name, callable $fn, $default = []) {
@@ -394,14 +395,21 @@ function df_rate_fetch(): ?array {
 }
 
 /* ---------------- small pages ---------------- */
+function df_logo_svg(): string {
+    return '<svg width="40" height="40" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="pivg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f9a8a"/><stop offset=".55" stop-color="#1e5a55"/><stop offset="1" stop-color="#123b37"/></linearGradient><linearGradient id="pivp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e2f0ec"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#pivg)"/><path d="M19 11.5H38.5L47 20V51L43.4 48.6 39.8 51 36.2 48.6 32.6 51 29 48.6 25.4 51 21.8 48.6 19 51z" fill="url(#pivp)"/><path d="M38.5 11.5V18a2 2 0 0 0 2 2H47z" fill="#a9d3ca"/><rect x="24" y="25.5" width="4.4" height="16" rx="2.2" fill="#1e5a55"/><circle cx="26.2" cy="19.8" r="2.7" fill="#eaa53a"/><path d="M33 27.5h9M33 33h9M33 38.5h5.5" stroke="#1e5a55" stroke-width="2.6" stroke-linecap="round" opacity=".5"/></svg>';
+}
+function df_favicon(): string {
+    return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Cdefs%3E%3ClinearGradient id="ivg" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="#2f9a8a"/%3E%3Cstop offset=".55" stop-color="#1e5a55"/%3E%3Cstop offset="1" stop-color="#123b37"/%3E%3C/linearGradient%3E%3ClinearGradient id="ivp" x1="0" y1="0" x2="0" y2="1"%3E%3Cstop offset="0" stop-color="#ffffff"/%3E%3Cstop offset="1" stop-color="#e2f0ec"/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="64" height="64" rx="15" fill="url%28#ivg%29"/%3E%3Cpath d="M19 11.5H38.5L47 20V51L43.4 48.6 39.8 51 36.2 48.6 32.6 51 29 48.6 25.4 51 21.8 48.6 19 51z" fill="url%28#ivp%29"/%3E%3Cpath d="M38.5 11.5V18a2 2 0 0 0 2 2H47z" fill="#a9d3ca"/%3E%3Crect x="24" y="25.5" width="4.4" height="16" rx="2.2" fill="#1e5a55"/%3E%3Ccircle cx="26.2" cy="19.8" r="2.7" fill="#eaa53a"/%3E%3Cpath d="M33 27.5h9M33 33h9M33 38.5h5.5" stroke="#1e5a55" stroke-width="2.6" stroke-linecap="round" opacity=".5"/%3E%3C/svg%3E';
+}
 function df_page(string $title, string $body, string $nonce = ''): void {
-    echo '<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>' . df_h($title) . '</title>'
+    echo '<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>' . df_h($title) . ' — Invora</title><link rel="icon" type="image/svg+xml" href="' . df_h(df_favicon()) . '"><meta name="theme-color" content="#1e5a55">'
         . '<style>:root{color-scheme:light dark}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#eef0ee;color:#1d2321;font:15px/1.8 Vazirmatn,Tahoma,sans-serif;padding:16px}'
         . '@media (prefers-color-scheme:dark){body{background:#121615;color:#e4e8e6}.box{background:#1a1f1e!important;border-color:#2e3533!important}input{background:#202625!important;color:#e4e8e6!important;border-color:#2e3533!important}}'
         . '.box{background:#fff;border:1px solid #d7dbd7;border-radius:14px;padding:22px;width:min(380px,100%);display:flex;flex-direction:column;gap:12px}h1{font-size:19px;margin:0}label{display:flex;flex-direction:column;gap:4px;font-size:13px}'
         . 'input{font:inherit;padding:8px 10px;border:1px solid #c9cfcb;border-radius:8px;background:#f6f7f5;width:100%}input.pin{direction:ltr;text-align:center;font-size:22px;letter-spacing:.4em}'
-        . 'button{font:inherit;font-weight:700;padding:9px;border:0;border-radius:8px;background:#1e5a55;color:#fff;cursor:pointer}.err{color:#a8261b;background:#fbe9e7;border-radius:8px;padding:6px 10px;font-size:13.5px}.ok{color:#2c7149}.muted{color:#6b736f;font-size:12.5px}</style>'
-        . '</head><body><div class="box">' . $body . '</div></body></html>';
+        . 'button{font:inherit;font-weight:700;padding:9px;border:0;border-radius:8px;background:#1e5a55;color:#fff;cursor:pointer}.err{color:#a8261b;background:#fbe9e7;border-radius:8px;padding:6px 10px;font-size:13.5px}.ok{color:#2c7149}.muted{color:#6b736f;font-size:12.5px}'
+        . '.brand{display:flex;align-items:center;gap:10px;margin-bottom:2px}.brand b{font:800 20px/1.1 system-ui,sans-serif;letter-spacing:.02em;color:#1e5a55}.brand small{display:block;font-size:11.5px;color:#6b736f}@media (prefers-color-scheme:dark){.brand b{color:#7fd0c2}}</style>'
+        . '</head><body><div class="box"><div class="brand">' . df_logo_svg() . '<div><b>Invora</b><small>دفتر فاکتور و پیش‌فاکتور</small></div></div>' . $body . '</div></body></html>';
 }
 function df_json(array $d, int $code = 200): void {
     http_response_code($code);

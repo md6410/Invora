@@ -204,6 +204,26 @@ try {
             if (!$u || !password_verify((string)($in['p'] ?? ''), $u['hash'])) df_json(['ok' => false, 'error' => 'رمز عبور خودتان را درست وارد کنید.'], 400);
             df_json(['ok' => true, 'code' => df_rc_set($dek)]);
         }
+        /* ---------- updates from GitHub ---------- */
+        case 'update_status':
+            df_json(['ok' => true, 'upd' => df_upd_status()]);
+        case 'update_tick': { /* called periodically by open pages; installs automatically when enabled */
+            $st = df_upd_state();
+            $r = df_upd_run(false, (bool)$st['auto'], 'auto');
+            df_json(['ok' => true, 'r' => $r, 'upd' => df_upd_status()]);
+        }
+        case 'update_check':
+        case 'update_apply': {
+            if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
+            $r = df_upd_run(true, $a === 'update_apply', $user);
+            df_json(['ok' => empty($r['error']), 'error' => $r['error'] ?? '', 'r' => $r, 'upd' => df_upd_status()], empty($r['error']) ? 200 : 502);
+        }
+        case 'update_cfg': {
+            if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
+            $auto = !empty($in['auto']); $every = max(5, min(1440, (int)($in['every'] ?? 10)));
+            df_update('update.json', function (array &$s) use ($auto, $every) { $s['auto'] = $auto; $s['every'] = $every; }, []);
+            df_json(['ok' => true, 'upd' => df_upd_status()]);
+        }
         default:
             df_json(['ok' => false, 'error' => 'unknown action'], 400);
     }
