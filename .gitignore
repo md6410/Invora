@@ -1,0 +1,8 @@
+# داده‌های برنامه هیچ‌وقت در مخزن قرار نمی‌گیرند
+/data/
+/daftar-factor-data/
+*.dfbak
+*.data
+*.keys
+*.log
+.DS_Store

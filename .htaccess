@@ -1,0 +1,24 @@
+# دفتر فاکتور — تنظیمات امنیتی
+Options -Indexes
+DirectoryIndex index.php
+
+# app.html فقط از طریق index.php (بعد از ورود) نمایش داده می‌شود
+<FilesMatch "^(app\.html|.*\.(md|txt|json|lock|log|bak))$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "same-origin"
+</IfModule>
+
+# برای اجبار به https (اگر گواهی SSL دارید) سه خط زیر را از حالت توضیح خارج کنید:
+# RewriteEngine On
+# RewriteCond %{HTTPS} !=on
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
