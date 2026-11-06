@@ -16,3 +16,14 @@ icons/apple-touch-icon.png
 icons/icon-192.png
 icons/icon-512.png
 icons/icon-maskable-512.png
+fonts/estedad-arabic.woff2
+fonts/estedad-latin.woff2
+fonts/sahel-vf.woff2
+fonts/samim-bold.woff2
+fonts/samim-medium.woff2
+fonts/samim.woff2
+fonts/shabnam-bold.woff2
+fonts/shabnam-medium.woff2
+fonts/shabnam.woff2
+fonts/vazirmatn-arabic.woff2
+fonts/vazirmatn-latin.woff2

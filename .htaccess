@@ -18,12 +18,14 @@ DirectoryIndex index.php
   AddType application/manifest+json .webmanifest
   AddType image/x-icon .ico
   AddType image/svg+xml .svg
+  AddType font/woff2 .woff2
 </IfModule>
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType image/x-icon "access plus 7 days"
   ExpiresByType image/png "access plus 7 days"
   ExpiresByType image/svg+xml "access plus 7 days"
+  ExpiresByType font/woff2 "access plus 30 days"
 </IfModule>
 
 <IfModule mod_headers.c>

@@ -4,11 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Invora — دفتر فاکتور</title>
-<meta name="app-version" content="2.5.1">
+<meta name="app-version" content="2.6.0">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Cdefs%3E%3ClinearGradient id="ivg" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="#2f9a8a"/%3E%3Cstop offset=".55" stop-color="#1e5a55"/%3E%3Cstop offset="1" stop-color="#123b37"/%3E%3C/linearGradient%3E%3ClinearGradient id="ivp" x1="0" y1="0" x2="0" y2="1"%3E%3Cstop offset="0" stop-color="#ffffff"/%3E%3Cstop offset="1" stop-color="#e2f0ec"/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="64" height="64" rx="15" fill="url(#ivg)"/%3E%3Cpath d="M19 11.5H38.5L47 20V51L43.4 48.6 39.8 51 36.2 48.6 32.6 51 29 48.6 25.4 51 21.8 48.6 19 51z" fill="url(#ivp)"/%3E%3Cpath d="M38.5 11.5V18a2 2 0 0 0 2 2H47z" fill="#a9d3ca"/%3E%3Crect x="24" y="25.5" width="4.4" height="16" rx="2.2" fill="#1e5a55"/%3E%3Ccircle cx="26.2" cy="19.8" r="2.7" fill="#eaa53a"/%3E%3Cpath d="M33 27.5h9M33 33h9M33 38.5h5.5" stroke="#1e5a55" stroke-width="2.6" stroke-linecap="round" opacity=".5"/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/png;base64,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">
 <meta name="theme-color" content="#1e5a55">
 <script>try{var t=localStorage.getItem('df-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script>
+/* Persian fonts: served from fonts/ next to the page (web version); falls back to jsDelivr (offline file). */
+var DF_FONTS={
+ estedad:{n:'Estedad',t:'استعداد',f:[['Estedad','estedad-arabic.woff2','@fontsource-variable/estedad@5.3.0/files/estedad-arabic-wght-normal.woff2','100 900','AR'],['Estedad','estedad-latin.woff2','@fontsource-variable/estedad@5.3.0/files/estedad-latin-wght-normal.woff2','100 900','LA']]},
+ vazirmatn:{n:'Vazirmatn',t:'وزیرمتن',f:[['Vazirmatn','vazirmatn-arabic.woff2','@fontsource-variable/vazirmatn@5.3.0/files/vazirmatn-arabic-wght-normal.woff2','100 900','AR'],['Vazirmatn','vazirmatn-latin.woff2','@fontsource-variable/vazirmatn@5.3.0/files/vazirmatn-latin-wght-normal.woff2','100 900','LA']]},
+ shabnam:{n:'Shabnam',t:'شبنم',f:[['Shabnam','shabnam.woff2','shabnam-font@5.0.0/dist/Shabnam.woff2','400'],['Shabnam','shabnam-medium.woff2','shabnam-font@5.0.0/dist/Shabnam-Medium.woff2','500 600'],['Shabnam','shabnam-bold.woff2','shabnam-font@5.0.0/dist/Shabnam-Bold.woff2','700 900']]},
+ sahel:{n:'Sahel',t:'ساحل',f:[['Sahel','sahel-vf.woff2','sahel-font@3.4.0/dist/Sahel-VF.woff2','400 900']]},
+ samim:{n:'Samim',t:'صمیم',f:[['Samim','samim.woff2','samim-font@4.0.5/dist/Samim.woff2','400'],['Samim','samim-medium.woff2','samim-font@4.0.5/dist/Samim-Medium.woff2','500 600'],['Samim','samim-bold.woff2','samim-font@4.0.5/dist/Samim-Bold.woff2','700 900']]}
+};
+function dfFontCss(cdnOnly){var R={AR:'U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC',LA:'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD'},o='';for(var k in DF_FONTS)DF_FONTS[k].f.forEach(function(x){o+="@font-face{font-family:'"+x[0]+"';font-style:normal;font-display:swap;font-weight:"+x[3]+";src:"+(cdnOnly?'':"url(fonts/"+x[1]+") format('woff2'),")+"url(https://cdn.jsdelivr.net/npm/"+x[2]+") format('woff2')"+(x[4]?';unicode-range:'+R[x[4]]:'')+"}"});return o}
+function dfUiFont(){var k='estedad',z=14;try{k=localStorage.getItem('df-ui-font')||k;z=+localStorage.getItem('df-ui-size')||z}catch(e){}if(!DF_FONTS[k])k='estedad';return{k:k,z:z}}
+(function(){document.write('<style id="dfFontFaces">'+dfFontCss(false)+'</style>');var u=dfUiFont(),r=document.documentElement;r.style.setProperty('--ui',"'"+DF_FONTS[u.k].n+"','Vazirmatn',Tahoma,'Segoe UI',sans-serif");r.style.setProperty('--ui-size',u.z+'px')})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=Noto+Naskh+Arabic:wght@400;700&family=Noto+Sans+Arabic:wght@400;600;700&family=Markazi+Text:wght@400;600;700&family=Amiri:wght@400;700&family=Lalezar&family=Reem+Kufi:wght@400;700&family=Mirza:wght@400;700&family=Harmattan:wght@400;700&family=El+Messiri:wght@400;700&family=Cairo:wght@400;700&display=swap">
@@ -30,7 +43,7 @@
   --danger:#ef8579; --ok:#79c895; --ok-soft:#1c3125; --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25); color-scheme:dark}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--fg);font:14px/1.7 var(--ui)}
+body{background:var(--bg);color:var(--fg);font:var(--ui-size,14px)/1.7 var(--ui)}
 button,input,select,textarea{font:inherit;color:inherit}
 h1,h2,h3{margin:0;text-wrap:balance}
 [hidden]{display:none!important}
@@ -259,6 +272,12 @@ body.locked>header,body.locked>main,body.locked #banner{visibility:hidden}
 .paper .sign img.sig{position:absolute;max-height:15mm;max-width:34mm;left:22%;top:58%;transform:translate(-50%,-50%)}
 .paper .notes{white-space:pre-line;font-size:.92em}
 .paper .notes b{display:block;font-family:var(--ft),var(--fb),sans-serif;margin-bottom:.4mm}
+.font-samples{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin:12px 0 6px}
+.font-sample{all:unset;cursor:pointer;border:1px solid var(--line,#dde3e0);border-radius:10px;padding:8px 12px;display:flex;flex-direction:column;gap:2px;color:var(--fg)}
+.font-sample b{font-size:16px;font-weight:700}
+.font-sample span{font-size:13px;opacity:.85}
+.font-sample[aria-pressed="true"]{border-color:var(--accent,#1e5a55);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent,#1e5a55) 25%,transparent)}
+.font-sample:focus-visible{outline:2px solid var(--accent,#1e5a55)}
 .qlist{max-height:420px;overflow:auto;display:flex;flex-direction:column;gap:6px}
 .qrow{display:flex;gap:10px;align-items:flex-start;border-bottom:1px solid var(--line,#e3e8e6);padding:6px 2px}
 .qrow .qtx{flex:1;line-height:1.8}
@@ -598,7 +617,7 @@ function fmtDocNumber(pattern,seq,padN,jdn){
 /* ---------- constants & defaults ---------- */
 const LS_KEY='daftar-factor-v1',DATA_FILE='daftar-factor-data.json';
 const TPL={formal:'رسمی جدولی',band:'نوار رنگی',minimal:'ساده و خلوت',frame:'قاب‌دار'};
-const FONTS=['Vazirmatn','Noto Naskh Arabic','Noto Sans Arabic','Markazi Text','Amiri','Lalezar','Reem Kufi','Mirza','Harmattan','El Messiri','Cairo','B Nazanin','B Titr','B Yekan','B Lotus','B Mitra','B Zar','B Koodak','IRANSans','Tahoma'];
+const FONTS=['Vazirmatn','Estedad','Shabnam','Sahel','Samim','Noto Naskh Arabic','Noto Sans Arabic','Markazi Text','Amiri','Lalezar','Reem Kufi','Mirza','Harmattan','El Messiri','Cairo','B Nazanin','B Titr','B Yekan','B Lotus','B Mitra','B Zar','B Koodak','IRANSans','Tahoma'];
 const UNITS=['عدد','دستگاه','قطعه','بسته','کارتن','جعبه','جفت','دست','کیلوگرم','گرم','تن','متر','متر مربع','متر مکعب','لیتر','رول','شاخه','ورق','سرویس','ساعت','نفر ساعت','روز','ماه','مورد'];
 const DEF_FIXED=`01/01 نوروز
 01/02 نوروز
@@ -938,7 +957,7 @@ function docFileHtml(d,forShare){
   const co=coById(d.companyId);const clean=Object.assign({},d);delete clean.savedPath;delete clean.fileSig;
   const data=JSON.stringify({app:'daftar-factor-doc',version:1,savedAt:Date.now(),company:co?{id:co.id,name:co.name}:null,doc:clean}).replace(/</g,'\\u003c');
   const title=fileNameOf(d).replace(/\.html$/,'');
-  return '<!doctype html>\n<html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+'</title>'+(fontsHref()?'<link rel="stylesheet" href="'+esc(fontsHref())+'">':'')+'<style>'+paperCss()+FILE_CSS+'</style></head><body><div class="bar"><b>'+esc(title)+'</b><button onclick="print()">چاپ</button></div>'+(co?renderPaper(d):'')+(forShare?'':'<script type="application/json" id="daftar-doc">'+data+'<\/script>')+'</body></html>';
+  return '<!doctype html>\n<html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+'</title>'+(fontsHref()?'<link rel="stylesheet" href="'+esc(fontsHref())+'">':'')+'<style>'+(typeof dfFontCss==='function'?dfFontCss(true):'')+paperCss()+FILE_CSS+'</style></head><body><div class="bar"><b>'+esc(title)+'</b><button onclick="print()">چاپ</button></div>'+(co?renderPaper(d):'')+(forShare?'':'<script type="application/json" id="daftar-doc">'+data+'<\/script>')+'</body></html>';
 }
 function parseDocHtml(txt){const m=String(txt).match(/<script type="application\/json" id="daftar-doc">([\s\S]*?)<\/script>/);if(!m)return null;try{const o=JSON.parse(m[1]);return o&&o.app==='daftar-factor-doc'&&o.doc&&o.doc.id?o:null}catch(e){return null}}
 function hstr(x){let h=2166136261;for(let i=0;i<x.length;i++){h^=x.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(36)}
@@ -1924,6 +1943,14 @@ function crudAction(a,btn){
 
 /* ===== global settings ===== */
 function upcomingHolidays(){const out=[];const t=todayJdn();for(let j=t;j<t+200&&out.length<10;j++){const s=jStr(j);const n=HOL.dated[s]||HOL.fixed[s.slice(5)];if(n)out.push([s,n,j])}return out}
+function uiCardHtml(){const u=dfUiFont();const th=curTheme();
+ return `<div class="card"><h3>ظاهر برنامه <small>روی همین مرورگر ذخیره می‌شود</small></h3><div class="grid g3">
+  <label class="f"><span>قلم رابط کاربری</span><select id="uiFont">${Object.entries(DF_FONTS).map(([k,f])=>`<option value="${k}" ${k===u.k?'selected':''} style="font-family:'${f.n}'">${f.t} (${f.n})</option>`).join('')}</select></label>
+  <label class="f"><span>اندازه‌ی نوشته‌ها</span><select id="uiSize">${[[13,'کوچک'],[14,'معمولی'],[15,'بزرگ'],[16,'خیلی بزرگ']].map(([z,l])=>`<option value="${z}" ${z===u.z?'selected':''}>${l}</option>`).join('')}</select></label>
+  <label class="f"><span>حالت نمایش</span><select id="uiTheme">${[['auto','خودکار (طبق سیستم)'],['light','روز'],['dark','شب']].map(([k,l])=>`<option value="${k}" ${k===th?'selected':''}>${l}</option>`).join('')}</select></label>
+ </div><div class="font-samples">${Object.entries(DF_FONTS).map(([k,f])=>`<button class="font-sample" data-act="ui-font" data-k="${k}" aria-pressed="${k===u.k}" style="font-family:'${f.n}',Tahoma"><b>${f.t}</b><span>صورتحساب فروش کالا و خدمات ۱۴۰۵/۰۸/۱۵ — مبلغ ۱۲٬۵۰۰٬۰۰۰ ریال</span></button>`).join('')}</div>
+ <small class="note">قلم سندها و فاکتورها جداگانه در صفحه‌ی «شرکت‌ها» (بخش ظاهر) انتخاب می‌شود؛ قلم‌های استعداد، شبنم، ساحل و صمیم آنجا هم هستند.</small></div>`}
+function setUiFont(k,z){if(k!=null){if(!DF_FONTS[k])return;try{localStorage.setItem('df-ui-font',k)}catch(e){}}if(z!=null){try{localStorage.setItem('df-ui-size',String(z))}catch(e){}}const u=dfUiFont();const r=document.documentElement;r.style.setProperty('--ui',`'${DF_FONTS[u.k].n}','Vazirmatn',Tahoma,'Segoe UI',sans-serif`);r.style.setProperty('--ui-size',u.z+'px')}
 let qFilter='quran';
 function quotesCardHtml(){const qs=allQuotes().filter(q=>q.cat===qFilter);const custom=new Set((S.quotes||[]).map(q=>q.id));
  return `<div class="card"><div class="card-h"><h3>سخن‌های پانویس <small>آیه‌ها، روایت‌ها و سخن بزرگان برای پانویس سندها؛ انتخاب برای هر شرکت در صفحه‌ی «شرکت‌ها»</small></h3></div>
@@ -1941,6 +1968,7 @@ function renderSettings(){
   <div class="card"><div class="card-h"><h3>تنظیمات عمومی <small>شرکت‌هایی که «پیروی از تنظیمات عمومی» دارند از این بخش پیروی می‌کنند</small></h3><button class="btn sm" data-act="set-allFollow">همه‌ی شرکت‌ها پیرو این تنظیمات شوند</button></div>
    ${settingsFields('data-s',g)}
    <div class="notice info">شرکت‌های پیرو: ${S.companies.filter(c=>c.followGlobal).map(c=>esc(c.name)).join('، ')||'هیچ‌کدام'}</div></div>
+  ${uiCardHtml()}
   ${fxCardHtml()}
   ${quotesCardHtml()}
   ${SRV?`<div class="card"><h3>تاریخ امروز</h3><div class="notice ${CLOCK.online?'ok':'warn'}" id="clockInfo">${esc(clockText())}<button class="btn sm" data-act="clock-sync">گرفتن دوباره</button></div><small class="note">در نسخه‌ی تحت وب، تاریخ و ساعت از ساعت سرور گرفته می‌شود و تعطیلات از طریق سرور از سرویس‌های ایرانی دریافت می‌شود.</small></div>`:`<div class="card"><h3>تاریخ امروز</h3><div class="grid g2">
@@ -2811,6 +2839,11 @@ async function exportBackup(){
 /* ---------- version, changes, theme ---------- */
 const APP_VERSION=(document.querySelector('meta[name="app-version"]')||{}).content||'0';
 const APP_CHANGES=[
+ {v:'2.6.0',d:'1405/08/15',t:'قلم‌های زیباتر',items:[
+  'قلم تازه‌ی رابط کاربری: «استعداد»؛ قلم‌های وزیرمتن، شبنم، ساحل و صمیم هم قابل انتخاب‌اند.',
+  'بخش تازه‌ی «ظاهر برنامه» در تنظیمات: قلم، اندازه‌ی نوشته‌ها و حالت روز و شب، با نمونه‌ی زنده‌ی هر قلم.',
+  'قلم‌ها روی خود سایت میزبانی می‌شوند و به گوگل وابسته نیستند؛ سریع‌تر و مطمئن‌تر بار می‌شوند.',
+  'استعداد، شبنم، ساحل و صمیم برای قلم فاکتورها و برچسب‌ها هم اضافه شدند.']},
  {v:'2.5.1',d:'1405/08/15',t:'آیکون صفحه',items:[
   'آیکون Invora روی زبانه‌ی مرورگر، نشانک‌ها (بوکمارک) و تاریخچه.',
   'افزودن به صفحه‌ی اصلی گوشی و نصب روی رایانه (از منوی مرورگر) با آیکون و نام Invora؛ برنامه در پنجره‌ی جداگانه باز می‌شود.']},
@@ -2966,6 +2999,9 @@ function route(el,ev){
   if(el.id==='bCustPick'&&ev==='change'){const b=curBatch();const ref=b&&batchRef(b);const c=S.customers.find(x=>x.id===el.value);if(ref&&c){Object.assign(ref.buyer,{name:c.name||'',nationalId:c.nationalId||'',economicCode:c.economicCode||'',postalCode:c.postalCode||'',address:c.address||'',phone:c.phone||''});syncBatch(b);save();renderBatch()}return}
   if((el.id==='shExp'||el.id==='shPinMode')&&ev==='change'){$('#shDateWrap').hidden=$('#shExp').value!=='date';$('#shPinWrap').hidden=$('#shPinMode').value!=='manual';return}
   if((el.id==='updAuto'||el.id==='updEvery')&&ev==='change'){updCfg();return}
+  if(el.id==='uiFont'&&ev==='change'){setUiFont(el.value,null);renderSettings();return}
+  if(el.id==='uiSize'&&ev==='change'){setUiFont(null,+el.value);return}
+  if(el.id==='uiTheme'&&ev==='change'){try{localStorage.setItem('df-theme',el.value)}catch(e){}applyTheme(el.value);return}
   if(el.id==='fxPerDay'&&ev==='change'){setFxPerDay(+el.value);return}
   if(el.id==='bOrder'&&ev==='change'){const b=curBatch();if(b){b.printOrder=el.value;save();refreshBatch(true)}return}
   if(el.id==='bSwitch'&&ev==='change'){S.activeBatch=el.value;save();renderBatch();return}
@@ -3033,6 +3069,7 @@ document.addEventListener('click',e=>{
     case 'user-pass':setUserPass(b.dataset.u);break;
     case 'rc-new':newRecovery();break;
     case 'hol-fetch':{const y=parseInt(normDigits(b.dataset.year||($('#holYear')||{}).value||''));if(!(y>1300&&y<1600)){toast('سال را درست وارد کنید (مثلاً ۱۴۰۶)');return}fetchHolidaysUI(y,false);break}
+    case 'ui-font':setUiFont(b.dataset.k,null);renderSettings();toast('قلم «'+DF_FONTS[b.dataset.k].t+'» انتخاب شد');break;
     case 'q-cat':qFilter=b.dataset.k;renderSettings();break;
     case 'q-add':{const fa=$('#qNewFa').value.trim(),ar=$('#qNewAr').value.trim(),ref=$('#qNewRef').value.trim(),cat=$('#qNewCat').value;if(!fa&&!ar){toast('متن سخن را بنویسید');return}if(!ref){toast('منبع را بنویسید (برای آیه: سوره و شماره‌ی آیه)');return}S.quotes=S.quotes||[];S.quotes.push({id:'u'+uid(),cat,ar,fa,ref});qFilter=cat;save();renderSettings();toast('سخن اضافه شد');break}
     case 'q-del':{const id=b.dataset.id;if(!confirm('این سخن حذف شود؟'))return;S.quotes=(S.quotes||[]).filter(q=>q.id!==id);S.companies.forEach(c=>{if(c.quoteFixed===id)c.quoteFixed=''});save();renderSettings();break}
