@@ -3,7 +3,7 @@ Options -Indexes
 DirectoryIndex index.php
 
 # app.html فقط از طریق index.php (بعد از ورود) نمایش داده می‌شود
-<FilesMatch "^(app\.html|.*\.(md|txt|json|lock|log|bak))$">
+<FilesMatch "^(app\.html|php\.ini|\.user\.ini|\.ftpquota|.*\.(md|txt|json|lock|log|bak|ini|yml|sh))$">
   <IfModule mod_authz_core.c>
     Require all denied
   </IfModule>

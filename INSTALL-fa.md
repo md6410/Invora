@@ -31,8 +31,11 @@
 اطلاعات، کاربران و فایل inc/config.local.php با به‌روزرسانی دست نمی‌خورند.
 
 اگر Document Root زیردامنه چیز دیگری است:
-در پوشه‌ی خانه‌ی هاست (File Manager، با Show Hidden Files) فایلی به نام .invora-deploy بسازید.
-مسیر کامل را در خط اول آن بنویسید، مثلاً: /home/USERNAME/factor.example.com
+- اگر نام پوشه‌اش با «invora.» شروع شود (مثلاً invora.example.com) و فقط یکی باشد، خودکار پیدا می‌شود.
+- وگرنه در پوشه‌ی خانه‌ی هاست (File Manager، با Show Hidden Files) فایلی به نام .invora-deploy بسازید
+  و مسیر کامل را در خط اول آن بنویسید، مثلاً: /home/USERNAME/factor.example.com
+بخش‌هایی که سی‌پنل یا LiteSpeed در .htaccess زیردامنه ساخته‌اند (مثل انتخاب نسخه‌ی PHP) با استقرار حفظ می‌شوند.
+گزارش هر استقرار در «Last Deployment Information» همان صفحه دیده می‌شود.
 
 تنظیمات اختصاصی هاست (مثل کلید navasan.tech یا مدت خروج خودکار) را در فایل inc/config.local.php بنویسید، نه در config.php.
 config.php با هر به‌روزرسانی بازنویسی می‌شود. نمونه:
