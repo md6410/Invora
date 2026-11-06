@@ -401,8 +401,14 @@ function df_logo_svg(): string {
 function df_favicon(): string {
     return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Cdefs%3E%3ClinearGradient id="ivg" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="#2f9a8a"/%3E%3Cstop offset=".55" stop-color="#1e5a55"/%3E%3Cstop offset="1" stop-color="#123b37"/%3E%3C/linearGradient%3E%3ClinearGradient id="ivp" x1="0" y1="0" x2="0" y2="1"%3E%3Cstop offset="0" stop-color="#ffffff"/%3E%3Cstop offset="1" stop-color="#e2f0ec"/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="64" height="64" rx="15" fill="url%28#ivg%29"/%3E%3Cpath d="M19 11.5H38.5L47 20V51L43.4 48.6 39.8 51 36.2 48.6 32.6 51 29 48.6 25.4 51 21.8 48.6 19 51z" fill="url%28#ivp%29"/%3E%3Cpath d="M38.5 11.5V18a2 2 0 0 0 2 2H47z" fill="#a9d3ca"/%3E%3Crect x="24" y="25.5" width="4.4" height="16" rx="2.2" fill="#1e5a55"/%3E%3Ccircle cx="26.2" cy="19.8" r="2.7" fill="#eaa53a"/%3E%3Cpath d="M33 27.5h9M33 33h9M33 38.5h5.5" stroke="#1e5a55" stroke-width="2.6" stroke-linecap="round" opacity=".5"/%3E%3C/svg%3E';
 }
+/* real icon files (favicon, home-screen icons, web app manifest) */
+function df_icon_links(bool $manifest = true): string {
+    return '<link rel="icon" href="favicon.ico" sizes="48x48"><link rel="icon" type="image/svg+xml" href="icons/favicon.svg">'
+        . '<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">' . ($manifest ? '<link rel="manifest" href="site.webmanifest">' : '')
+        . '<meta name="apple-mobile-web-app-title" content="Invora"><meta name="application-name" content="Invora">';
+}
 function df_page(string $title, string $body, string $nonce = ''): void {
-    echo '<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>' . df_h($title) . ' — Invora</title><link rel="icon" type="image/svg+xml" href="' . df_h(df_favicon()) . '"><meta name="theme-color" content="#1e5a55">'
+    echo '<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>' . df_h($title) . ' — Invora</title><link rel="icon" type="image/svg+xml" href="' . df_h(df_favicon()) . '"><meta name="theme-color" content="#1e5a55">' . df_icon_links($nonce === '')
         . '<style>:root{color-scheme:light dark}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#eef0ee;color:#1d2321;font:15px/1.8 Vazirmatn,Tahoma,sans-serif;padding:16px}'
         . '@media (prefers-color-scheme:dark){body{background:#121615;color:#e4e8e6}.box{background:#1a1f1e!important;border-color:#2e3533!important}input{background:#202625!important;color:#e4e8e6!important;border-color:#2e3533!important}}'
         . '.box{background:#fff;border:1px solid #d7dbd7;border-radius:14px;padding:22px;width:min(380px,100%);display:flex;flex-direction:column;gap:12px}h1{font-size:19px;margin:0}label{display:flex;flex-direction:column;gap:4px;font-size:13px}'
