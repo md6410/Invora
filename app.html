@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Invora — دفتر فاکتور</title>
-<meta name="app-version" content="2.9.0">
+<meta name="app-version" content="2.10.0">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Cdefs%3E%3ClinearGradient id="ivg" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="#2f9a8a"/%3E%3Cstop offset=".55" stop-color="#1e5a55"/%3E%3Cstop offset="1" stop-color="#123b37"/%3E%3C/linearGradient%3E%3ClinearGradient id="ivp" x1="0" y1="0" x2="0" y2="1"%3E%3Cstop offset="0" stop-color="#ffffff"/%3E%3Cstop offset="1" stop-color="#e2f0ec"/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="64" height="64" rx="15" fill="url(#ivg)"/%3E%3Cpath d="M19 11.5H38.5L47 20V51L43.4 48.6 39.8 51 36.2 48.6 32.6 51 29 48.6 25.4 51 21.8 48.6 19 51z" fill="url(#ivp)"/%3E%3Cpath d="M38.5 11.5V18a2 2 0 0 0 2 2H47z" fill="#a9d3ca"/%3E%3Crect x="24" y="25.5" width="4.4" height="16" rx="2.2" fill="#1e5a55"/%3E%3Ccircle cx="26.2" cy="19.8" r="2.7" fill="#eaa53a"/%3E%3Cpath d="M33 27.5h9M33 33h9M33 38.5h5.5" stroke="#1e5a55" stroke-width="2.6" stroke-linecap="round" opacity=".5"/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/png;base64,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">
 <meta name="theme-color" content="#1e5a55">
@@ -291,6 +291,7 @@ body.locked>header,body.locked>main,body.locked #banner{visibility:hidden}
 .seal-opt{display:flex;align-items:center;gap:6px;cursor:pointer;border:1px solid var(--line,#dde3e0);border-radius:8px;padding:4px 10px;background:var(--surface)}
 .seal-opt img{width:34px;height:34px;object-fit:contain;background:#fff;border-radius:4px}
 .seal-opt.off{opacity:.55;cursor:default}
+.list td.who{white-space:nowrap;font-size:12.5px;line-height:1.5}
 .bank-card{border:1px solid var(--line,#dde3e0);border-radius:10px;padding:10px 12px;background:var(--bg2,transparent)}
 .bank-card .card-h{margin-bottom:6px}
 .paper .bank{font-size:.9em;display:flex;flex-wrap:wrap;gap:.6mm 5mm}
@@ -752,7 +753,7 @@ function migrate(d){
   st.draft=d.draft?fixDoc(d.draft):null;st.refAuto=false;st.fx=Object.assign({rate:0,at:0,src:'',manual:false},d.fx||{});st.trash=(d.trash||[]).map(t=>({doc:fixDoc(t.doc||{}),deletedAt:t.deletedAt||Date.now()}));
   return st;
 }
-function fixDoc(x){const t={id:uid(),companyId:'',type:'invoice',number:'',seq:0,counterKey:'',manualNumber:false,committed:false,date:jStr(todayJdn()),validDays:7,currency:'IRR',vatOn:true,vatRate:10,discType:'amount',disc:0,extraLabel:'هزینه حمل و نقل',extra:0,buyer:emptyBuyer(),items:[],notes:'',terms:'',linkedId:'',official:false,offKind:'type1',offSubject:'main',offRef:'',offCanceled:'',settle:'cash',taxId:'',taxStatus:'none',bankIds:null,quoteId:'',stampOn:null,sigOn:null,createdAt:Date.now(),updatedAt:Date.now()};const o=Object.assign(t,x);o.buyer=Object.assign(emptyBuyer(),x.buyer||{});o.items=(x.items||[]).map(i=>Object.assign(newItem(),i));return o}
+function fixDoc(x){const t={id:uid(),companyId:'',type:'invoice',number:'',seq:0,counterKey:'',manualNumber:false,committed:false,date:jStr(todayJdn()),validDays:7,currency:'IRR',vatOn:true,vatRate:10,discType:'amount',disc:0,extraLabel:'هزینه حمل و نقل',extra:0,buyer:emptyBuyer(),items:[],notes:'',terms:'',linkedId:'',official:false,offKind:'type1',offSubject:'main',offRef:'',offCanceled:'',settle:'cash',taxId:'',taxStatus:'none',bankIds:null,quoteId:'',stampOn:null,sigOn:null,createdBy:'',issuedAt:0,issuedBy:'',updatedBy:'',createdAt:Date.now(),updatedAt:Date.now()};const o=Object.assign(t,x);o.buyer=Object.assign(emptyBuyer(),x.buyer||{});o.items=(x.items||[]).map(i=>Object.assign(newItem(),i));return o}
 
 /* ---------- helpers ---------- */
 const $=(s,r=document)=>r.querySelector(s);
@@ -1028,6 +1029,14 @@ function purgeTrash(ids){S.trash=S.trash.filter(t=>{if(!ids.has(t.doc.id))return
 
 /* ---------- share links (web version only) ---------- */
 let shareDoc=null;
+/* who and when: server/online clock and the logged-in user (offline: the name set for this device) */
+function nowTs(){return Date.now()+(CLOCK&&CLOCK.online&&!CLOCK.dateOnly?CLOCK.offset:0)}
+function curUser(){if(SRV)return String(SRV.user||'');let n='';try{n=localStorage.getItem('df-off-user')||''}catch(e){}return n||'آفلاین'}
+function fmtTsSec(ms){if(!ms)return '—';const j=tehranJdn(ms);const t=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Tehran',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date(ms));return toFa(jStr(j))+' ساعت '+toFa(t)}
+function tsHtml(ms){if(!ms)return '—';const j=tehranJdn(ms);const t=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Tehran',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date(ms));return `<bdi dir="ltr">${toFa(jStr(j))}</bdi> <small class="muted">ساعت</small> <bdi dir="ltr">${toFa(t)}</bdi>`}
+function whoCell(d){const at=d.issuedAt||d.createdAt;const by=d.issuedAt?d.issuedBy:d.createdBy;
+  const tip=['ساخت: '+fmtTsSec(d.createdAt)+(d.createdBy?' — '+d.createdBy:''),d.issuedAt?'ثبت: '+fmtTsSec(d.issuedAt)+(d.issuedBy?' — '+d.issuedBy:''):'',d.updatedAt?'آخرین تغییر: '+fmtTsSec(d.updatedAt)+(d.updatedBy?' — '+d.updatedBy:''):''].filter(Boolean).join('\n');
+  return `<span title="${esc(tip)}"><span class="n">${tsHtml(at)}</span>${d.issuedAt?'':' <small class="muted">(ساخت)</small>'}<br><small class="muted">👤 ${esc(by||'—')}</small></span>`}
 function fmtTs(ms){if(!ms)return '—';const j=tehranJdn(ms);const t=new Intl.DateTimeFormat('fa-IR',{timeZone:'Asia/Tehran',hour:'2-digit',minute:'2-digit'}).format(new Date(ms));return toFa(jStr(j))+' '+t}
 function copyText(t){if(!t)return;const ok=()=>toast('کپی شد');if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(ok,()=>fallback());else fallback();
   function fallback(){const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();try{document.execCommand('copy');ok()}catch(e){toast('کپی نشد؛ متن را دستی انتخاب کنید')}a.remove()}}
@@ -1169,7 +1178,7 @@ function newDoc(companyId,type,noRef){
   const r=applyRule(todayJdn(),cfg.holidayRule==='warn'?Object.assign({},cfg,{holidayRule:'next'}):cfg);
   const d=fixDoc({id:uid(),companyId:co.id,type:type||'invoice',date:jStr(r.jdn),validDays:cfg.proformaValidityDays,currency:cfg.currency,vatOn:Number(cfg.vatRate)>0,vatRate:cfg.vatRate,items:[newItem()],notes:cfg.defaultNotes||'',terms:cfg.defaultTerms||''});
   const rf=refDoc();if(false&&!noRef&&S.refAuto&&rf){fillFromRef(rf,d,true,true,true);d.autoRef=true}
-  d.quoteId=pickQuote(co);
+  d.quoteId=pickQuote(co);d.createdAt=nowTs();d.createdBy=curUser();
   return d;
 }
 function seqType(d){return d.official?'official':d.type}
@@ -1186,13 +1195,14 @@ function commitDoc(doc,keepView){
   const co=coById(doc.companyId);const jdn=parseJ(doc.date)||todayJdn();
   if(!doc.manualNumber||!doc.number){const seq=peekSeq(co,seqType(doc),jdn);doc.seq=seq;doc.counterKey=counterKey(co,seqType(doc),jdn);doc.number=fmtDocNumber(patOf(co,seqType(doc)),seq,co.numbering.pad,jdn);co.numbering.counters[doc.counterKey]=seq+1;doc.manualNumber=false}
   doc.totalRound=doc.official?null:totalRoundNow(doc);
+  if(!doc.issuedAt){doc.issuedAt=nowTs();doc.issuedBy=curUser()}
   doc.committed=true;doc.updatedAt=Date.now();if(!doc.quoteId)doc.quoteId=pickQuote(co,doc.id);
   if(!S.documents.includes(doc))S.documents.push(doc);if(S.draft===doc)S.draft=null;if(!keepView)curId=doc.id;
   if(doc.linkedId){const o=S.documents.find(d=>d.id===doc.linkedId);if(o&&!o.linkedId)o.linkedId=doc.id}
   if(doc.official&&doc.offSubject==='cancel'&&doc.offRef){const o=S.documents.find(d=>d.id===doc.offRef);if(o)o.offCanceled=doc.id}
 }
 function dupNumber(doc){return doc.number&&S.documents.some(d=>d.id!==doc.id&&d.companyId===doc.companyId&&seqType(d)===seqType(doc)&&d.number===doc.number)}
-function cloneDoc(src,over){const c=JSON.parse(JSON.stringify(src));c.id=uid();c.items.forEach(i=>i.id=uid());Object.assign(c,{number:'',seq:0,counterKey:'',manualNumber:false,committed:false,linkedId:'',autoRef:false,offSubject:'main',offRef:'',offCanceled:'',taxId:'',taxStatus:'none',quoteId:'',createdAt:Date.now(),updatedAt:Date.now()},over||{});if(!(over&&over.quoteId))c.quoteId=pickQuote(coById(c.companyId));return c}
+function cloneDoc(src,over){const c=JSON.parse(JSON.stringify(src));c.id=uid();c.items.forEach(i=>i.id=uid());Object.assign(c,{number:'',seq:0,counterKey:'',manualNumber:false,committed:false,linkedId:'',autoRef:false,offSubject:'main',offRef:'',offCanceled:'',taxId:'',taxStatus:'none',quoteId:'',stampOn:null,sigOn:null,totalRound:null,issuedAt:0,issuedBy:'',createdBy:curUser(),updatedBy:'',createdAt:nowTs(),updatedAt:Date.now()},over||{});if(!(over&&over.quoteId))c.quoteId=pickQuote(coById(c.companyId));return c}
 function validUntil(doc){const j=parseJ(doc.date);if(j==null)return null;return j+Math.max(0,parseInt(doc.validDays)||0)}
 function docStatus(d){
   if(!d.committed)return['پیش‌نویس','draft'];
@@ -1677,7 +1687,7 @@ function edExtrasHtml(doc,co){if(!co)return '';let h='';
    else{const pool=quotePool(co);const cur=q&&!pool.some(x=>x.id===q.id)?[q]:[];h+=`<label class="f span-all"><span>سخن پانویس</span><div class="inline"><select id="edQuote">${Object.entries(QCAT).map(([k,l])=>{const qs=cur.concat(pool).filter(x=>x.cat===k);return qs.length?`<optgroup label="${esc(l)}">${qs.map(x=>opt(x.id,(x.fa||x.ar).slice(0,80)+' — '+x.ref,q?q.id:'')).join('')}</optgroup>`:''}).join('')}</select><button class="btn icon" data-act="ed-quote" title="یک سخن دیگر">${IC.re}</button></div></label>`}}
   return h}
 function renderEdPreview(){clearTimeout(pvT);pvT=setTimeout(()=>{const w=$('#edPv');const d=curDoc();if(w&&d)mountPreview(w,renderPaper(d))},90)}
-function docChanged(){const d=curDoc();if(!d)return;d.updatedAt=Date.now();batchHook(d);const fi=$('[data-d="fileName"]');if(fi)fi.placeholder=autoFileName(d);updateSummary();updateEdNotices();renderEdPreview();save()}
+function docChanged(){const d=curDoc();if(!d)return;d.updatedAt=Date.now();d.updatedBy=curUser();batchHook(d);const fi=$('[data-d="fileName"]');if(fi)fi.placeholder=autoFileName(d);updateSummary();updateEdNotices();renderEdPreview();save()}
 function onDocField(el){
   const doc=curDoc();const k=el.dataset.d;let v=readVal(el);
   if(k!=='companyId'&&k!=='type')doc.autoRef=false;
@@ -1810,8 +1820,8 @@ function renderDocs(){
   <span class="spacer"></span><span class="badge" id="selCount">${toFa(docSel.size)} انتخاب‌شده</span>
   <button class="btn" data-act="docs-preview">پیش‌نمایش انتخاب‌شده‌ها</button><button class="btn pri" data-act="docs-print">${IC.print} چاپ انتخاب‌شده‌ها</button><button class="btn danger" data-act="docs-del">حذف</button><button class="btn" data-act="docs-trash">سطل بازیافت (${toFa(S.trash.length)})</button>${dirOk?'<button class="btn" data-act="docs-scan" title="سندهایی که فایلشان در پوشه‌ی شرکت‌ها هست ولی در برنامه نیست">بازیابی از پوشه‌ها</button>':''}</div>
   ${S.draft?`<div class="notice info">یک پیش‌نویس ثبت‌نشده دارید.<button class="btn sm" data-act="docs-openDraft">ادامه‌ی پیش‌نویس</button></div>`:''}
-  <div class="tbl-wrap">${list.length?`<table class="list"><thead><tr><th><input type="checkbox" id="selAll" ${list.length&&list.every(d=>docSel.has(d.id))?'checked':''} title="انتخاب همه"></th><th>شماره</th><th>نوع</th><th>شرکت</th><th>خریدار</th><th>تاریخ</th><th>مبلغ</th><th>وضعیت</th><th></th></tr></thead><tbody>
-  ${list.map(d=>{const co=coById(d.companyId);const st=docStatus(d);return `<tr data-id="${d.id}"><td><input type="checkbox" class="dsel" ${docSel.has(d.id)?'checked':''}></td><td class="n"><b>${esc(toFa(d.number))}</b></td><td>${d.type==='proforma'?'پیش‌فاکتور':'فاکتور'}</td><td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${esc(co?co.color:'#999')};margin-left:6px"></span>${esc(co?co.name:'—')}</td><td>${esc(d.buyer.name||'—')}${d.committed?`<br><small style="color:var(--muted)" title="${esc(d.savedPath?d.savedPath.parts.join('/')+'/'+d.savedPath.name:'')}">📄 ${esc(fileNameOf(d))}</small>`:''}</td><td class="n">${toFa(d.date)}</td><td class="n">${fmtMoney(calcDoc(d).total,d.currency,true)} <small>${CUR[d.currency].name}</small></td><td><span class="badge ${st[1]}">${esc(st[0])}</span></td><td><div class="acts"><button class="btn sm" data-act="doc-open">باز کردن</button><button class="btn sm" data-act="doc-dup">کپی</button><button class="btn sm icon" data-act="doc-print" title="چاپ">${IC.print}</button>${d.committed&&SRV?'<button class="btn sm" data-act="doc-share" title="لینک دانلود با رمز">اشتراک</button>':''}</div></td></tr>`}).join('')}</tbody></table>`:'<div class="empty">سندی پیدا نشد. از بخش «صدور سند» اولین فاکتور یا پیش‌فاکتور را ثبت کنید.</div>'}</div></div></div>`;
+  <div class="tbl-wrap">${list.length?`<table class="list"><thead><tr><th><input type="checkbox" id="selAll" ${list.length&&list.every(d=>docSel.has(d.id))?'checked':''} title="انتخاب همه"></th><th>شماره</th><th>نوع</th><th>شرکت</th><th>خریدار</th><th>تاریخ</th><th>مبلغ</th><th>وضعیت</th><th>زمان ثبت و کاربر</th><th></th></tr></thead><tbody>
+  ${list.map(d=>{const co=coById(d.companyId);const st=docStatus(d);return `<tr data-id="${d.id}"><td><input type="checkbox" class="dsel" ${docSel.has(d.id)?'checked':''}></td><td class="n"><b>${esc(toFa(d.number))}</b></td><td>${d.type==='proforma'?'پیش‌فاکتور':'فاکتور'}</td><td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${esc(co?co.color:'#999')};margin-left:6px"></span>${esc(co?co.name:'—')}</td><td>${esc(d.buyer.name||'—')}${d.committed?`<br><small style="color:var(--muted)" title="${esc(d.savedPath?d.savedPath.parts.join('/')+'/'+d.savedPath.name:'')}">📄 ${esc(fileNameOf(d))}</small>`:''}</td><td class="n">${toFa(d.date)}</td><td class="n">${fmtMoney(calcDoc(d).total,d.currency,true)} <small>${CUR[d.currency].name}</small></td><td><span class="badge ${st[1]}">${esc(st[0])}</span></td><td class="who">${whoCell(d)}</td><td><div class="acts"><button class="btn sm" data-act="doc-open">باز کردن</button><button class="btn sm" data-act="doc-dup">کپی</button><button class="btn sm icon" data-act="doc-print" title="چاپ">${IC.print}</button>${d.committed&&SRV?'<button class="btn sm" data-act="doc-share" title="لینک دانلود با رمز">اشتراک</button>':''}</div></td></tr>`}).join('')}</tbody></table>`:'<div class="empty">سندی پیدا نشد. از بخش «صدور سند» اولین فاکتور یا پیش‌فاکتور را ثبت کنید.</div>'}</div></div></div>`;
 }
 let docTrash=false;
 function renderTrash(){
@@ -2012,9 +2022,10 @@ function crudAction(a,btn){
 /* ===== global settings ===== */
 function upcomingHolidays(){const out=[];const t=todayJdn();for(let j=t;j<t+200&&out.length<10;j++){const s=jStr(j);const n=HOL.dated[s]||HOL.fixed[s.slice(5)];if(n)out.push([s,n,j])}return out}
 function uiCardHtml(){const u=dfUiFont();const th=curTheme();
- return `<div class="card"><h3>ظاهر برنامه <small>روی همین مرورگر ذخیره می‌شود</small></h3><div class="grid g3">
+ return `<div class="card"><h3>ظاهر برنامه${SRV?'':' و کاربر'} <small>روی همین مرورگر ذخیره می‌شود</small></h3><div class="grid g3">
   <label class="f"><span>قلم رابط کاربری</span><select id="uiFont">${Object.entries(DF_FONTS).map(([k,f])=>`<option value="${k}" ${k===u.k?'selected':''} style="font-family:'${f.n}'">${f.t} (${f.n})</option>`).join('')}</select></label>
   <label class="f"><span>اندازه‌ی نوشته‌ها</span><select id="uiSize">${[[13,'کوچک'],[14,'معمولی'],[15,'بزرگ'],[16,'خیلی بزرگ']].map(([z,l])=>`<option value="${z}" ${z===u.z?'selected':''}>${l}</option>`).join('')}</select></label>
+  ${SRV?'':`<label class="f"><span>نام کاربر این دستگاه (در سندها ثبت می‌شود)</span><input id="offUser" value="${esc((()=>{try{return localStorage.getItem('df-off-user')||''}catch(e){return ''}})())}" placeholder="مثلاً نگار"></label>`}
   <label class="f"><span>حالت نمایش</span><select id="uiTheme">${[['auto','خودکار (طبق سیستم)'],['light','روز'],['dark','شب']].map(([k,l])=>`<option value="${k}" ${k===th?'selected':''}>${l}</option>`).join('')}</select></label>
  </div><div class="font-samples">${Object.entries(DF_FONTS).map(([k,f])=>`<button class="font-sample" data-act="ui-font" data-k="${k}" aria-pressed="${k===u.k}" style="font-family:'${f.n}',Tahoma"><b>${f.t}</b><span>صورتحساب فروش کالا و خدمات ۱۴۰۵/۰۸/۱۵ — مبلغ ۱۲٬۵۰۰٬۰۰۰ ریال</span></button>`).join('')}</div>
  <small class="note">قلم سندها و فاکتورها جداگانه در صفحه‌ی «شرکت‌ها» (بخش ظاهر) انتخاب می‌شود؛ قلم‌های استعداد، شبنم، ساحل و صمیم آنجا هم هستند.</small></div>`}
@@ -2910,6 +2921,12 @@ async function exportBackup(){
 /* ---------- version, changes, theme ---------- */
 const APP_VERSION=(document.querySelector('meta[name="app-version"]')||{}).content||'0';
 const APP_CHANGES=[
+ {v:'2.10.0',d:'1405/08/15',t:'زمان و کاربر ثبت سند',items:[
+  'در فهرست «اسناد» ستون تازه‌ی «زمان ثبت و کاربر»: تاریخ، ساعت، دقیقه و ثانیه‌ی ثبت سند و نام کاربری که آن را ثبت کرده است.',
+  'با نگه داشتن نشانگر روی آن، زمان ساخت، ثبت و آخرین تغییر سند و کاربر هر کدام دیده می‌شود.',
+  'زمان از ساعت سرور (یا ساعت اینترنتی در نسخه‌ی آفلاین) و به وقت تهران ثبت می‌شود.',
+  'در نسخه‌ی آفلاین نام کاربر این دستگاه در «تنظیمات ← ظاهر برنامه و کاربر» تعیین می‌شود.',
+  'سندهای قدیمی که زمان ثبت ندارند، زمان ساخت را با برچسب «(ساخت)» نشان می‌دهند.']},
  {v:'2.9.0',d:'1405/08/15',t:'گرد کردن مبلغ نهایی',items:[
   'مبلغ قابل پرداخت فاکتور با واحد «گرد کردن قیمت‌های تبدیل‌شده» (مثلاً میلیون ریال) گرد می‌شود و خرده ندارد.',
   'در فاکتور ردیف «کسر بابت گرد کردن» (یا «افزوده بابت گرد کردن») نشان داده می‌شود؛ مبلغ به حروف هم همان مبلغ گردشده است.',
@@ -3095,6 +3112,7 @@ function route(el,ev){
   if((el.id==='updAuto'||el.id==='updEvery')&&ev==='change'){updCfg();return}
   if(el.id==='uiFont'&&ev==='change'){setUiFont(el.value,null);renderSettings();return}
   if(el.id==='uiSize'&&ev==='change'){setUiFont(null,+el.value);return}
+  if(el.id==='offUser'){try{localStorage.setItem('df-off-user',el.value.trim())}catch(e){}return}
   if(el.id==='uiTheme'&&ev==='change'){try{localStorage.setItem('df-theme',el.value)}catch(e){}applyTheme(el.value);return}
   if(el.id==='fxPerDay'&&ev==='change'){setFxPerDay(+el.value);return}
   if(el.id==='bOrder'&&ev==='change'){const b=curBatch();if(b){b.printOrder=el.value;save();refreshBatch(true)}return}
