@@ -6,3 +6,4 @@
 *.keys
 *.log
 .DS_Store
+/inc/config.local.php

@@ -1,0 +1,12 @@
+---
+# استقرار خودکار در سی‌پنل (Git Version Control ← Deploy HEAD Commit)
+# مقصد پیش‌فرض: ‎$HOME/invora‎ (Document Root زیردامنه).
+# برای مقصد دیگر، در پوشه‌ی خانه‌ی هاست فایلی به نام ‎.invora-deploy‎ بسازید و مسیر کامل را در خط اول آن بنویسید.
+# پوشه‌ی داده، inc/config.local.php و هر فایل دیگری که روی هاست ساخته شده، دست نمی‌خورد.
+deployment:
+  tasks:
+    - export DEPLOYPATH="$HOME/invora"
+    - if [ -s "$HOME/.invora-deploy" ]; then export DEPLOYPATH="$(head -n1 "$HOME/.invora-deploy" | tr -d '\r')"; fi
+    - /bin/mkdir -p "$DEPLOYPATH/inc"
+    - /bin/cp -f app.html index.php api.php d.php .htaccess "$DEPLOYPATH/"
+    - /bin/cp -f inc/.htaccess inc/lib.php inc/crypto.php inc/config.php "$DEPLOYPATH/inc/"

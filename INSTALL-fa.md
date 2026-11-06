@@ -10,8 +10,39 @@
 هر تغییری در app.html بدهید، در هر دو نسخه اعمال می‌شود. بعد از تغییر، فقط app.html را دوباره روی هاست بارگذاری کنید.
 
 
-نصب روی هاست سی‌پنل
--------------------
+نصب روی زیردامنه از گیت‌هاب (پیشنهادی)
+--------------------------------------
+1) زیردامنه: در سی‌پنل، Domains (یا Subdomains) ← Create A New Domain.
+   مثلاً factor.example.com را بسازید و «Document Root» را دقیقاً invora بگذارید.
+   مسیر نهایی /home/USERNAME/invora می‌شود.
+2) PHP: در MultiPHP Manager برای همین زیردامنه نسخه‌ی 8.1 یا بالاتر را انتخاب کنید.
+   در Select PHP Version مطمئن شوید openssl، sodium، curl و mbstring فعال‌اند.
+3) گیت: در Git™ Version Control ← Create:
+   - Clone URL: https://github.com/md6410/Invora.git
+   - Repository Path: repositories/Invora (پیش‌فرض خود سی‌پنل)
+4) استقرار: در همان صفحه ← Manage ← تب Pull or Deploy ← Deploy HEAD Commit.
+   فایل‌ها به /home/USERNAME/invora کپی می‌شوند. پوشه‌ی .git در دسترس وب قرار نمی‌گیرد.
+5) SSL: در SSL/TLS Status برای زیردامنه AutoSSL را اجرا کنید.
+   سپس در صفحه‌ی Domains گزینه‌ی «Force HTTPS Redirect» را برای زیردامنه روشن کنید.
+6) راه‌اندازی: آدرس زیردامنه را باز کنید، حساب مدیر را بسازید و کد بازیابی را یادداشت کنید.
+   اطلاعات در /home/USERNAME/daftar-factor-data ساخته می‌شود؛ بیرون از دسترس وب و رمزشده.
+
+به‌روزرسانی بعدی: Git Version Control ← Manage ← Pull or Deploy ← «Update from Remote» و بعد «Deploy HEAD Commit».
+اطلاعات، کاربران و فایل inc/config.local.php با به‌روزرسانی دست نمی‌خورند.
+
+اگر Document Root زیردامنه چیز دیگری است:
+در پوشه‌ی خانه‌ی هاست (File Manager، با Show Hidden Files) فایلی به نام .invora-deploy بسازید.
+مسیر کامل را در خط اول آن بنویسید، مثلاً: /home/USERNAME/factor.example.com
+
+تنظیمات اختصاصی هاست (مثل کلید navasan.tech یا مدت خروج خودکار) را در فایل inc/config.local.php بنویسید، نه در config.php.
+config.php با هر به‌روزرسانی بازنویسی می‌شود. نمونه:
+  <?php
+  define('DF_NAVASAN_KEY', 'کلید شما');
+  define('DF_IDLE_MINUTES', 60);
+
+
+نصب دستی روی هاست سی‌پنل (بدون گیت)
+----------------------------------
 1) پیش‌نیاز: PHP نسخه‌ی 7.4 یا بالاتر (پیشنهاد: 8.1+) با افزونه‌های openssl، curl، mbstring و sodium
    (sodium برای رمزنگاری گزارش دسترسی لینک‌ها؛ اگر نباشد، گزارش‌ها بدون رمز ذخیره می‌شوند).
    در سی‌پنل: Select PHP Version یا MultiPHP Manager.
