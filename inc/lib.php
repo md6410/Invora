@@ -84,6 +84,8 @@ function df_base_url(): string {
     return (df_is_https() ? 'https' : 'http') . '://' . $host . df_base_path();
 }
 function df_ip(): string { return (string)($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0'); }
+/* a PIN as typed or pasted: Persian/Arabic digits become ASCII, everything else (spaces, invisible marks, "رمز:") is dropped */
+function df_pin_norm(string $s): string { return (string)preg_replace('/\D+/', '', df_fa_digits($s)); }
 function df_h(?string $s): string { return htmlspecialchars((string)$s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); }
 function df_fa_digits(string $s): string {
     return strtr($s, ['۰'=>'0','۱'=>'1','۲'=>'2','۳'=>'3','۴'=>'4','۵'=>'5','۶'=>'6','۷'=>'7','۸'=>'8','۹'=>'9','٠'=>'0','١'=>'1','٢'=>'2','٣'=>'3','٤'=>'4','٥'=>'5','٦'=>'6','٧'=>'7','٨'=>'8','٩'=>'9']);
@@ -219,8 +221,18 @@ function df_login(string $user, string $pass): ?string {
     } else {
         return 'حساب شما هنوز به کلید رمزنگاری اطلاعات وصل نشده است. از مدیر بخواهید در «تنظیمات عمومی ← کاربران» برایتان رمز تعیین کند.';
     }
+    /* remember this login; the previous one is shown on the app's home page (the IP is stored encrypted) */
+    $prev = df_update('users.json', function (array &$d) use ($user, $dek) {
+        if (!isset($d['users'][$user])) return [];
+        $x = &$d['users'][$user];
+        $ip = !empty($x['lastIp']) ? df_dec((string)base64_decode((string)$x['lastIp']), $dek, 'lastip') : null;
+        $p = ['at' => (int)($x['lastAt'] ?? 0), 'ip' => (string)($ip ?? '')];
+        $x['lastAt'] = time(); $x['lastIp'] = base64_encode(df_enc(df_ip(), $dek, 'lastip'));
+        return $p;
+    }, ['users' => []]);
     session_regenerate_id(true);
     $_SESSION['u'] = $user; $_SESSION['ver'] = df_users()[$user]['ver'] ?? 1;
+    $_SESSION['prev'] = is_array($prev) ? $prev : [];
     $_SESSION['since'] = $_SESSION['t'] = time();
     $_SESSION['admin'] = !empty($u['admin']);
     $_SESSION['csrf'] = bin2hex(random_bytes(32));
@@ -287,7 +299,8 @@ function df_share_public(string $h, array $s, string $dek): array {
     elseif (($s['exp'] ?? 0) > 0 && $now > $s['exp']) $state = 'expired';
     elseif (($s['max'] ?? 0) > 0 && ($s['used'] ?? 0) >= $s['max']) $state = 'exhausted';
     $t = !empty($s['te']) ? df_dec((string)base64_decode($s['te']), $dek, 'tok') : null;
-    return ['id' => $h, 'url' => $t ? df_base_url() . 'd.php?t=' . $t : '', 'doc' => $s['doc'] ?? '',
+    $pin = !empty($s['pe']) ? df_dec((string)base64_decode($s['pe']), $dek, 'pin') : null;
+    return ['id' => $h, 'url' => $t ? df_base_url() . 'd.php?t=' . $t : '', 'pin' => $pin ?? '', 'doc' => $s['doc'] ?? '',
         'created' => ($s['created'] ?? 0) * 1000, 'exp' => ($s['exp'] ?? 0) * 1000, 'max' => $s['max'] ?? 0, 'used' => $s['used'] ?? 0,
         'fails' => $s['fails'] ?? 0, 'by' => $s['by'] ?? '', 'state' => $state, 'deadAt' => ($s['deadAt'] ?? 0) * 1000,
         'events' => is_file(df_share_log_file($h)) ? count(file(df_share_log_file($h), FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES) ?: []) : 0];
@@ -407,7 +420,8 @@ function df_icon_links(bool $manifest = true): string {
         . '<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">' . ($manifest ? '<link rel="manifest" href="site.webmanifest">' : '')
         . '<meta name="apple-mobile-web-app-title" content="Invora"><meta name="application-name" content="Invora">';
 }
-function df_page(string $title, string $body, string $nonce = ''): void {
+/* $plain: no app subtitle (the public share page must not say what the file is before the PIN) */
+function df_page(string $title, string $body, string $nonce = '', bool $plain = false): void {
     echo '<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>' . df_h($title) . ' — Invora</title><link rel="icon" type="image/svg+xml" href="' . df_h(df_favicon()) . '"><meta name="theme-color" content="#1e5a55">' . df_icon_links($nonce === '')
         . '<style>:root{color-scheme:light dark}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#eef0ee;color:#1d2321;font:15px/1.8 Vazirmatn,Tahoma,sans-serif;padding:16px}'
         . '@media (prefers-color-scheme:dark){body{background:#121615;color:#e4e8e6}.box{background:#1a1f1e!important;border-color:#2e3533!important}input{background:#202625!important;color:#e4e8e6!important;border-color:#2e3533!important}}'
@@ -415,7 +429,7 @@ function df_page(string $title, string $body, string $nonce = ''): void {
         . 'input{font:inherit;padding:8px 10px;border:1px solid #c9cfcb;border-radius:8px;background:#f6f7f5;width:100%}input.pin{direction:ltr;text-align:center;font-size:22px;letter-spacing:.4em}'
         . 'button{font:inherit;font-weight:700;padding:9px;border:0;border-radius:8px;background:#1e5a55;color:#fff;cursor:pointer}.err{color:#a8261b;background:#fbe9e7;border-radius:8px;padding:6px 10px;font-size:13.5px}.ok{color:#2c7149}.muted{color:#6b736f;font-size:12.5px}'
         . '.brand{display:flex;align-items:center;gap:10px;margin-bottom:2px}.brand b{font:800 20px/1.1 system-ui,sans-serif;letter-spacing:.02em;color:#1e5a55}.brand small{display:block;font-size:11.5px;color:#6b736f}@media (prefers-color-scheme:dark){.brand b{color:#7fd0c2}}</style>'
-        . '</head><body><div class="box"><div class="brand">' . df_logo_svg() . '<div><b>Invora</b><small>دفتر فاکتور و پیش‌فاکتور</small></div></div>' . $body . '</div></body></html>';
+        . '</head><body><div class="box"><div class="brand">' . df_logo_svg() . '<div><b>Invora</b>' . ($plain ? '' : '<small>دفتر فاکتور و پیش‌فاکتور</small>') . '</div></div>' . $body . '</div></body></html>';
 }
 function df_json(array $d, int $code = 200): void {
     http_response_code($code);

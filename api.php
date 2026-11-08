@@ -95,7 +95,7 @@ try {
             $exp = (int)floor(((int)($in['exp'] ?? 0)) / 1000);
             if ($exp !== 0 && ($exp < time() + 60 || $exp > time() + 366 * 86400)) df_json(['ok' => false, 'error' => 'زمان انقضا معتبر نیست.'], 400);
             $max = max(0, min(10000, (int)($in['max'] ?? 0)));
-            $pin = df_fa_digits(trim((string)($in['pin'] ?? '')));
+            $pin = df_pin_norm((string)($in['pin'] ?? ''));
             if ($pin === '') $pin = str_pad((string)random_int(0, 99999), 5, '0', STR_PAD_LEFT);
             elseif (!preg_match('/^\d{4,5}$/', $pin)) df_json(['ok' => false, 'error' => 'رمز باید ۴ یا ۵ رقم باشد.'], 400);
             df_log_keys_ensure($dek);
@@ -104,7 +104,8 @@ try {
             $title = mb_substr((string)($in['title'] ?? ''), 0, 160);
             $rec = ['doc' => $doc, 'created' => time(), 'by' => $user, 'exp' => $exp, 'max' => $max, 'used' => 0, 'fails' => 0, 'last' => 0,
                 'pin' => password_hash($pin, PASSWORD_DEFAULT), 'pk' => 1, 'dead' => '',
-                'te' => base64_encode(df_enc($t, $dek, 'tok')), 'tt' => base64_encode(df_enc($title, df_share_title_key($t), 'title'))];
+                'te' => base64_encode(df_enc($t, $dek, 'tok')), 'tt' => base64_encode(df_enc($title, df_share_title_key($t), 'title')),
+                'pe' => base64_encode(df_enc($pin, $dek, 'pin'))]; /* the PIN, readable only after login, so the sender can see it again */
             df_update('shares.json', function (array &$all) use ($h, $rec) { $all[$h] = $rec; });
             df_json(['ok' => true, 'pin' => $pin, 'share' => df_share_public($h, $rec, $dek)]);
         }

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Invora — دفتر فاکتور</title>
-<meta name="app-version" content="2.12.0">
+<meta name="app-version" content="2.13.0">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Cdefs%3E%3ClinearGradient id="ivg" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="#2f9a8a"/%3E%3Cstop offset=".55" stop-color="#1e5a55"/%3E%3Cstop offset="1" stop-color="#123b37"/%3E%3C/linearGradient%3E%3ClinearGradient id="ivp" x1="0" y1="0" x2="0" y2="1"%3E%3Cstop offset="0" stop-color="#ffffff"/%3E%3Cstop offset="1" stop-color="#e2f0ec"/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="64" height="64" rx="15" fill="url(#ivg)"/%3E%3Cpath d="M19 11.5H38.5L47 20V51L43.4 48.6 39.8 51 36.2 48.6 32.6 51 29 48.6 25.4 51 21.8 48.6 19 51z" fill="url(#ivp)"/%3E%3Cpath d="M38.5 11.5V18a2 2 0 0 0 2 2H47z" fill="#a9d3ca"/%3E%3Crect x="24" y="25.5" width="4.4" height="16" rx="2.2" fill="#1e5a55"/%3E%3Ccircle cx="26.2" cy="19.8" r="2.7" fill="#eaa53a"/%3E%3Cpath d="M33 27.5h9M33 33h9M33 38.5h5.5" stroke="#1e5a55" stroke-width="2.6" stroke-linecap="round" opacity=".5"/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAMAAAAKE/YAAAABIFBMVEX+/v78/v38/f37/fz5/Pv3+/r2+/n1+vnz+ffx+Pbw9/Xt9vPs9fLq9PHp9PHo8/Dn8+/m8u/l8u7k8e3rrk7Z6eas1MuTs7BpoZotkoQujoErjH4riXwqiHsqhXkphXgpg3cpgnY4eHAogHUof3QofnMnfXInfHEnenAmeW8meG4mdm0ldWslc2okcmkkcWgkcGcjb2YjbWUka2Qia2MiaWEiaGAhZ2AhZV4hZF0gY10gYlwgYVsfYFofX1kmXFgfXVgfXFceW1YeWlUeWVQdWVQdWFMdV1IdVlEcVVAcVE8bU04bUk0bUUwaUUwaUEsaT0oaTkkZTkkZTUgZTEcYS0YYSkYXSkUXSUUXSEQXR0MWRkIWRUEVRD8UQT0TPjruZ3+mAAALIElEQVR42tWcCXMTOROGlcQm9+lY8u7CLogz4dwPAiEcDpiQg1w44Qiw8P//xddSzyHZY6fVM1RFrZp11bgSP3m2eTOZkST+GFJ//vGnrb/MSOoy1BUzoP75G8fVf65evXbt+rXrUDeu37hx88atm7du3b51+/ad23furNxZWVldWV29u3oX6h7U/Xv37z+4/+DBwwcPHz569O+jf6H+B/XkMQyotSdra8+e4lh/tr6+sb7xfOP5i+cvXrx88erlq1diKHRaPvNlS3zlyt+GGOrqVcN8zTJfN8xQwHw7Z14xzHdTZkCGegDQhvlRxvwY6omttbU1Q/zMHOvr60C8sfFiA5hfAvKr1yLE8+XU8xWGZ2S+S/Scmi7w/HoodOb5L6bnO8M8Pxzi+SmUNZ16NqaNZ8s8GHpIPw/3fPP39vProdBV9fMqt59zzxsbeT9DbYrI+hmoNweZ/l39fK90P7/e3Cw2fVHzOWEeAH1B8zlhLoK+uPls+nlz800h9IXNZ/S8+UbElM+WePNNAfQFzmf0/OatiCmf0fPbXtMXO5/R81vf9EXPZ/TcC33B8xk9v+2ImPIZPXc86Aufz+jZgY4hn9GzCx1BPqPnzjsRUz4b5nedrdR0HPmMnt9tiZjy2TBvvdvC9ogln9GzNR1PPpt+3nr33piOJ5/R89Z7EVM+o2cwHVM+o+f370VM+Yyet1PoOPIZPb/fFqx8Vk1WqZL5jJ5T06H9LAWrmrJcPqNna5rRz2xoWSqfYRhm2x7h/cyHlmX72ZRg5XMJaFkin7et5x0wzcnnMtCSn8+WGagFK59LQUt2PqNnMM3K53LQskw/b+/s7AjW9bMcEaMi/EihFTOfrWcHOuz3oBQjIyPhRwptqDn5jJ4T6ODrDTkqOCODloqVzzvW9G5iOvR6Q46MckYOLRW3n3d2d3cF6/pZjo6MjYQfDjRQh+ezZU5Mh18/y9HR0bHww4WWKjyfE9G7gnX9LMdGx0bgGA179aCBOjSfrefdPWgPzvWzGmOVDy0Vp5+h9gTr/obsw1k21awFQUsVmM+mn/eMadbfgz2mLy2ntRAELVV4P+/u7RnTjL8HrelUa62xnBfIzs73vfZBA3VIPqNnC834e9A3vezWpRDTQB3az6YE6/6GMj7T0fCgl8dqA0cBtFQB+YyeP4Bpzv0NNVar1dLDZ16uu+/5x7gspA7qZ2D+IFj3NzzTPdAzg03XpgdR0/IZPYNp1v0NVXOqB7pZG1LjhR0S0s97Hz6g6eD7z6pey0cP9IL7XsGYWVpqLPmHJuYzekbo8PvPxnQ9PXqgL7nv0Q4d0M9Q+4J1v84z3fSha/XgoYn5jJ73wTTnfp2q26rZ/075LZ2dp7/qgH7+sL+/L1j3n5X9vPRYKGAOOjQxn9EzQLPuPyem02p4zOGlA/p5PzcdeP+5B7o+kTDP1pnQtHxGz4fGNOP+s+r/4InGTJ1bOqCfoQ4E6/mgGq9XOTQxn9EzmGY9H1T1S5fg0+Co5FUH9PP+4cGhYD1PUfB5ZtSredXEfEbPh9AenOeDarzS0gH9fHB4cCRYzweN6fHqDt2h9zMwHwjW88GqTQf08+GRMc15Plh5e9DyGT0fATTn+WAB9FSzUcI0vZ8PjwCaNX9DTYz7Q+p2p6PVVO952tAB/XyE0Iz5G2p8YmIiPxqtDpaW7vmpIc9Bp92v1wH9DHUsWM+7e0zLTlot96waVtI3TcpnYD44PjoG05z5G2rCrebTDLqTvzOcWalm/g10QD8fHR+Dac78DUQbTz5T5cwdnZ0/h1nJ7OvHdUA/g2mEDp6/4ZvuhZ4gQTvfQwf08zGaZszfoEDLc0077UHLZ/TctabD529QoJvnQDdc0/R+huoK1vw6gJ60w7560Pn55jn/DrOvB2h6P3etac78OmU/LT1805Pee6RDB/TzcfcjmObMR1KTE84oMB02NDGf0XP3o2DNr1OTbvnQjNIB/fyx2z0RrPl1xvRkdvRCT4QeOqCfTz6efBSs+XW/wTS1n7snYJo1v05NTTrDg/beIQ5NzGfTz2Aa2oMzv055n+mbZlDrgH7ungA0a77obzBN7eeTk1OA5sx/VlNu+dBZLQ35RS7lovMNdEA/Q50K1nxRCnTjvF/jDjQxn9EzmGbNf6ZAn3vB5Jkm9/PJ6SmY5sx/pkCfe2nqQlP72ZoGaM785yqgXdMB/WxKsOY/q+kpZ3jQ2dlz2yP/DpqYz6fW8yeA5sx/Vi5zj+n07Ow50M530AH9DPVJsObzU0xPTRc96Eyr6X4HTcxn9GxMc9anqGm3fGhG6YB+/gQlWPP5q4Ym5jN6/gztwVmfUrlpej9DfRas9SnVmyblM3oG06z1KdWbJvczMH8WrPUpambaGR609w5xaGI+o+cv0B6c9SnK+0zfNINaB/SzKcFab0UzPd93g3dpoGlSPqPnrwDNWW+lZtzyobMq+j0uZ4pKB/QzMH8VrPVWFOjiaw9ZDE3LZ/T8NYEOXT9IgR5wyTHANLmfgRmhg9cPqtkZZ3jQ+dni8r4yGZqYz+gZocPXDxpfs9nhm07PD7g0db4uOzS1n79YZgPNWD9IMV1807Q5wDQpn9HzGUBz1g+qWbdc6FZ+ulnIXFQ6oJ8B+kyw1sMa07PZ0XSglXOefGhiPqPnFDp0fbdveraVMT8vVnlOaWI+o2cLzVgPq+Zm3ZE/k1Ozc4yhifmMnr9Z6PD1sGrOr6adhdR53HueWJrcz1b0N8Fa363m52DM2v/iq1StlmrO9Z0nvWpiPqNnMM1a363m5qscmpjPZ9bzNzDNWd+tKmWG9qD387ez7waasb5bzVdampjP6Pnbd8HarwCgF5IPrOJVE/MZPRvTnP031Hyl1JqYz+jZmObsV6AW581YmK/mVQf0MwyA5uxXoBYqLU3MZ/QM0Kz9N9TiQpVDE/MZPRtozv4bamFxcbG6QxPzOWE20Iz9N6o3Te7n799/ADRn/w21WGlpYj4j848fgrWfDJhegg+Do5JXHeTZQjP2R1L4iVUdmpjPiegfgrU/klparHLoIM//gWnOfjJqqdLSxHy2moFasPZHUv3rr8ocmpjP6BlMs/ZHUkuVUmtiPqPn/4xpxv5IqrFU5dBBng00Z38k1ai0NDGf0TNAs/b7SqGbBQTUc85JHeQZocP3r0ugW+0+5c3WTqsPUbV13zn5uC1d05R8Rs8WmrF/nUI+WG/VQyNhDtXuY+n/HHAn93Bb9fxs5mo0/fF0kGcDzdnvS1kWuw7Ild1sbeO0L1e2auPzFPfHk8l1XSJbE/M5LcHav06Z/73p+sGMRubz657KTHP2PGUn+5fQOsiun+2Pp4M8AzRr/zrVkO18vVVbZZrz+XUoGzWnz1O0xJ/N/TvFyNbEfE7qp2DtX6fUG2/9INCAZn/+M8iGbvafW4Fs283e9XOrqYM8/wTTnP3rdO/6wXarYP5zq93/fFAX/D3YbhPzGZl/gukK9q/bDpz/fBJ4/ex7TqDL7l+3HTj/uRt4/ex7ttDl96/bCZz/XM4zmi69f9124PznbuD1s+8ZoNcq2L8uvJ9PSng2ptfK719Xup+/0PsZTZfYX3Q7cH1KFf2M0Bemn89I/WyhY8rnDDqmfO41HUU+95iOI58907Hkcw4dUT4n9UvElM+WGIaIKZ+R+tcvEVM+J8zQHhHlc8IMpiPKZ9PPCXQ8+YyeATqmfP6VQseUzxl0TPnsm44knx3T8eRzDh1RPmfQMeWzYzqefM5NR5TPOXRE+ZxBx5TPOXRE+ZxBx5TPOXRE+exAx5PPOXRE+ZzW/wF2Okly1HjZ/AAAAABJRU5ErkJggg==">
 <meta name="theme-color" content="#1e5a55">
@@ -274,6 +274,32 @@ body.locked>header,body.locked>main,body.locked #banner{visibility:hidden}
 .seal-opt img{width:34px;height:34px;object-fit:contain;background:#fff;border-radius:4px}
 .seal-opt.off{opacity:.55;cursor:default}
 .list td.who{white-space:nowrap;font-size:12.5px;line-height:1.5}
+.home-hero{display:flex;flex-direction:row;justify-content:space-between;align-items:center;gap:14px 24px;flex-wrap:wrap;background:linear-gradient(135deg,var(--accent-soft),var(--surface) 70%)}
+.hm-greet{font-size:20px;font-weight:800}
+.hm-date{font-size:16px;font-weight:700}
+.hm-sub{font-size:13px;color:var(--muted)}
+.hm-clock{font-size:38px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums;letter-spacing:.02em;color:var(--accent)}
+.hm-side{display:flex;flex-direction:column;align-items:flex-end;gap:4px;text-align:left}
+.hm-login{font-size:12.5px;color:var(--muted)}
+table.list.hm-list{min-width:0}
+.hm-list td.hn{white-space:nowrap}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface-2);display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi .k{font-size:12.5px;color:var(--muted)}
+.kpi .v{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.home-cols{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:900px){.home-cols{grid-template-columns:1fr}.hm-side{align-items:flex-start;text-align:right}}
+.todo{display:flex;flex-direction:column;gap:6px}
+.todo-i{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:9px;background:var(--surface-2);border:1px solid var(--line);font-size:13.5px}
+.todo-i.warn{background:var(--warn-soft);border-color:transparent;color:var(--warn)}
+.todo-i.ok{background:var(--ok-soft);border-color:transparent;color:var(--ok)}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.menu-card{text-align:right;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 14px;cursor:pointer;font:inherit;color:inherit;display:flex;flex-direction:column;gap:3px}
+.menu-card:hover{border-color:var(--accent);background:var(--accent-soft)}
+.menu-card b{font-size:15px}
+.menu-card small{color:var(--muted);font-size:12.5px;line-height:1.6}
+.sh-pin{font-size:16px;letter-spacing:.18em;font-variant-numeric:tabular-nums;user-select:all}
 .bank-card{border:1px solid var(--line,#dde3e0);border-radius:10px;padding:10px 12px;background:var(--bg2,transparent)}
 .bank-card .card-h{margin-bottom:6px}
 /* ============ PAPER (print-true) ============ */
@@ -311,6 +337,19 @@ body.locked>header,body.locked>main,body.locked #banner{visibility:hidden}
 .paper .fq-ref{opacity:.75;font-size:.92em;white-space:nowrap}
 .paper .valid{font-size:.92em;font-weight:600;color:var(--c)}
 .paper .push{margin-top:auto}
+/* a little too tall for one sheet: tighter spacing (and smaller text, set by the layout code) */
+.paper.pg-fit{gap:2.2mm;padding-top:9mm;padding-bottom:8mm}
+.paper.pg-fit .items th,.paper.pg-fit .items td{padding-top:.8mm;padding-bottom:.8mm}
+.paper.pg-fit .sign{min-height:max(24mm,calc(24mm * var(--sts,1) + 3mm),calc(13mm * var(--sgs,1) + 8mm))}
+.t-band.pg-fit{padding:0;gap:0}.t-band.pg-fit .b-band{padding-top:7mm;padding-bottom:5mm}.t-band.pg-fit .b-body{gap:3mm;padding-top:4.5mm;padding-bottom:4.5mm}
+.t-min.pg-fit{padding:11mm 16mm 9mm;gap:3.6mm}
+.t-frame.pg-fit{padding:8mm}.t-frame.pg-fit .fr-in{gap:2.2mm;padding:5mm 6mm 4mm}
+.paper .items tr.pg-carry td{font-weight:700;background:#f3f3f3}
+.paper .items tr.pg-carry td.l{text-align:left}
+.paper .pg-cont{text-align:center;font-weight:700;font-size:.9em;color:var(--c);border:.25mm dashed currentColor;border-radius:1.5mm;padding:.8mm 2mm;break-inside:avoid}
+.paper .pg-no{text-align:center;font-size:.8em;color:#555;line-height:1.4}
+.t-band .pg-no{background:color-mix(in srgb,var(--c) 10%,#fff);padding:0 12mm 2.6mm;margin-top:-.1mm}
+.t-frame .pg-no{margin-top:-1.6mm}
 
 /* T1 formal */
 .t-formal{--line:#2a2a2a}
@@ -441,12 +480,13 @@ body.locked>header,body.locked>main,body.locked #banner{visibility:hidden}
 </head>
 <body>
 <header class="top">
-  <div class="brand">
+  <div class="brand" data-act="home" title="پیشخوان" style="cursor:pointer">
     <div class="mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="ivg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f9a8a"/><stop offset=".55" stop-color="#1e5a55"/><stop offset="1" stop-color="#123b37"/></linearGradient><linearGradient id="ivp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e2f0ec"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#ivg)"/><path d="M19 11.5H38.5L47 20V51L43.4 48.6 39.8 51 36.2 48.6 32.6 51 29 48.6 25.4 51 21.8 48.6 19 51z" fill="url(#ivp)"/><path d="M38.5 11.5V18a2 2 0 0 0 2 2H47z" fill="#a9d3ca"/><rect x="24" y="25.5" width="4.4" height="16" rx="2.2" fill="#1e5a55"/><circle cx="26.2" cy="19.8" r="2.7" fill="#eaa53a"/><path d="M33 27.5h9M33 33h9M33 38.5h5.5" stroke="#1e5a55" stroke-width="2.6" stroke-linecap="round" opacity=".5"/></svg></div>
     <div><b>Invora</b><small>دفتر فاکتور و پیش‌فاکتور</small></div>
   </div>
   <nav class="tabs" role="tablist" id="tabs">
-    <button role="tab" data-view="editor" aria-selected="true">صدور تکی</button>
+    <button role="tab" data-view="home" aria-selected="true">پیشخوان</button>
+    <button role="tab" data-view="editor" aria-selected="false">صدور تکی</button>
     <button role="tab" data-view="batch" aria-selected="false">صدور گروهی</button>
     <button role="tab" data-view="docs">اسناد</button>
     <button role="tab" data-view="companies">شرکت‌ها</button>
@@ -470,7 +510,8 @@ body.locked>header,body.locked>main,body.locked #banner{visibility:hidden}
 <input type="file" id="lblImg" accept="image/*" hidden>
 <main>
   <div id="banner" class="stack" style="margin-bottom:12px"></div>
-  <section id="v-editor" class="view"></section>
+  <section id="v-home" class="view"></section>
+  <section id="v-editor" class="view" hidden></section>
   <section id="v-batch" class="view" hidden></section>
   <section id="v-docs" class="view" hidden></section>
   <section id="v-companies" class="view" hidden></section>
@@ -975,7 +1016,7 @@ function fileNameOf(d){return safeName(String(d.fileName||'').trim()||autoFileNa
 let _paperCss=null;
 function paperCss(){if(_paperCss==null){const t=[...document.querySelectorAll('style')].map(x=>x.textContent).join('\n');const i=t.indexOf('/* ============ PAPER');const j=t.indexOf('/* print */',i);_paperCss=i>=0?t.slice(i,j>i?j:undefined):''}return _paperCss}
 function fontsHref(){const l=document.querySelector('link[rel="stylesheet"]');return l?l.href:''}
-const FILE_CSS='body{margin:0;background:#e9ebe9;font-family:Vazirmatn,Tahoma,sans-serif;display:flex;flex-direction:column;align-items:center;gap:14px;padding:14px}.bar{display:flex;gap:12px;align-items:center;justify-content:space-between;width:210mm;max-width:100%;font-size:14px;color:#333}.bar button{font:inherit;padding:6px 20px;border-radius:8px;border:0;background:#1e5a55;color:#fff;cursor:pointer}.paper{box-shadow:0 2px 10px rgba(0,0,0,.15)}@media print{@page{size:A4;margin:0}body{background:#fff;padding:0;display:block}.bar{display:none}.paper{box-shadow:none;min-height:296mm}}';
+const FILE_CSS='body{margin:0;background:#e9ebe9;font-family:Vazirmatn,Tahoma,sans-serif;display:flex;flex-direction:column;align-items:center;gap:14px;padding:14px}.bar{display:flex;gap:12px;align-items:center;justify-content:space-between;width:210mm;max-width:100%;font-size:14px;color:#333}.bar button{font:inherit;padding:6px 20px;border-radius:8px;border:0;background:#1e5a55;color:#fff;cursor:pointer}.paper{box-shadow:0 2px 10px rgba(0,0,0,.15)}@media print{@page{size:A4;margin:0}html,body{width:210mm}body{background:#fff;padding:0;margin:0;display:block}.bar{display:none}.paper{box-shadow:none;margin:0;min-height:296.5mm;overflow:hidden;break-after:page;page-break-after:always}.paper:last-of-type{break-after:auto;page-break-after:auto}}';
 function docFileHtml(d,forShare){
   const co=coById(d.companyId);const clean=Object.assign({},d);delete clean.savedPath;delete clean.fileSig;
   const data=JSON.stringify({app:'daftar-factor-doc',version:1,savedAt:Date.now(),company:co?{id:co.id,name:co.name}:null,doc:clean}).replace(/</g,'\\u003c');
@@ -991,6 +1032,7 @@ async function writeFileAt(parts,name,text){if(SRV){await api('file_put',{parts,
   await writeBytes(dh,f,await aesEnc(VAULT.key,enc8.encode(JSON.stringify({parts,name,content:text})),'file'))}
 async function removeFileAt(parts,name){if(SRV){try{await api('file_del',{parts,name})}catch(e){}return}if(!VAULT)return;try{const [d,f]=await encDocPath(parts,name);const dh=await getDir([FILES_DIR,d],false);await dh.removeEntry(f)}catch(e){}}
 async function writeDocFile(d,toTrash){
+  await pgReady([d]);
   const co=coById(d.companyId);const dir=safeName(co?co.name:(d.savedPath&&d.savedPath.parts[1])||'بدون شرکت');
   const parts=[DOCS_DIR,dir].concat(toTrash?[TRASH_DIR]:[]);let name=fileNameOf(d);
   const pool=S.documents.concat(S.trash.map(t=>t.doc));
@@ -1072,23 +1114,27 @@ async function createShare(){
   const max=parseInt(normDigits($('#shMax').value))||0;
   const pin=$('#shPinMode').value==='manual'?normDigits($('#shPin').value.trim()):'';
   if($('#shPinMode').value==='manual'&&!/^\d{4,5}$/.test(pin)){toast('رمز باید ۴ یا ۵ رقم باشد');return}
+  await pgReady([doc]);
   let j;try{j=await api('share_create',{docId:doc.id,title:fileNameOf(doc).replace(/\.html$/,''),html:docFileHtml(doc,true),exp,max,pin})}catch(e){toast(e.message,4500);return}
-  const sh=j.share;const co=coById(doc.companyId);
-  const msg=`${TN(doc.type)} شماره ${toFa(doc.number)}${co?' — '+co.name:''}\nلینک دریافت: ${sh.url}\nرمز: ${toFa(j.pin)}${sh.exp?'\nاعتبار تا: '+fmtTs(sh.exp):''}${sh.max?'\nحداکثر '+toFa(sh.max)+' بار قابل دریافت است.':''}`;
+  const sh=j.share;sh.pin=sh.pin||j.pin;SH_ITEMS[sh.id]=sh;
   $('#shResult').innerHTML=`<div class="card" style="border-color:var(--ok)"><h3>لینک ساخته شد</h3>
    <label class="f"><span>لینک</span><div class="inline"><input id="shUrl" class="ltr" readonly value="${esc(sh.url)}"><button class="btn" data-act="sh-copy" data-from="shUrl">کپی لینک</button></div></label>
-   <div class="inline"><span>رمز:</span><b style="font-size:24px;letter-spacing:.25em;direction:ltr" id="shPinOut">${esc(j.pin)}</b><button class="btn sm" data-act="sh-copy" data-text="${esc(j.pin)}">کپی رمز</button></div>
-   <label class="f"><span>متن آماده برای فرستادن</span><textarea id="shMsg" rows="4" readonly>${esc(msg)}</textarea></label>
+   <div class="inline"><span>رمز:</span><b style="font-size:24px;letter-spacing:.25em;direction:ltr" id="shPinOut">${esc(sh.pin)}</b><button class="btn sm" data-act="sh-copy" data-text="${esc(sh.pin)}">کپی رمز</button></div>
+   <label class="f"><span>متن آماده برای فرستادن</span><textarea id="shMsg" rows="4" readonly>${esc(shareMsg(sh))}</textarea></label>
    <div class="btns"><button class="btn pri" data-act="sh-copy" data-from="shMsg">کپی متن کامل</button></div>
-   <small class="note warn">رمز فقط همین الان نمایش داده می‌شود و جایی ذخیره نمی‌شود؛ اگر گمش کنید، لینک تازه بسازید.</small></div>`;
+   <small class="note">رمز هر لینک در فهرست پایین همیشه دیده می‌شود (فقط برای کاربرانِ واردشده). در لینک و صفحه‌ی دریافت، تا رمز درست زده نشود، هیچ نامی از سند، خریدار یا شرکت نمی‌آید.</small></div>`;
   loadShares();
 }
 async function loadShares(){
   const box=$('#shList');if(!box||!shareDoc)return;
   let j;try{j=await api('share_list',{docId:shareDoc.id})}catch(e){box.innerHTML='<div class="empty">'+esc(e.message)+'</div>';return}
   const st={active:['فعال','ok'],expired:['منقضی',''],exhausted:['دانلودها تمام شد',''],locked:['غیرفعال: ۵ رمز اشتباه','draft'],revoked:['غیرفعال‌شده توسط شما','']};
-  box.innerHTML=j.items.length?`<table class="list"><thead><tr><th>ساخته شده</th><th>اعتبار تا</th><th>دریافت</th><th>رمز اشتباه</th><th>وضعیت</th><th></th></tr></thead><tbody>${j.items.map(x=>`<tr><td class="n">${fmtTs(x.created)}<br><small style="color:var(--muted)">${esc(x.by)}</small></td><td class="n">${x.exp?fmtTs(x.exp):'نامحدود'}</td><td class="n">${toFa(x.used)}${x.max?' از '+toFa(x.max):''}</td><td class="n">${toFa(x.fails)} از ۵</td><td><span class="badge ${(st[x.state]||['',''])[1]}">${(st[x.state]||[x.state])[0]}</span>${x.deadAt?`<br><small style="color:var(--muted)">${fmtTs(x.deadAt)}</small>`:''}</td><td><div class="acts"><button class="btn sm pri" data-act="sh-log" data-id="${esc(x.id)}">گزارش (${toFa(x.events)})</button>${x.url?`<button class="btn sm" data-act="sh-copy" data-text="${esc(x.url)}">کپی لینک</button>`:''}${x.state==='active'?`<button class="btn sm danger" data-act="sh-del" data-id="${esc(x.id)}">غیرفعال کردن</button>`:''}</div></td></tr>`).join('')}</tbody></table>`:'<div class="empty">هنوز لینکی برای این سند ساخته نشده است.</div>';
+  j.items.forEach(x=>SH_ITEMS[x.id]=x);
+  box.innerHTML=j.items.length?`<table class="list"><thead><tr><th>ساخته شده</th><th>رمز</th><th>اعتبار تا</th><th>دریافت</th><th>رمز اشتباه</th><th>وضعیت</th><th></th></tr></thead><tbody>${j.items.map(x=>`<tr><td class="n">${fmtTs(x.created)}<br><small style="color:var(--muted)">${esc(x.by)}</small></td><td class="n">${x.pin?`<b class="sh-pin" dir="ltr">${esc(x.pin)}</b> <button class="btn sm" data-act="sh-copy" data-text="${esc(x.pin)}" title="کپی رمز">کپی</button>`:'<small class="muted" title="این لینک پیش از نسخه‌ی ۲٫۱۳ ساخته شده و رمزش ذخیره نشده است">ذخیره نشده</small>'}</td><td class="n">${x.exp?fmtTs(x.exp):'نامحدود'}</td><td class="n">${toFa(x.used)}${x.max?' از '+toFa(x.max):''}</td><td class="n">${toFa(x.fails)} از ۵</td><td><span class="badge ${(st[x.state]||['',''])[1]}">${(st[x.state]||[x.state])[0]}</span>${x.deadAt?`<br><small style="color:var(--muted)">${fmtTs(x.deadAt)}</small>`:''}</td><td><div class="acts"><button class="btn sm pri" data-act="sh-log" data-id="${esc(x.id)}">گزارش (${toFa(x.events)})</button>${x.url?`<button class="btn sm" data-act="sh-copy" data-text="${esc(x.url)}">کپی لینک</button>`:''}${x.url&&x.pin?`<button class="btn sm" data-act="sh-copyMsg" data-id="${esc(x.id)}" title="لینک و رمز و اعتبار، آماده‌ی فرستادن">کپی متن</button>`:''}${x.state==='active'?`<button class="btn sm danger" data-act="sh-del" data-id="${esc(x.id)}">غیرفعال کردن</button>`:''}</div></td></tr>`).join('')}</tbody></table>`:'<div class="empty">هنوز لینکی برای این سند ساخته نشده است.</div>';
 }
+/* the text to send: link, PIN and limits only (nothing that tells what the file is) */
+const SH_ITEMS={};
+function shareMsg(sh){return `لینک دریافت فایل:\n${sh.url}\nرمز: ${toFa(sh.pin||'')}${sh.exp?'\nاعتبار تا: '+fmtTs(sh.exp):''}${sh.max?'\nحداکثر '+toFa(sh.max)+' بار قابل دریافت است.':''}`}
 async function delShare(id){if(!confirm('این لینک غیرفعال شود؟ گیرنده دیگر نمی‌تواند فاکتور را دریافت کند. (فایل و گزارش‌ها می‌مانند)'))return;try{await api('share_del',{id});toast('لینک غیرفعال شد');loadShares()}catch(e){toast(e.message)}}
 /* ---- access report ---- */
 const SH_EV={open:['باز کردن لینک',''],pin_ok:['رمز درست','ok'],pin_bad:['رمز اشتباه','draft'],locked:['غیرفعال شد (۵ رمز اشتباه)','draft'],view:['دیدن فاکتور','acc'],download:['دانلود فایل','ok'],blocked:['تلاش روی لینک غیرفعال',''],ip_limited:['مسدود: تلاش زیاد از این آی‌پی','draft'],revoked:['غیرفعال‌سازی توسط '+'فرستنده',''],error:['خطا','draft']};
@@ -1405,7 +1451,7 @@ function tOfficial(c){
   const kv=(l,v,w)=>String(v||'').trim()?`<div class="kv${w?' wide':''}"><span>${l}:</span> ${w?esc(D(v)):'<span class="ltr" style="color:inherit">'+esc(D(v))+'</span>'}</div>`:'';
   const place=x=>[x.province,x.city].filter(y=>String(y||'').trim()).join('، ');
   const sum=k=>ol.reduce((a,x)=>a+x[k],0);
-  const rows=(doc.items||[]).map((it,i)=>{const x=ol[i]||{gross:0,disc:0,net:0,tax:0,total:0};return `<tr><td class="n">${D(i+1)}</td><td class="n" style="direction:ltr;word-break:break-all;white-space:normal;font-size:.95em">${esc(D(it.code||''))}</td><td><div>${esc(it.name)}</div>${String(it.desc||'').trim()?`<div class="idesc">${esc(it.desc)}</div>`:''}</td><td class="n">${c.q(it.qty)}</td><td class="n">${esc(it.unit||'')}</td><td class="m">${f(it.price)}</td><td class="m">${f(x.gross)}</td><td class="m">${x.disc?f(x.disc):D(0)}</td><td class="m">${f(x.net)}</td><td class="m">${f(x.tax)}</td><td class="m">${f(x.total)}</td></tr>`}).join('');
+  const rows=(doc.items||[]).map((it,i)=>{const x=ol[i]||{gross:0,disc:0,net:0,tax:0,total:0};return `<tr data-amt="${x.total}"><td class="n">${D(i+1)}</td><td class="n" style="direction:ltr;word-break:break-all;white-space:normal;font-size:.95em">${esc(D(it.code||''))}</td><td><div>${esc(it.name)}</div>${String(it.desc||'').trim()?`<div class="idesc">${esc(it.desc)}</div>`:''}</td><td class="n">${c.q(it.qty)}</td><td class="n">${esc(it.unit||'')}</td><td class="m">${f(it.price)}</td><td class="m">${f(x.gross)}</td><td class="m">${x.disc?f(x.disc):D(0)}</td><td class="m">${f(x.net)}</td><td class="m">${f(x.tax)}</td><td class="m">${f(x.total)}</td></tr>`}).join('');
   const chk=on=>`<span style="display:inline-block;width:3.2mm;height:3.2mm;border:.25mm solid #333;margin:0 1mm;vertical-align:middle;text-align:center;line-height:3mm;font-size:.8em">${on?'✓':''}</span>`;
   return `<header class="f-head"><div class="f-logo">${co.logo?`<img src="${co.logo}" alt="">`:''}</div>
   <div class="f-title"><h1>${esc(title)}</h1><div class="f-sub">${doc.offKind==='type2'?'صورتحساب نوع دوم':'صورتحساب نوع اول'}${ref?' · مرجع: صورتحساب شماره '+esc(D(ref.number))+' مورخ '+esc(D(ref.date))+(ref.taxId?' (شماره مالیاتی '+esc(ref.taxId)+')':''):''}</div></div>
@@ -1454,7 +1500,7 @@ function itemsTable(c,withFoot){
   const cols=3+(hasUnit?1:0)+2+(hasDisc?2:0);
   let h=`<table class="items"><thead><tr><th class="n">ردیف</th><th>شرح کالا / خدمات</th><th class="n">مقدار</th>${hasUnit?'<th class="n">واحد</th>':''}<th class="n">مبلغ واحد<br><small>(${curName})</small></th><th class="n">مبلغ کل<br><small>(${curName})</small></th>${hasDisc?'<th class="n">تخفیف</th><th class="n">پس از تخفیف</th>':''}</tr></thead><tbody>`;
   (doc.items||[]).forEach((it,i)=>{const l=t.lines[i];
-    h+=`<tr><td class="n">${D(i+1)}</td><td><div>${esc(it.name)}</div>${String(it.desc||'').trim()?`<div class="idesc">${esc(it.desc)}</div>`:''}</td><td class="n">${q(it.qty)}</td>${hasUnit?`<td class="n">${esc(it.unit)}</td>`:''}<td class="m">${f(it.price)}</td><td class="m">${f(l.gross)}</td>${hasDisc?`<td class="m">${l.disc?f(l.disc):'—'}</td><td class="m">${f(l.net)}</td>`:''}</tr>`});
+    h+=`<tr data-amt="${hasDisc?l.net:l.gross}"><td class="n">${D(i+1)}</td><td><div>${esc(it.name)}</div>${String(it.desc||'').trim()?`<div class="idesc">${esc(it.desc)}</div>`:''}</td><td class="n">${q(it.qty)}</td>${hasUnit?`<td class="n">${esc(it.unit)}</td>`:''}<td class="m">${f(it.price)}</td><td class="m">${f(l.gross)}</td>${hasDisc?`<td class="m">${l.disc?f(l.disc):'—'}</td><td class="m">${f(l.net)}</td>`:''}</tr>`});
   h+='</tbody>';
   if(withFoot){const span=cols-1;h+='<tfoot>'+c.rows.map(r=>`<tr><td colspan="${span}" class="l">${esc(r[0])}</td><td class="m">${r[1]}</td></tr>`).join('')+`<tr class="grand"><td colspan="${span}" class="l">${esc(c.grand[0])}</td><td class="m">${c.grand[1]}</td></tr></tfoot>`}
   return h+'</table>';
@@ -1500,8 +1546,123 @@ function imgNum(co,k){const v=Number(co[k]);return Number.isFinite(v)?v:IMG_DEF[
 function imgVars(co){const c=(k,a,b)=>Math.min(b,Math.max(a,imgNum(co,k)));return `;--lgs:${c('logoScale',30,300)/100};--sts:${c('stampScale',30,300)/100};--sgs:${c('sigScale',30,300)/100};--stx:${c('stampX',-60,60)}mm;--sty:${c('stampY',-40,40)}mm;--str:${c('stampRot',-45,45)}deg;--sgx:${c('sigX',-60,60)}mm;--sgy:${c('sigY',-40,40)}mm`}
 function renderPaper(doc){
   const c=buildCtx(doc);c.foot=footHtml(c);
-  if(doc.official)return `<div class="paper t-formal t-off" style="${styleVars(c.co)}">${doc.offCanceled&&S.documents.some(x=>x.id===doc.offCanceled)?'<div class="wm">ابطال شده</div>':''}${tOfficial(c)}</div>`;const fn={formal:tFormal,band:tBand,minimal:tMinimal,frame:tFrame}[c.co.template]||tFormal;
-  return `<div class="paper t-${{formal:'formal',band:'band',minimal:'min',frame:'frame'}[c.co.template]||'formal'}" style="${styleVars(c.co)}">${wm(c)}${fn(c)}</div>`;
+  if(doc.official)return pgLayout(`<div class="paper t-formal t-off" style="${styleVars(c.co)}">${doc.offCanceled&&S.documents.some(x=>x.id===doc.offCanceled)?'<div class="wm">ابطال شده</div>':''}${tOfficial(c)}</div>`,c);const fn={formal:tFormal,band:tBand,minimal:tMinimal,frame:tFrame}[c.co.template]||tFormal;
+  return pgLayout(`<div class="paper t-${{formal:'formal',band:'band',minimal:'min',frame:'frame'}[c.co.template]||'formal'}" style="${styleVars(c.co)}">${wm(c)}${fn(c)}</div>`,c);
+}
+/* ---------- A4 sheets: keep a document on one sheet, or split it over several ----------
+   Each paper is measured off-screen, in a shadow root that has only the paper styles (the same as printing) and the page's fonts.
+   - fits on one sheet: unchanged;
+   - a little too tall: spacing gets tighter and, if needed, text slightly smaller (down to 85%) so it stays on one sheet;
+   - still too tall: item rows are split over sheets. Every sheet keeps the header, the seal/signature boxes and the footer,
+     says «ادامه در صفحه‌ی بعد», carries the running total, and is numbered «صفحه ۱ از ۲».
+     Parties come on the first sheet; totals, amount in words, notes and bank accounts on the last one.
+   Every sheet is exactly one A4 page tall, so each one prints on its own sheet. */
+const PG_PX_MM=96/25.4,PG_H=293.5;/* usable height of a sheet in mm: the printed paper is 296.5mm of the 297mm page, minus 3mm for small font differences between screen and printer */
+const PG_FIT=[1,.97,.94,.91,.88,.85];/* text sizes tried with the tighter spacing */
+const PG_PARTIES='.f-box,.b-parties,.m-parties,.fr-parties';
+let pgHostRoot=null,pgUnsure=false,pgRefT=0;const pgCache=new Map(),pgWaited=new Set();
+function pgRoot(){
+  if(pgHostRoot&&pgHostRoot.isConnected)return pgHostRoot;
+  if(!document.body)return null;
+  const host=document.createElement('div');host.setAttribute('aria-hidden','true');host.id='pgMeasure';
+  host.style.cssText='position:absolute;left:-12000px;top:0;width:210mm;height:0;overflow:hidden;visibility:hidden;pointer-events:none';
+  document.body.appendChild(host);
+  const sr=host.attachShadow?host.attachShadow({mode:'open'}):host;
+  sr.innerHTML='<style>:host{all:initial;display:block}'+paperCss()+'.paper{min-height:0!important;height:auto!important;overflow:visible!important}</style><div style="width:210mm"></div>';
+  pgHostRoot=sr.lastElementChild;return pgHostRoot;
+}
+function pgMM(el){return el.getBoundingClientRect().height/PG_PX_MM}
+/* a logo that is not decoded yet, or a font that is still loading, would give a wrong height:
+   measure with the logo at its largest size, do not cache, and lay out again once it is ready */
+function pgPrep(paper){
+  paper.querySelectorAll('img').forEach(i=>{if(i.complete||i.closest('.sign'))return;const k=i.src.length+':'+i.src.slice(-64);if(pgWaited.has(k))return;
+    pgUnsure=true;const mh=getComputedStyle(i).maxHeight;if(mh&&mh!=='none'){i.style.height=mh;i.setAttribute('data-pgh','')}
+    const done=()=>{pgWaited.add(k);pgSoon()};i.addEventListener('load',done,{once:true});i.addEventListener('error',done,{once:true})});
+  if(!document.fonts||!document.fonts.check)return;
+  const cs=getComputedStyle(paper);
+  [cs.getPropertyValue('--ft'),cs.getPropertyValue('--fb')].forEach(fam=>{fam=String(fam||'').trim();if(!fam)return;
+    [400,700].forEach(w=>{const spec=w+' 12px '+fam;if(pgWaited.has(spec))return;
+      try{if(!document.fonts.check(spec,'اب1')){pgUnsure=true;pgWaited.add(spec);document.fonts.load(spec,'اب1').then(pgSoon,pgSoon)}}catch(e){pgWaited.add(spec)}})});
+}
+function pgSoon(){clearTimeout(pgRefT);pgRefT=setTimeout(()=>{pgCache.clear();pgRefreshPreviews()},180)}
+function pgRefreshPreviews(){
+  if(!S)return;
+  if($('#edPv')&&view==='editor')renderEdPreview();
+  if($('#coPv')&&view==='companies')renderCoPreview();
+  if($('#bPv')&&view==='batch')refreshBatch(true);
+  const m=$('#modal'),mp=$('#mPv');if(mp&&m._docs)mountPreview(mp,m._docs.map(renderPaper).join(''));
+}
+/* wait for the fonts and logos of these documents (before printing or saving a file) */
+async function pgReady(docs){
+  const fams=new Set(),imgs=new Set();
+  (docs||[]).forEach(d=>{const co=coById(d.companyId);if(!co)return;[co.titleFont,co.bodyFont].forEach(f=>f&&fams.add(f));if(co.logo)imgs.add(co.logo)});
+  const ps=[];
+  if(document.fonts&&document.fonts.load)fams.forEach(f=>[400,700].forEach(w=>ps.push(document.fonts.load(w+" 12px '"+String(f).replace(/'/g,'')+"'",'اب1').catch(()=>{}))));
+  imgs.forEach(src=>{const i=new Image();i.src=src;ps.push(i.decode?i.decode().catch(()=>{}):new Promise(r=>{i.onload=i.onerror=r}))});
+  await Promise.race([Promise.all(ps),new Promise(r=>setTimeout(r,4000))]);
+}
+function pgLayout(html,c){
+  const hit=pgCache.get(html);if(hit!=null)return hit;
+  pgUnsure=false;let out=html;
+  try{out=pgDo(html,c)||html}catch(e){console.warn('page layout',e);out=html}
+  if(pgHostRoot)pgHostRoot.innerHTML='';
+  if(!pgUnsure){if(pgCache.size>120)pgCache.clear();pgCache.set(html,out)}
+  return out;
+}
+function pgOut(papers){return papers.map(p=>{p.querySelectorAll('img[data-pgh]').forEach(i=>{i.style.height='';i.removeAttribute('data-pgh');if(!i.getAttribute('style'))i.removeAttribute('style')});return p.outerHTML}).join('')}
+/* smaller text until the paper fits; false when even the smallest size does not fit (paper left at full size) */
+function pgShrink(root,p){
+  const fs0=parseFloat(p.style.getPropertyValue('--fs'))||10;let ok=false;
+  root.appendChild(p);
+  for(const k of PG_FIT){p.style.setProperty('--fs',(fs0*k).toFixed(2)+'pt');p.classList.add('pg-fit');if(pgMM(p)<=PG_H){ok=true;break}}
+  if(!ok){p.style.setProperty('--fs',fs0+'pt');p.classList.remove('pg-fit')}
+  p.remove();return ok;
+}
+function pgDo(html,c){
+  const root=pgRoot();if(!root)return html;
+  root.innerHTML=html;const paper=root.querySelector('.paper');if(!paper)return html;
+  pgPrep(paper);
+  if(pgMM(paper)<=PG_H)return html;
+  const one=paper.cloneNode(true);paper.remove();
+  if(pgShrink(root,one))return pgOut([one]);
+  return pgSplit(root,paper,c)||pgOut([one]);
+}
+function pgSplit(root,paper,c){
+  const tbl=paper.querySelector('table.items');if(!tbl||!tbl.tBodies[0])return null;
+  const rows=[...tbl.tBodies[0].rows],n=rows.length;if(n<2)return null;
+  const box=tbl.parentElement,kids=[...box.children],ti=kids.indexOf(tbl);
+  let pi=kids.findIndex((k,i)=>i>ti&&k.classList.contains('push'));if(pi<0)pi=kids.length;
+  const hr=tbl.tHead&&tbl.tHead.rows[tbl.tHead.rows.length-1];
+  const ncols=hr?[...hr.cells].reduce((a,x)=>a+(x.colSpan||1),0):2;
+  const amts=rows.map(r=>parseFloat(r.getAttribute('data-amt'))||0);
+  const sumTo=k=>{let t=0;for(let i=0;i<k;i++)t+=amts[i];return t};
+  const carry=(lab,v)=>`<tr class="pg-carry"><td colspan="${Math.max(1,ncols-1)}" class="l">${lab}</td><td class="m">${c.f(v)}</td></tr>`;
+  const D=c.D||(x=>toFa(x));
+  const build=(a,b,first,last,no,of)=>{
+    const p=paper.cloneNode(true);const t=p.querySelector('table.items');const bx=t.parentElement;const ks=[...bx.children];
+    const tb=t.tBodies[0];tb.textContent='';
+    if(!first)p.querySelectorAll(PG_PARTIES).forEach(e=>e.remove());
+    if(!last){if(t.tFoot)t.tFoot.remove();ks.slice(ti+1,pi).forEach(e=>e.remove());t.insertAdjacentHTML('afterend','<div class="pg-cont">ادامه در صفحه‌ی بعد</div>')}
+    if(!first)tb.insertAdjacentHTML('beforeend',carry('جمع نقل از صفحه‌ی قبل',sumTo(a)));
+    for(let i=a;i<b;i++)tb.appendChild(rows[i].cloneNode(true));
+    if(!last)tb.insertAdjacentHTML('beforeend',carry('جمع نقل به صفحه‌ی بعد',sumTo(b)));
+    p.classList.add('pg');p.insertAdjacentHTML('beforeend',`<div class="pg-no">صفحه‌ی ${D(no)} از ${D(of)}</div>`);
+    return p;
+  };
+  const fits=p=>{root.appendChild(p);const ok=pgMM(p)<=PG_H;p.remove();return ok};
+  const plan=[];let i=0;
+  while(i<n&&plan.length<400){
+    const first=!plan.length;
+    if(fits(build(i,n,first,true,88,88))){plan.push([i,n,first,true]);i=n;break}
+    let lo=1,hi=n-i,best=0;
+    while(lo<=hi){const m=(lo+hi)>>1;if(fits(build(i,i+m,first,false,88,88))){best=m;lo=m+1}else hi=m-1}
+    best=Math.max(1,best);
+    if(i+best>=n){/* the rows fit but the totals do not: keep at least one row with the totals */
+      if(n-i>1)best=n-i-1;else{plan.push([i,n,first,false]);plan.push([n,n,false,true]);i=n;break}}
+    plan.push([i,i+best,first,false]);i+=best;
+  }
+  const pages=plan.map((x,k)=>{const p=build(x[0],x[1],x[2],x[3],k+1,plan.length);if(!fits(p))pgShrink(root,p);return p});
+  return pgOut(pages);
 }
 function tFormal(c){
   const {co,doc,D}=c;
@@ -1563,6 +1724,7 @@ async function printDocs(docs){
   {const und=docs.filter(d=>!d.committed&&sealable(coById(d.companyId))&&(d.stampOn==null||d.sigOn==null));if(und.length){if(!await askSeal(und,'چاپ — مهر و امضا'))return;if(view==='batch')refreshBatch(true);else if(view==='editor')renderEditor()}}
   if(!docs.length)return;
   {const st=$('#lblPageStyle');if(st)st.textContent=''}
+  await pgReady(docs);
   const papers=docs.map(renderPaper).join('');
   try{await printFrame(papers,docs.length===1?fileNameOf(docs[0]).replace(/\.html?$/i,''):'Invora - '+toFa(docs.length)+' سند');return}catch(e){console.warn('print frame failed',e)}
   /* fallback: print from the page itself */
@@ -1589,10 +1751,78 @@ async function printFrame(papers,title){
 }
 window.addEventListener('afterprint',()=>{$('#printArea').innerHTML='';const st=$('#lblPageStyle');if(st)st.textContent=''});
 
+/* ---------- home: today, money summary, pending work, last login, and the work menu ---------- */
+let PREV_OPEN=0;/* offline version: when the app was opened before this time */
+const HOME_MENU=[['editor','صدور تکی','فاکتور، پیش‌فاکتور یا فاکتور رسمی تازه'],['batch','صدور گروهی','یک فاکتور برای چند شرکت با تاریخ و قیمت نسبی'],['docs','اسناد','جستجو، باز کردن، چاپ و اشتراک‌گذاری سندها'],['companies','شرکت‌ها','قالب، لوگو، مهر، شماره‌گذاری و حساب‌ها'],['customers','مشتریان','فهرست خریداران و مشخصاتشان'],['labels','چاپ آدرس','برچسب و پاکت با نشانی مشتری'],['products','کالا و خدمات','فهرست کالا با قیمت و واحد'],['settings','تنظیمات عمومی','تاریخ، تعطیلات، دلار، کاربران و پشتیبان']];
+function tehranHM(ms,sec){return new Intl.DateTimeFormat('fa-IR',{timeZone:'Asia/Tehran',hour:'2-digit',minute:'2-digit',second:sec?'2-digit':undefined,hour12:false}).format(new Date(ms))}
+function greetText(){const h=+new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Tehran',hour:'2-digit',hour12:false}).format(new Date(nowTs()))%24;return h<5?'شب بخیر':h<11?'صبح بخیر':h<15?'ظهر بخیر':h<19?'عصر بخیر':'شب بخیر'}
+function moneySum(list){const by={};list.forEach(d=>{const c=d.currency||'IRR';by[c]=(by[c]||0)+calcDoc(d).total});const ks=Object.keys(by);return ks.length?ks.map(c=>fmtMoney(by[c],c,true)+' '+(CUR[c]||CUR.IRR).name).join(' + '):'۰'}
+/* documents that count as sales: issued, not cancelled, not a cancel/return document */
+function salesDocs(){return S.documents.filter(d=>d.committed&&!(d.official&&(d.offSubject==='cancel'||d.offSubject==='return'))&&!(d.offCanceled&&S.documents.some(x=>x.id===d.offCanceled)))}
+function openProforma(d){return d.type==='proforma'&&!(d.linkedId&&S.documents.some(x=>x.id===d.linkedId&&x.type==='invoice'))}
+function homeTodo(){
+  const out=[],t=todayJdn();
+  const dr=S.draft;if(dr&&((dr.items||[]).some(i=>String(i.name||'').trim())||String((dr.buyer||{}).name||'').trim()))out.push(['warn','پیش‌نویس ناتمام در صدور تکی'+(dr.buyer&&dr.buyer.name?' — '+dr.buyer.name:''),'home-draft','ادامه']);
+  (S.batches||[]).forEach(b=>{const n=batchDocs(b).filter(d=>!d.committed).length;const r=batchRef(b);if(n&&r)out.push(['warn','صدور گروهی ناتمام: '+toFa(n)+' سند ثبت نشده'+(r.buyer&&r.buyer.name?' (خریدار: '+r.buyer.name+')':''),'home-batch','باز کردن',b.id])});
+  const pf=S.documents.filter(d=>d.committed&&openProforma(d));
+  pf.forEach(d=>{const v=validUntil(d);if(v==null||!(parseInt(d.validDays)>0))return;const left=v-t;if(left>=0&&left<=3)out.push(['warn','پیش‌فاکتور '+toFa(d.number)+(d.buyer.name?' — '+d.buyer.name:'')+(left?' '+toFa(left)+' روز دیگر':' امروز')+' اعتبارش تمام می‌شود و هنوز فاکتور نشده','home-open','باز کردن',d.id])});
+  const exp=pf.filter(d=>{const v=validUntil(d);return v!=null&&parseInt(d.validDays)>0&&v<t&&v>=t-30});
+  if(exp.length)out.push(['','پیش‌فاکتورهایی که در ۳۰ روز گذشته منقضی شدند و فاکتور نشدند: '+toFa(exp.length),'home-docs','اسناد']);
+  const off=S.documents.filter(d=>d.committed&&d.official&&!d.offCanceled&&(d.taxStatus||'none')!=='accepted'&&d.offSubject!=='cancel');
+  const offNone=off.filter(d=>(d.taxStatus||'none')==='none').length,offRej=off.filter(d=>d.taxStatus==='rejected').length,offSent=off.filter(d=>d.taxStatus==='sent').length;
+  if(offRej)out.push(['warn','فاکتور رسمیِ ردشده در سامانه‌ی مودیان: '+toFa(offRej),'home-docs','اسناد']);
+  if(offNone)out.push(['warn','فاکتور رسمیِ ثبت‌نشده در سامانه‌ی مودیان: '+toFa(offNone),'home-docs','اسناد']);
+  if(offSent)out.push(['','فاکتور رسمیِ در انتظار تأیید سامانه: '+toFa(offSent),'home-docs','اسناد']);
+  let bk=0;try{bk=+localStorage.getItem('df-last-backup')||0}catch(e){}
+  const days=bk?Math.floor((Date.now()-bk)/86400000):-1;
+  if(S.documents.length&&(days<0||days>=14))out.push([SRV?'':'warn',(days<0?'هنوز از این مرورگر پشتیبان رمزشده نگرفته‌اید':'آخرین پشتیبان رمزشده '+toFa(days)+' روز پیش بوده است')+(SRV?' (سرور هر روز پشتیبان خودش را دارد)':''),'export','پشتیبان بگیرید']);
+  if(S.companies.some(c=>c.sample))out.push(['','شرکت‌ها و مشتریان نمونه هنوز در برنامه هستند','home-go','شرکت‌ها','companies']);
+  return out;
+}
+function renderHome(){
+  const host=$('#v-home');if(!host)return;
+  const t=todayJdn(),tj=d2j(t),now=nowTs();
+  const hol=holidayInfo(t,S.global);const next=upcomingHolidays().find(x=>x[2]>t);
+  const g=new Intl.DateTimeFormat('fa-IR-u-ca-gregory',{timeZone:'Asia/Tehran',day:'numeric',month:'long',year:'numeric'}).format(new Date(now));
+  let hj='';try{hj=new Intl.DateTimeFormat('fa-IR-u-ca-islamic-umalqura',{timeZone:'Asia/Tehran',day:'numeric',month:'long',year:'numeric'}).format(new Date(now))}catch(e){}
+  const sales=salesDocs();
+  const inP=(d,f)=>{const j=parseJ(d.date);if(j==null)return false;const x=d2j(j);return f(x,j)};
+  const inv=sales.filter(d=>d.type==='invoice'),pfs=sales.filter(d=>d.type==='proforma');
+  const mInv=inv.filter(d=>inP(d,x=>x.jy===tj.jy&&x.jm===tj.jm)),mPf=pfs.filter(d=>inP(d,x=>x.jy===tj.jy&&x.jm===tj.jm));
+  const dInv=inv.filter(d=>inP(d,(x,j)=>j===t)),yInv=inv.filter(d=>inP(d,x=>x.jy===tj.jy));
+  const openPf=pfs.filter(d=>{if(!openProforma(d))return false;const v=validUntil(d);return v==null||!(parseInt(d.validDays)>0)||v>=t});
+  const MN=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+  const kpi=(k,v,sub)=>`<div class="kpi"><span class="k">${k}</span><span class="v">${v}</span><span class="s">${sub}</span></div>`;
+  let login='';
+  if(SRV){login=SRV.prevLogin?`آخرین ورود پیش از این: <b>${esc(fmtTsSec(SRV.prevLogin))}</b>${SRV.prevIp?` · آی‌پی <bdi dir="ltr">${esc(SRV.prevIp)}</bdi>`:''}`:'این نخستین ورود ثبت‌شده‌ی شماست.';if(SRV.since)login+=`<br>ورود فعلی: ${esc(fmtTsSec(SRV.since))}`}
+  else login=PREV_OPEN?`آخرین باز شدن برنامه پیش از این: <b>${esc(fmtTsSec(PREV_OPEN))}</b>`:'نخستین باز شدن برنامه در این مرورگر.';
+  const todo=homeTodo();
+  const recent=S.documents.filter(d=>d.committed).slice().sort((a,b)=>(b.issuedAt||b.createdAt||0)-(a.issuedAt||a.createdAt||0)).slice(0,6);
+  const coRows=S.companies.map(co=>{const a=mInv.filter(d=>d.companyId===co.id),b=mPf.filter(d=>d.companyId===co.id);return{co,a,b}}).filter(x=>x.a.length||x.b.length);
+  host.innerHTML=`<div class="stack">
+  <div class="card home-hero"><div class="stack" style="gap:4px">
+    <div class="hm-greet">${esc(greetText())}${SRV&&SRV.user?' '+esc(SRV.user):''}</div>
+    <div class="hm-date">${WD[pIdx(t)]} ${toFa(tj.jd)} ${MN[tj.jm-1]} ${toFa(tj.jy)} <small class="muted">(${toFa(jStr(t))})</small></div>
+    <div class="hm-sub">${esc(g)}${hj?' · '+esc(hj):''}</div>
+    <div class="hm-sub">${hol?'<span class="badge draft">امروز تعطیل است: '+esc(hol)+'</span>':'امروز روز کاری است.'}${next?' · تعطیلی بعدی: '+esc(toFa(next[0]))+' ('+esc(next[1])+')':''}</div>
+   </div>
+   <div class="hm-side"><div class="hm-clock" id="hmClock">${tehranHM(now,true)}</div><div class="hm-sub">به وقت تهران · ${CLOCK.online?(SRV?'ساعت سرور':'ساعت اینترنت'):'ساعت رایانه'}</div><div class="hm-login">${login}</div></div></div>
+  <div class="card"><div class="card-h"><h3>گزارش مالی <small>${MN[tj.jm-1]} ${toFa(tj.jy)} — فقط سندهای ثبت‌شده؛ ابطالی و برگشتی حساب نمی‌شوند</small></h3><button class="btn sm" data-act="home-go" data-view="docs">همه‌ی اسناد</button></div>
+   <div class="kpis">${kpi('فاکتورهای امروز',toFa(dInv.length),moneySum(dInv))}${kpi('فاکتورهای این ماه',toFa(mInv.length),moneySum(mInv))}${kpi('پیش‌فاکتورهای این ماه',toFa(mPf.length),moneySum(mPf))}${kpi('فاکتورهای امسال',toFa(yInv.length),moneySum(yInv))}${kpi('پیش‌فاکتورهای باز',toFa(openPf.length),openPf.length?moneySum(openPf)+' — هنوز فاکتور نشده':'همه تبدیل یا منقضی شده‌اند')}${S.fx&&S.fx.rate?kpi('نرخ دلار',fmtMoney(S.fx.rate,'IRR',true)+' <small style="font-size:12px;font-weight:400">ریال</small>',S.fx.at?esc(fmtTs(S.fx.at))+(S.fx.src?' · '+esc(S.fx.src):''):''):''}</div>
+   ${coRows.length?`<div class="tbl-wrap"><table class="list hm-list"><thead><tr><th>شرکت</th><th>فاکتور این ماه</th><th>مبلغ فاکتورها</th><th>پیش‌فاکتور این ماه</th><th>مبلغ پیش‌فاکتورها</th></tr></thead><tbody>${coRows.map(x=>`<tr><td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${esc(x.co.color||'#999')};margin-left:6px"></span>${esc(x.co.name)}</td><td class="hn">${toFa(x.a.length)}</td><td class="hn">${moneySum(x.a)}</td><td class="hn">${toFa(x.b.length)}</td><td class="hn">${moneySum(x.b)}</td></tr>`).join('')}</tbody></table></div>`:''}</div>
+  <div class="home-cols">
+   <div class="card"><h3>کارهای مانده</h3><div class="todo">${todo.length?todo.map(x=>`<div class="todo-i ${x[0]}"><span>${esc(x[1])}</span><button class="btn sm" data-act="${x[2]}"${x[4]?` data-id="${esc(x[4])}" data-view="${esc(x[4])}"`:''}>${esc(x[3])}</button></div>`).join(''):'<div class="todo-i ok"><span>✓ کار عقب‌مانده‌ای نیست.</span></div>'}</div></div>
+   <div class="card"><div class="card-h"><h3>آخرین سندها</h3><button class="btn sm pri" data-act="home-go" data-view="editor">${IC.plus} سند تازه</button></div>${recent.length?`<div class="tbl-wrap"><table class="list hm-list"><tbody>${recent.map(d=>{const co=coById(d.companyId);return `<tr><td><b>${TN(d.type,d)} ${esc(toFa(d.number||''))}</b><br><small class="muted">${esc(co?co.name:'—')} · ${esc(d.buyer.name||'—')}</small></td><td class="hn"><bdi dir="ltr">${toFa(d.date)}</bdi><br><small class="muted">${fmtMoney(calcDoc(d).total,d.currency,true)} ${(CUR[d.currency]||CUR.IRR).name}</small></td><td><button class="btn sm" data-act="home-open" data-id="${esc(d.id)}">باز کردن</button></td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">هنوز سندی ثبت نشده است.</div>'}</div>
+  </div>
+  <div class="card"><h3>منوی کار</h3><div class="menu-grid">${HOME_MENU.map(m=>`<button class="menu-card" data-act="home-go" data-view="${m[0]}"><b>${m[1]}</b><small>${m[2]}</small></button>`).join('')}</div></div>
+  </div>`;
+}
+function homeTick(){if(view!=='home')return;const c=$('#hmClock');if(c)c.textContent=tehranHM(nowTs(),true)}
+
 /* ---------- views ---------- */
-let view='editor';
+let view='home';
 function showView(v){view=v;$$('#tabs button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===v)));$$('.view').forEach(s=>s.hidden=s.id!=='v-'+v);closeDP();renderView()}
-function renderView(){({editor:renderEditor,batch:renderBatch,docs:renderDocs,companies:renderCompanies,customers:()=>renderCrud('customers'),labels:renderLabels,products:()=>renderCrud('products'),settings:renderSettings})[view]()}
+function renderView(){({home:renderHome,editor:renderEditor,batch:renderBatch,docs:renderDocs,companies:renderCompanies,customers:()=>renderCrud('customers'),labels:renderLabels,products:()=>renderCrud('products'),settings:renderSettings})[view]()}
 function renderAll(){fillLists();renderBanner();renderView()}
 function fillLists(){$('#unitList').innerHTML=UNITS.map(u=>`<option value="${esc(u)}">`).join('');$('#prodList').innerHTML=S.products.map(p=>`<option value="${esc(p.name)}">`).join('');$('#fontList').innerHTML=FONTS.map(f=>`<option value="${esc(f)}">`).join('')}
 function renderBanner(){
@@ -2977,6 +3207,7 @@ async function exportBackup(){
   toast('در حال ساخت پشتیبان…',20000);
   const obj=JSON.parse(JSON.stringify(S));obj.exportedAt=Date.now();
   const u8=await makeBackup(obj,p);
+  try{localStorage.setItem('df-last-backup',String(Date.now()))}catch(e){}
   downloadBlob('daftar-factor-'+jStr(todayJdn()).replace(/\//g,'-')+'.dfbak',new Blob([u8],{type:'application/octet-stream'}));
   toast('پشتیبان رمزشده ساخته شد ('+toFa(S.documents.length)+' سند، '+toFa(S.companies.length)+' شرکت). در هر دو نسخه با «بازیابی از فایل» و همین رمز باز می‌شود.',6000);
 }
@@ -2985,6 +3216,15 @@ async function exportBackup(){
 /* ---------- version, changes, theme ---------- */
 const APP_VERSION=(document.querySelector('meta[name="app-version"]')||{}).content||'0';
 const APP_CHANGES=[
+ {v:'2.13.0',d:'1405/08/17',t:'پیشخوان، چاپ چندصفحه‌ای و لینک‌های امن‌تر',items:[
+  'صفحه‌ی اول برنامه «پیشخوان» است: تاریخ شمسی، میلادی و قمری، ساعت تهران، تعطیلی امروز و بعدی، گزارش مالی امروز و این ماه و امسال (به تفکیک شرکت)، پیش‌فاکتورهای باز، کارهای مانده، آخرین سندها، آخرین ورود و منوی کار. با زدن روی لوگو هم به پیشخوان برمی‌گردید.',
+  'کارهای مانده: پیش‌نویس ناتمام، صدور گروهی ثبت‌نشده، پیش‌فاکتورِ رو به انقضا، فاکتور رسمیِ ثبت‌نشده یا ردشده در سامانه‌ی مودیان، و یادآوری پشتیبان.',
+  'فاکتوری که کمی از یک برگه بلندتر است، با فاصله‌های کمتر و در صورت نیاز قلم کمی کوچک‌تر روی همان یک برگه چاپ می‌شود؛ دیگر پانویس و مهر و امضا تنها به صفحه‌ی بعد نمی‌رود.',
+  'اگر اقلام در یک برگه جا نشوند، ادامه‌ی اقلام به برگه‌ی بعد می‌رود: پایین برگه «ادامه در صفحه‌ی بعد» و «جمع نقل به صفحه‌ی بعد»، بالای برگه‌ی بعد «جمع نقل از صفحه‌ی قبل»، و جمع کل و مبلغ به حروف و توضیحات در برگه‌ی آخر.',
+  'همه‌ی برگه‌ها سربرگ، جای مهر و امضا و پانویس دارند و پایینشان «صفحه‌ی ۱ از ۲» نوشته می‌شود. هر برگه دقیقاً یک A4 است و در هر چاپگری وسط کاغذ می‌نشیند؛ پیش‌نمایش هم همان برگه‌ها را نشان می‌دهد.',
+  'لینک دانلود: رمزِ هر لینک همیشه در فهرست لینک‌های سند دیده می‌شود و دکمه‌ی «کپی متن» دارد (برای لینک‌های تازه).',
+  'در لینک، متن پیام و صفحه‌ی دریافت، تا رمز درست زده نشود هیچ نامی از سند، خریدار، شرکت یا حتی «فاکتور» نمی‌آید.',
+  'رمز با فاصله، «رمز:»، اعداد فارسی یا نشانه‌های نامرئیِ کپی هم پذیرفته می‌شود؛ رمز ناقص تلاش اشتباه حساب نمی‌شود؛ و اگر مرورگرِ گیرنده (مثلاً مرورگر داخل پیام‌رسان) کوکی را نپذیرد، به‌جای «رمز اشتباه» پیام روشن می‌دهد.']},
  {v:'2.12.0',d:'1405/08/15',t:'نام و توضیح کالا برای هر شرکت در صدور گروهی',items:[
   'در صدور گروهی بخش تازه‌ی «نام و توضیح کالا برای هر شرکت»: برای هر شرکت می‌توانید نام و توضیح هر ردیف را متفاوت از فاکتور ۱ بنویسید.',
   'قیمت، مقدار، تاریخ و قاعده‌های گروه مثل قبل از فاکتور ۱ می‌آید؛ با تغییر فاکتور ۱ نام‌های اختصاصی هر شرکت حفظ می‌شود.',
@@ -3250,6 +3490,12 @@ document.addEventListener('click',e=>{
     case 'resetAll':if(!confirm('همه‌ی شرکت‌ها، سندها و تنظیمات پاک شود؟ پیش از این کار از اطلاعات خروجی بگیرید.'))return;if(!confirm('مطمئن هستید؟ این کار برگشت‌پذیر نیست.'))return;S=defaultState();S.companies.forEach((c,i)=>{c.sample=false;c.name='شرکت '+toFa(i+1);['headerText','address','postalCode','phone','economicCode','nationalId','regNo','email','bankName','accountNo','sheba','footerText'].forEach(k=>c[k]='')});S.customers=[];S.products=[];refreshHolidays();curId=null;saveNow();renderAll();toast('همه‌چیز پاک شد');break;
     case 'clock-sync':syncClock(true);break;
     case 'ver-show':showChanges();break;
+    case 'home':showView('home');break;
+    case 'home-go':showView(b.dataset.view);break;
+    case 'home-draft':curId=null;showView('editor');break;
+    case 'home-open':curId=b.dataset.id;showView('editor');break;
+    case 'home-batch':S.activeBatch=b.dataset.id;save();showView('batch');break;
+    case 'home-docs':showView('docs');break;
     case 'theme':cycleTheme();break;
     case 'upd-check':updAction('check');break;
     case 'upd-apply':if(confirm('نسخه‌ی تازه از گیت‌هاب نصب شود؟'))updAction('apply');break;
@@ -3275,6 +3521,7 @@ document.addEventListener('click',e=>{
     case 'sh-log':showShareLog(b.dataset.id);break;
     case 'sh-logCsv':shareLogCsv();break;
     case 'sh-back':if(shareDoc)openShareModal(shareDoc);break;
+    case 'sh-copyMsg':{const x=SH_ITEMS[b.dataset.id];if(x)copyText(shareMsg(x));break}
     case 'sh-copy':copyText(b.dataset.text||($('#'+b.dataset.from)||{}).value||'');break;
     case 'modal-close':$('#modal').hidden=true;$('#modal').innerHTML='';break;
     case 'modal-print':printDocs($('#modal')._docs||[]);break;
@@ -3298,6 +3545,7 @@ $('#modal').addEventListener('click',e=>{if(e.target.id==='modal'){$('#modal').h
     data=(await vaultGate()).data;
   }
   S=data?migrate(data):defaultState();
+  if(!SRV)try{PREV_OPEN=+localStorage.getItem('df-last-open')||0;localStorage.setItem('df-last-open',String(Date.now()))}catch(e){}
   refreshHolidays();
   if(!data){/* first run: sample invoice so the preview shows real layout */
     const co=S.companies[0];const d=newDoc(co.id,'invoice');d.sample=true;
@@ -3313,7 +3561,7 @@ $('#modal').addEventListener('click',e=>{if(e.target.id==='modal'){$('#modal').h
   whatsNew();
   renderToday();await syncClock(false);autoHolidays();loadFx();if(SRV)setInterval(loadFx,20*60*1000);
   if(SRV){updTick();setInterval(updTick,5*60*1000)}else offlineUpdCheck();
-  setInterval(renderToday,60000);setInterval(()=>syncClock(false),6*3600*1000);
+  setInterval(renderToday,60000);setInterval(homeTick,1000);setInterval(()=>syncClock(false),6*3600*1000);
 })();
 </script>
 </body>
