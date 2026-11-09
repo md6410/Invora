@@ -27,6 +27,18 @@
 3. صفحه‌ی **http://localhost:8766** باز می‌شود: برای هر چاپگر بگویید **الان چه کاغذی داخلش است**
    (A4، A5، برچسب ۱۰۰×۱۵۰، حرارتی ۵۰×۳۰ …)، یکی را پیش‌فرض کنید و «چاپ آزمایشی» بزنید.
 
+### اگر نصب در «Installing required packages» گیر کرد یا خطا داد
+
+- برنامه‌ی نصب حالا پیشرفت دانلود بسته‌ها را نشان می‌دهد و اگر pypi.org کند یا بسته بود، خودش سراغ آینه‌های
+  ایرانی (Runflare، لیارا، hmirror) می‌رود. همه‌ی جزئیات در فایل `install.log` کنار برنامه نوشته می‌شود.
+- اگر هیچ‌کدام جواب نداد، اینترنت یا VPN را بررسی کنید، یا در همان پوشه دستی نصب کنید و دوباره
+  install-windows.bat را اجرا کنید:
+  ```
+  py -3 -m pip install -i https://mirror-pypi.runflare.com/simple -r requirements.txt
+  ```
+- اگر پیام «Python was not found» آمد ولی پایتون نصب است: Settings ← Apps ← Advanced app settings ←
+  App execution aliases و «python.exe» و «python3.exe» (میان‌برهای Microsoft Store) را خاموش کنید.
+
 > **چاپگرهای شبکه‌ای/اشتراکی:** سرویس با حساب SYSTEM اجرا می‌شود و چاپگری را که فقط برای حساب شما
 > وصل شده نمی‌بیند. اگر چاپگری در فهرست نبود: `services.msc` ← «Invora Print Station» ← Properties ←
 > Log On ← «This account» و حساب ویندوز خودتان، سپس Restart.
