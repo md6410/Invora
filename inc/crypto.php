@@ -111,6 +111,11 @@ function df_doc_store(array $parts, string $name, string $dek): string {
     return 'files/' . $d . '/' . $f . '.bin';
 }
 
+/* accounting attachments: file names on disk are keyed hashes too */
+function df_att_path(string $id, string $dek): string {
+    return 'attach/' . substr(hash_hmac('sha256', 'att:' . $id, hash_hmac('sha256', 'df-names', $dek, true)), 0, 40) . '.bin';
+}
+
 /* ---------- share links ---------- */
 function df_share_hash(string $t): string { return hash('sha256', 'df-share:' . $t); }
 function df_share_title_key(string $t): string { return hash_hmac('sha256', 'df-share-title', $t, true); }

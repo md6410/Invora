@@ -144,6 +144,29 @@ try {
             df_json(['ok' => $r['ok'], 'error' => $r['ok'] ? '' : $r['msg'], 'msg' => $r['msg']], $r['ok'] ? 200 : 502);
         }
 
+        /* ---------- accounting attachments (customer/order dossier files), encrypted with the data key ---------- */
+        case 'att_put': {
+            $id = (string)($in['id'] ?? '');
+            if (!preg_match('/^[a-z0-9]{6,40}$/', $id)) df_json(['ok' => false, 'error' => 'bad id'], 400);
+            $bin = base64_decode((string)($in['data'] ?? ''), true);
+            if ($bin === false || $bin === '') df_json(['ok' => false, 'error' => 'فایل خالی است.'], 400);
+            if (strlen($bin) > 8 * 1024 * 1024) df_json(['ok' => false, 'error' => 'فایل بزرگ‌تر از ۸ مگابایت است.'], 413);
+            df_swrite(df_att_path($id, $dek), $bin, $dek, 'att');
+            df_json(['ok' => true]);
+        }
+        case 'att_get': {
+            $id = (string)($in['id'] ?? '');
+            if (!preg_match('/^[a-z0-9]{6,40}$/', $id)) df_json(['ok' => false, 'error' => 'bad id'], 400);
+            $bin = df_sread(df_att_path($id, $dek), $dek, 'att');
+            if ($bin === null) df_json(['ok' => false, 'error' => 'فایل روی سرور پیدا نشد.'], 404);
+            df_json(['ok' => true, 'data' => base64_encode($bin)]);
+        }
+        case 'att_del': {
+            $id = (string)($in['id'] ?? '');
+            if (preg_match('/^[a-z0-9]{6,40}$/', $id)) @unlink(df_path(df_att_path($id, $dek)));
+            df_json(['ok' => true]);
+        }
+
         /* ---------- my account: fingerprint, trusted devices, mobile ---------- */
         case 'sec_get':
             df_json(['ok' => true, 'sec' => df_dev_public($user), 'rp' => pk_rp_id(), 'https' => df_is_https(), 'smsLogin' => !empty(sms_cfg()['login'])]);

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Invora — دفتر فاکتور</title>
-<meta name="app-version" content="2.14.0">
+<meta name="app-version" content="2.15.0">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Cdefs%3E%3ClinearGradient id="ivg" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="#2f9a8a"/%3E%3Cstop offset=".55" stop-color="#1e5a55"/%3E%3Cstop offset="1" stop-color="#123b37"/%3E%3C/linearGradient%3E%3ClinearGradient id="ivp" x1="0" y1="0" x2="0" y2="1"%3E%3Cstop offset="0" stop-color="#ffffff"/%3E%3Cstop offset="1" stop-color="#e2f0ec"/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="64" height="64" rx="15" fill="url(#ivg)"/%3E%3Cpath d="M19 11.5H38.5L47 20V51L43.4 48.6 39.8 51 36.2 48.6 32.6 51 29 48.6 25.4 51 21.8 48.6 19 51z" fill="url(#ivp)"/%3E%3Cpath d="M38.5 11.5V18a2 2 0 0 0 2 2H47z" fill="#a9d3ca"/%3E%3Crect x="24" y="25.5" width="4.4" height="16" rx="2.2" fill="#1e5a55"/%3E%3Ccircle cx="26.2" cy="19.8" r="2.7" fill="#eaa53a"/%3E%3Cpath d="M33 27.5h9M33 33h9M33 38.5h5.5" stroke="#1e5a55" stroke-width="2.6" stroke-linecap="round" opacity=".5"/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/png;base64,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">
 <meta name="theme-color" content="#1e5a55">
@@ -299,6 +299,11 @@ table.list.hm-list{min-width:0}
 .menu-card:hover{border-color:var(--accent);background:var(--accent-soft)}
 .menu-card b{font-size:15px}
 .menu-card small{color:var(--muted);font-size:12.5px;line-height:1.6}
+.dossier{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.note-i{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:6px 10px}
+.note-h{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.note-h .btn{padding:1px 8px;font-size:11.5px}
+.note-t{white-space:pre-wrap;font-size:13.5px;margin-top:2px}
 .sh-pin{font-size:16px;letter-spacing:.18em;font-variant-numeric:tabular-nums;user-select:all}
 .bank-card{border:1px solid var(--line,#dde3e0);border-radius:10px;padding:10px 12px;background:var(--bg2,transparent)}
 .bank-card .card-h{margin-bottom:6px}
@@ -1919,7 +1924,7 @@ function prnCardHtml(){
    Everything is computed again from these records, so editing or deleting a record always gives consistent totals.
    Amounts are in rials. */
 const ACC_CAT={salary:'حقوق',rent:'اجاره',purchase:'خرید',other:'سایر'};
-function accFix(a){a=a&&typeof a==='object'?a:{};return{partners:Array.isArray(a.partners)?a.partners:[],recurring:Array.isArray(a.recurring)?a.recurring:[],expenses:Array.isArray(a.expenses)?a.expenses:[],confirm:a.confirm&&typeof a.confirm==='object'?a.confirm:{},deposits:Array.isArray(a.deposits)?a.deposits:[],settles:Array.isArray(a.settles)?a.settles:[],carry:a.carry!==false}}
+function accFix(a){a=a&&typeof a==='object'?a:{};return{partners:Array.isArray(a.partners)?a.partners:[],recurring:Array.isArray(a.recurring)?a.recurring:[],expenses:Array.isArray(a.expenses)?a.expenses:[],confirm:a.confirm&&typeof a.confirm==='object'?a.confirm:{},deposits:Array.isArray(a.deposits)?a.deposits:[],settles:Array.isArray(a.settles)?a.settles:[],carry:a.carry!==false,notes:a.notes&&typeof a.notes==='object'?a.notes:{},files:a.files&&typeof a.files==='object'?a.files:{}}}
 function ACC(){if(!S.acc)S.acc=accFix(null);return S.acc}
 function accMonth(date){const j=parseJ(date);if(j==null)return '';const x=d2j(j);return x.jy+'/'+pad2(x.jm)}
 function accNextMonth(m){let [y,mm]=m.split('/').map(Number);mm++;if(mm>12){mm=1;y++}return y+'/'+pad2(mm)}
@@ -1983,9 +1988,10 @@ function renderAcc(){
   const pIds=A.partners.map(p=>p.id);const bal=id=>(C.credit[id]||0)-(C.settled[id]||0);
   const totCoef=A.partners.filter(p=>p.active!==false).reduce((a,p)=>a+(+p.coef||0),0);
   const kpi=(k,v,sub)=>`<div class="kpi"><span class="k">${k}</span><span class="v">${v}</span><span class="s">${sub}</span></div>`;
-  const tabs=[['wait','منتظر واریز ('+toFa(waiting.length)+')'],['deps','واریزها'],['exp','هزینه‌ها'],['partners','شرکا و تسویه'],['months','گزارش ماهانه']];
+  const tabs=[['wait','منتظر واریز ('+toFa(waiting.length)+')'],['cust','مشتریان و پرونده‌ها'],['deps','واریزها'],['exp','هزینه‌ها'],['partners','شرکا و تسویه'],['months','گزارش ماهانه']];
   let body='';
   if(ACCV.tab==='wait')body=`<div class="card"><h3>فاکتورهای تأییدشده، منتظر اعلام واریز</h3>${waiting.length?`<div class="tbl-wrap"><table class="list hm-list"><thead><tr><th>فاکتور</th><th>خریدار</th><th>تأیید پرداخت</th><th>مبلغ (ریال)</th><th>واریزشده</th><th>مانده</th><th></th></tr></thead><tbody>${waiting.map(x=>{const co=coById(x.d.companyId);return `<tr><td><b>${TN(x.d.type,x.d)} ${esc(toFa(x.d.number||''))}</b><br><small class="muted">${esc(co?co.name:'—')} · ${toFa(x.d.date)}</small></td><td>${esc(x.d.buyer.name||'—')}</td><td class="hn">${tsHtml(A.confirm[x.d.id].at)}<br><small class="muted">${esc(A.confirm[x.d.id].by||'')}</small></td><td class="hn">${x.tot?rial(x.tot):'<small>نامشخص (دلاری)</small>'}</td><td class="hn">${rial(x.paid)}</td><td class="hn"><b>${rial(x.rem)}</b></td><td><div class="acts"><button class="btn sm pri" data-act="acc-depOpen" data-id="${esc(x.d.id)}">ثبت واریز</button><button class="btn sm" data-act="acc-unconfirm" data-id="${esc(x.d.id)}" title="برداشتن تأیید پرداخت">×</button></div></td></tr>${ACCV.dep===x.d.id?`<tr><td colspan="7"><div class="grid g4"><label class="f"><span>مبلغ واریز (ریال)</span><input id="adAmt" class="ltr num" inputmode="numeric" value="${esc(toFa(fmtNum(x.rem,0,false)))}"></label><label class="f"><span>تاریخ واریز</span><div class="inline"><input id="adDate" class="jdate ltr" value="${esc(jStr(t))}"><button class="btn icon" data-act="pickdate">${IC.cal}</button></div></label><label class="f"><span>بانک / توضیح</span><input id="adNote"></label><div style="align-self:end" class="btns"><button class="btn pri" data-act="acc-depSave" data-id="${esc(x.d.id)}">تأیید واریز</button><button class="btn" data-act="acc-depCancel">انصراف</button></div></div>${totCoef?'':'<div class="notice warn">هنوز شریکی با ضریب تعریف نکرده‌اید؛ سهم بعد از هزینه‌ها به کسی تعلق نمی‌گیرد. از «شرکا و تسویه» شرکا را اضافه کنید.</div>'}</td></tr>`:''}`}).join('')}</tbody></table></div>`:'<div class="empty">فاکتوری منتظر واریز نیست. در «اسناد» یا صفحه‌ی خود فاکتور، دکمه‌ی «تأیید پرداخت» فاکتور را به این‌جا می‌فرستد.</div>'}</div>`;
+  if(ACCV.tab==='cust')body=ACCV.cust?accCustHtml(ACCV.cust):accCustListHtml();
   if(ACCV.tab==='deps'){const deps=A.deposits.slice().sort((a,b)=>(parseJ(b.date)||0)-(parseJ(a.date)||0)||(b.at||0)-(a.at||0));
     body=`<div class="card"><h3>واریزهای تأییدشده و تقسیمشان</h3>${deps.length?`<div class="tbl-wrap"><table class="list hm-list"><thead><tr><th>تاریخ</th><th>فاکتور</th><th>مبلغ</th><th>به هزینه‌ها</th><th>سهم شرکا</th><th></th></tr></thead><tbody>${deps.map(x=>{const d=S.documents.find(y=>y.id===x.docId);const r=C.depRes[x.id]||{exp:0,parts:{}};return `<tr><td class="hn">${toFa(x.date)}<br><small class="muted">${esc(x.by||'')}</small></td><td>${d?TN(d.type,d)+' '+esc(toFa(d.number||''))+' · '+esc(d.buyer.name||''):'<small>سند حذف شده</small>'}${x.note?'<br><small class="muted">'+esc(x.note)+'</small>':''}</td><td class="hn"><b>${rial(x.amount)}</b></td><td class="hn">${rial(r.exp)}</td><td style="font-size:12.5px">${Object.entries(r.parts).map(([p,v])=>esc((A.partners.find(q=>q.id===p)||{name:'شریک حذف‌شده'}).name)+': '+rial(v)).join('<br>')||'—'}</td><td><button class="btn sm danger" data-act="acc-depDel" data-id="${esc(x.id)}">حذف</button></td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">هنوز واریزی ثبت نشده است.</div>'}<small class="note">هر واریز اول هزینه‌های همان ماه (و هزینه‌ی پوشش‌نیافته‌ی ماه‌های قبل) را می‌پوشاند و باقی به نسبت ضریب شرکا (ضریبِ لحظه‌ی ثبت واریز) میانشان تقسیم می‌شود.</small></div>`}
   if(ACCV.tab==='exp'){const cm=accMonthExpense(C.cur);
@@ -2054,6 +2060,140 @@ function onAccField(el){
     if(k==='amount')x.amount=Math.round(parseNum(normDigits(el.value))||0);else{const v=normDigits(el.value.trim());if(v&&!/^\d{4}\/\d{2}$/.test(v)){toast('ماه را به شکل ۱۴۰۵/۰۸ بنویسید');return true}x[k]=v}save();return true}
   if(el.dataset.accp){const p=A.partners.find(y=>y.id===el.dataset.id);if(!p)return true;if(el.dataset.accp==='coef'){const c=parseNum(normDigits(el.value));if(!(c>0)){toast('ضریب باید بزرگ‌تر از صفر باشد');return true}p.coef=c}else p.name=el.value.trim()||p.name;save();return true}
   return false;
+}
+
+/* ---------- accounting: customer profiles and order dossiers ----------
+   A customer is recognised by national id (if any) or by normalised name, so documents issued before the
+   customer was saved in «مشتریان» still land in the same profile.
+   Every order (document) and every customer has a dossier: any number of dated notes and attached files.
+   Notes and the list of files live in the (encrypted) app data; file contents are stored separately,
+   encrypted: web version on the server (data key), offline version in the data folder or this browser. */
+function normName(s){return String(s||'').replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/[‌‏‎]/g,' ').replace(/\s+/g,' ').trim()}
+function custKeyOf(x){const nid=normDigits(String(x&&x.nationalId||'')).replace(/\D/g,'');return nid.length>=8?'n:'+nid:'m:'+normName(x&&x.name)}
+function accProfiles(){
+  const map=new Map();
+  const get=(k,src)=>{let p=map.get(k);if(!p){p={key:k,info:Object.assign({},src),docs:[],cust:null};map.set(k,p)}return p};
+  S.customers.forEach(c=>{if(!normName(c.name))return;const p=get(custKeyOf(c),c);p.cust=c;p.info=Object.assign({},c)});
+  S.documents.filter(d=>d.committed&&d.buyer&&normName(d.buyer.name)).forEach(d=>{const p=get(custKeyOf(d.buyer),d.buyer);p.docs.push(d);
+    if(!p.cust){const b=d.buyer;Object.keys(b).forEach(k=>{if(String(b[k]||'').trim()&&!String(p.info[k]||'').trim())p.info[k]=b[k]})}});
+  return [...map.values()];
+}
+function accProfileStats(p){
+  const A=ACC();const sales=salesDocs();const ids=new Set(p.docs.map(d=>d.id));
+  const inv=sales.filter(d=>ids.has(d.id)&&d.type==='invoice'),pf=p.docs.filter(d=>d.type==='proforma');
+  const invSum=inv.reduce((a,d)=>a+accDocRial(d),0);const conf=inv.filter(d=>A.confirm[d.id]);
+  const confSum=conf.reduce((a,d)=>a+accDocRial(d),0);const recv=A.deposits.filter(x=>ids.has(x.docId)).reduce((a,x)=>a+(+x.amount||0),0);
+  const dates=p.docs.map(d=>parseJ(d.date)).filter(x=>x!=null).sort((a,b)=>a-b);
+  const notes=[...ids].reduce((a,id)=>a+((A.notes[id]||[]).length),0)+((A.notes['c:'+p.key]||[]).length);
+  const files=[...ids].reduce((a,id)=>a+((A.files[id]||[]).length),0)+((A.files['c:'+p.key]||[]).length);
+  return{inv,pf,invSum,pfSum:pf.reduce((a,d)=>a+accDocRial(d),0),conf,confSum,recv,due:Math.max(0,confSum-recv),notConf:inv.filter(d=>!A.confirm[d.id]).reduce((a,d)=>a+accDocRial(d),0),first:dates[0],last:dates[dates.length-1],notes,files};
+}
+function accDocState(d){const A=ACC();if(d.type!=='invoice')return['پیش‌فاکتور',''];if(!A.confirm[d.id])return['تأیید پرداخت نشده','draft'];const t=accDocRial(d),p=accPaid(d.id);if(t&&p>=t)return['واریز کامل','ok'];if(p>0)return['واریز '+rial(p)+' از '+rial(t),'acc'];return['منتظر واریز','acc']}
+function fmtSize(n){return n>=1048576?toFa((n/1048576).toFixed(1))+' مگابایت':toFa(Math.max(1,Math.round(n/1024)))+' کیلوبایت'}
+/* -- attachment storage -- */
+async function attPut(id,u8){
+  if(SRV){await api('att_put',{id,data:b64(u8)});return}
+  if(!VAULT)throw new Error('برنامه قفل است.');const enc=await aesEnc(VAULT.key,u8,'att');
+  if(dirOk&&dirHandle){const dh=await getDir([FILES_DIR,'att'],true);await writeBytes(dh,id+'.att',enc);return}
+  await idb.set('att:'+id,enc);
+}
+async function attGet(id){
+  if(SRV)return unb64((await api('att_get',{id})).data);
+  if(!VAULT)throw new Error('برنامه قفل است.');let enc=null;
+  if(dirOk&&dirHandle){try{enc=await readBytes(await getDir([FILES_DIR,'att'],false),id+'.att')}catch(e){}}
+  if(!enc){try{enc=await idb.get('att:'+id)}catch(e){}}
+  if(!enc)throw new Error('فایل این پیوست روی این رایانه پیدا نشد.');
+  return aesDec(VAULT.key,enc instanceof Uint8Array?enc:new Uint8Array(enc),'att');
+}
+async function attDel(id){
+  if(SRV){try{await api('att_del',{id})}catch(e){}return}
+  if(dirOk&&dirHandle){try{(await getDir([FILES_DIR,'att'],false)).removeEntry(id+'.att')}catch(e){}}
+  try{await idb.del('att:'+id)}catch(e){}
+}
+async function shrinkImage(file){/* photos of documents: max 2000px JPEG, enough to read and much smaller */
+  return new Promise(res=>{const u=URL.createObjectURL(file);const im=new Image();
+    im.onload=()=>{const k=Math.min(1,2000/Math.max(im.width,im.height));if(k===1&&file.size<1.5e6){URL.revokeObjectURL(u);res(null);return}
+      const c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);
+      c.toBlob(b=>res(b),'image/jpeg',.85)};
+    im.onerror=()=>{URL.revokeObjectURL(u);res(null)};im.src=u});
+}
+async function accUpload(key,files,cap){
+  const A=ACC();A.files[key]=A.files[key]||[];let n=0;
+  for(const f of files){
+    let blob=f,type=f.type||'application/octet-stream',name=f.name||'file';
+    if(/^image\/(jpeg|png|webp|bmp)$/.test(type)){const s=await shrinkImage(f);if(s&&s.size<f.size){blob=s;type='image/jpeg';name=name.replace(/\.\w+$/,'')+'.jpg'}}
+    if(blob.size>8*1024*1024){toast('«'+name+'» بزرگ‌تر از ۸ مگابایت است و بارگذاری نشد.',6000);continue}
+    const id=uid().toLowerCase().replace(/[^a-z0-9]/g,'')+Date.now().toString(36);
+    toast('در حال بارگذاری «'+name+'»…',20000);
+    try{await attPut(id,new Uint8Array(await blob.arrayBuffer()))}catch(e){toast('«'+name+'» بارگذاری نشد: '+e.message,6000);continue}
+    A.files[key].push({id,name,type,size:blob.size,cap:cap||'',at:nowTs(),by:curUser()});n++;
+  }
+  if(n){save();toast(toFa(n)+' فایل پیوست شد'+(SRV?' (رمزشده روی سرور)':''),4000)}
+}
+async function accOpenFile(key,id,download){
+  const f=(ACC().files[key]||[]).find(x=>x.id===id);if(!f)return;
+  let u8;try{toast('در حال باز کردن…',15000);u8=await attGet(id)}catch(e){toast(e.message,6000);return}
+  $('#toast').hidden=true;
+  const url=URL.createObjectURL(new Blob([u8],{type:f.type||'application/octet-stream'}));
+  if(download||!/^(image\/|application\/pdf|text\/plain)/.test(f.type)){const a=document.createElement('a');a.href=url;a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);return}
+  const m=$('#modal');m.hidden=false;
+  m.innerHTML=`<div class="modal-box" style="width:min(960px,100%)"><div class="modal-h"><h3>${esc(f.name)}${f.cap?' <small>'+esc(f.cap)+'</small>':''}</h3><div class="btns"><button class="btn" data-act="accf-dl" data-k="${esc(key)}" data-id="${esc(id)}">دانلود</button><button class="btn" data-act="modal-close">بستن</button></div></div><div class="card">${/^image\//.test(f.type)?`<img src="${url}" alt="" style="max-width:100%;display:block;margin:auto">`:`<iframe src="${url}" style="width:100%;height:75vh;border:0;background:#fff"></iframe>`}</div></div>`;
+}
+/* one dossier: notes + files (for an order: key = document id; for the customer: key = 'c:'+profile key) */
+function accDossierHtml(key,title){
+  const A=ACC();const notes=(A.notes[key]||[]).slice().sort((a,b)=>b.at-a.at);const files=(A.files[key]||[]).slice().sort((a,b)=>b.at-a.at);
+  return `<div class="dossier"><div class="grid g2" style="align-items:start">
+   <div class="stack" style="gap:8px"><b style="font-size:13.5px">یادداشت‌ها${title?' — '+esc(title):''} (${toFa(notes.length)})</b>
+    <textarea data-accnote="${esc(key)}" rows="3" placeholder="توضیح تازه بنویسید: پیگیری، قول پرداخت، تماس، شرایط تحویل…"></textarea>
+    <div class="btns"><button class="btn sm pri" data-act="accn-add" data-k="${esc(key)}">ثبت یادداشت</button></div>
+    ${notes.map(n=>`<div class="note-i"><div class="note-h"><span>${tsHtml(n.at)} · ${esc(n.by||'')}${n.ed?' · <small class="muted">ویرایش‌شده</small>':''}</span><span><button class="btn sm" data-act="accn-edit" data-k="${esc(key)}" data-id="${esc(n.id)}">ویرایش</button><button class="btn sm danger" data-act="accn-del" data-k="${esc(key)}" data-id="${esc(n.id)}">حذف</button></span></div><div class="note-t">${esc(n.text)}</div></div>`).join('')||'<small class="muted">هنوز یادداشتی نیست.</small>'}</div>
+   <div class="stack" style="gap:8px"><b style="font-size:13.5px">مدارک و پیوست‌ها (${toFa(files.length)})</b>
+    <div class="inline" style="flex-wrap:wrap"><input type="file" multiple data-accfile="${esc(key)}" style="flex:1;min-width:180px"><input data-acccap="${esc(key)}" placeholder="عنوان (اختیاری): قرارداد، رسید، بارنامه…" style="flex:1;min-width:160px"></div>
+    <div class="btns"><button class="btn sm pri" data-act="accf-up" data-k="${esc(key)}">بارگذاری</button></div>
+    ${files.length?`<div class="tbl-wrap"><table class="list hm-list"><tbody>${files.map(f=>`<tr><td><b>${esc(f.cap||f.name)}</b>${f.cap?'<br><small class="muted">'+esc(f.name)+'</small>':''}<br><small class="muted">${fmtSize(f.size)} · ${tsHtml(f.at)} · ${esc(f.by||'')}</small></td><td><div class="acts"><button class="btn sm" data-act="accf-open" data-k="${esc(key)}" data-id="${esc(f.id)}">دیدن</button><button class="btn sm" data-act="accf-dl" data-k="${esc(key)}" data-id="${esc(f.id)}">دانلود</button><button class="btn sm danger" data-act="accf-del" data-k="${esc(key)}" data-id="${esc(f.id)}">حذف</button></div></td></tr>`).join('')}</tbody></table></div>`:'<small class="muted">هنوز فایلی پیوست نشده است. عکس، PDF، Word، Excel و… (هرکدام تا ۸ مگابایت).</small>'}
+   </div></div></div>`;
+}
+function accCustListHtml(){
+  const q=normName(ACCV.cq||'');const ps=accProfiles().map(p=>Object.assign(p,{st:accProfileStats(p)})).filter(p=>!q||normName(p.info.name).includes(q)||normDigits(String(p.info.phone||'')+' '+String(p.info.nationalId||'')).includes(normDigits(q)));
+  ps.sort((a,b)=>(b.st.last||0)-(a.st.last||0)||normName(a.info.name).localeCompare(normName(b.info.name),'fa'));
+  return `<div class="card"><div class="card-h"><h3>مشتریان <small>${toFa(ps.length)} پرونده</small></h3><input id="accCq" placeholder="جستجوی نام، تلفن یا شناسه" value="${esc(ACCV.cq||'')}" style="max-width:280px"></div>
+   ${ps.length?`<div class="tbl-wrap"><table class="list hm-list"><thead><tr><th>مشتری</th><th>فاکتور</th><th>جمع فاکتورها (ریال)</th><th>دریافت‌شده</th><th>مانده‌ی تأییدشده</th><th>آخرین سند</th><th>پرونده</th><th></th></tr></thead><tbody>${ps.map(p=>`<tr><td><b>${esc(p.info.name)}</b>${p.cust?'':' <small class="muted">(از فاکتورها)</small>'}<br><small class="muted">${esc([p.info.city,p.info.phone].filter(Boolean).join(' · '))}</small></td><td class="hn">${toFa(p.st.inv.length)}${p.st.pf.length?' <small class="muted">+ '+toFa(p.st.pf.length)+' پیش‌فاکتور</small>':''}</td><td class="hn">${rial(p.st.invSum)}</td><td class="hn">${rial(p.st.recv)}</td><td class="hn">${p.st.due?'<b style="color:var(--warn)">'+rial(p.st.due)+'</b>':'۰'}</td><td class="hn">${p.st.last!=null?toFa(jStr(p.st.last)):'—'}</td><td class="hn"><small>${toFa(p.st.notes)} یادداشت · ${toFa(p.st.files)} فایل</small></td><td><button class="btn sm pri" data-act="accc-open" data-k="${esc(p.key)}">پرونده</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">مشتری‌ای پیدا نشد.</div>'}</div>`;
+}
+function accCustHtml(key){
+  const p=accProfiles().find(x=>x.key===key);if(!p){ACCV.cust='';return accCustListHtml()}
+  const st=accProfileStats(p);const A=ACC();const i=p.info;
+  const docs=p.docs.slice().sort((a,b)=>(parseJ(b.date)||0)-(parseJ(a.date)||0)||(b.issuedAt||0)-(a.issuedAt||0));
+  const byYear={};docs.forEach(d=>{const j=parseJ(d.date);if(j==null)return;const y=d2j(j).jy;const o=byYear[y]||(byYear[y]={inv:0,invSum:0,pf:0,recv:0});if(d.type==='invoice'&&st.inv.includes(d)){o.inv++;o.invSum+=accDocRial(d);o.recv+=accPaid(d.id)}if(d.type==='proforma')o.pf++});
+  const kpi=(k,v,sub)=>`<div class="kpi"><span class="k">${k}</span><span class="v">${v}</span><span class="s">${sub}</span></div>`;
+  const kv=(l,v)=>String(v||'').trim()?`<span><small class="muted">${l}:</small> ${esc(toFa(v))}</span>`:'';
+  return `<div class="card"><div class="card-h"><h3>پرونده‌ی ${esc(i.name)} ${p.cust?'':'<small>(مشتری از روی فاکتورها شناخته شده؛ در «مشتریان» ذخیره نشده)</small>'}</h3><div class="btns"><button class="btn sm" data-act="accc-back">بازگشت به فهرست</button><button class="btn sm" data-act="accc-new" data-k="${esc(key)}">${IC.plus} سند تازه برای این مشتری</button></div></div>
+   <div class="inline" style="flex-wrap:wrap;gap:6px 18px;font-size:13.5px">${kv('شناسه / کد ملی',i.nationalId)}${kv('کد اقتصادی',i.economicCode)}${kv('تلفن',i.phone)}${kv('همراه',i.mobile)}${kv('کد پستی',i.postalCode)}${kv('نشانی',[i.province,i.city,i.address].filter(x=>String(x||'').trim()).join('، '))}</div>
+   <div class="kpis">${kpi('فاکتورها',toFa(st.inv.length),rial(st.invSum)+' ریال')}${kpi('دریافت‌شده',rial(st.recv),'ریال · از '+toFa(st.conf.length)+' فاکتورِ تأییدشده')}${kpi('مانده‌ی تأییدشده',rial(st.due),'منتظر اعلام واریز')}${kpi('تأیید پرداخت نشده',rial(st.notConf),'فاکتورهایی که هنوز تأیید پرداخت نگرفته‌اند')}${kpi('پیش‌فاکتورها',toFa(st.pf.length),rial(st.pfSum)+' ریال')}${kpi('اولین / آخرین خرید',st.first!=null?toFa(jStr(st.first)):'—',st.last!=null?'آخرین: '+toFa(jStr(st.last)):'')}</div>
+   ${Object.keys(byYear).length>1?`<div class="tbl-wrap"><table class="list hm-list"><thead><tr><th>سال</th><th>فاکتور</th><th>جمع (ریال)</th><th>دریافت‌شده</th><th>پیش‌فاکتور</th></tr></thead><tbody>${Object.entries(byYear).sort((a,b)=>b[0]-a[0]).map(([y,o])=>`<tr><td>${toFa(y)}</td><td class="hn">${toFa(o.inv)}</td><td class="hn">${rial(o.invSum)}</td><td class="hn">${rial(o.recv)}</td><td class="hn">${toFa(o.pf)}</td></tr>`).join('')}</tbody></table></div>`:''}</div>
+  <div class="card"><h3>سفارش‌ها و سندها <small>روی «پرونده‌ی سفارش» بزنید تا یادداشت‌ها و مدارک همان سفارش را ببینید</small></h3>
+   ${docs.length?`<div class="tbl-wrap"><table class="list hm-list"><thead><tr><th>سند</th><th>تاریخ</th><th>مبلغ (ریال)</th><th>وضعیت مالی</th><th>پرونده</th><th></th></tr></thead><tbody>${docs.map(d=>{const co=coById(d.companyId);const s2=accDocState(d);const nn=(A.notes[d.id]||[]).length,nf=(A.files[d.id]||[]).length;const open=ACCV.ord===d.id;
+     return `<tr${open?' style="background:var(--accent-soft)"':''}><td><b>${TN(d.type,d)} ${esc(toFa(d.number||''))}</b><br><small class="muted">${esc(co?co.name:'—')}</small></td><td class="hn"><bdi dir="ltr">${toFa(d.date)}</bdi></td><td class="hn">${rial(accDocRial(d))}</td><td><span class="badge ${s2[1]}">${esc(s2[0])}</span></td><td class="hn"><small>${toFa(nn)} یادداشت · ${toFa(nf)} فایل</small></td><td><div class="acts"><button class="btn sm${open?' pri':''}" data-act="acco-toggle" data-id="${esc(d.id)}">پرونده‌ی سفارش</button><button class="btn sm" data-act="home-open" data-id="${esc(d.id)}">باز کردن سند</button>${accBtn(d,true)}</div></td></tr>${open?`<tr><td colspan="6">${accDossierHtml(d.id,TN(d.type,d)+' '+toFa(d.number||''))}${(()=>{const deps=A.deposits.filter(x=>x.docId===d.id);return deps.length?`<div style="margin-top:8px;font-size:13px"><b>واریزهای این سفارش:</b> ${deps.map(x=>toFa(x.date)+' — '+rial(x.amount)+' ریال'+(x.note?' ('+esc(x.note)+')':'')).join(' · ')}</div>`:''})()}</td></tr>`:''}`}).join('')}</tbody></table></div>`:'<div class="empty">برای این مشتری هنوز سندی ثبت نشده است.</div>'}</div>
+  <div class="card"><h3>پرونده‌ی کلی مشتری <small>یادداشت‌ها و مدارکی که به سفارش خاصی مربوط نیست (قرارداد، کارت ملی، نامه‌ها…)</small></h3>${accDossierHtml('c:'+key,'')}</div>`;
+}
+async function accCustAction(a,b){
+  const A=ACC();const k=b.dataset.k,id=b.dataset.id;
+  switch(a){
+    case 'accc-open':ACCV.cust=k;ACCV.ord='';break;
+    case 'accc-back':ACCV.cust='';ACCV.ord='';break;
+    case 'acco-toggle':ACCV.ord=ACCV.ord===id?'':id;break;
+    case 'accc-new':{const p=accProfiles().find(x=>x.key===k);if(!p)return;const base=curDoc();S.draft=newDoc(base?base.companyId:S.companies[0].id);const i=p.info;
+      Object.assign(S.draft.buyer,{name:i.name||'',kind:i.kind||'legal',nationalId:i.nationalId||'',economicCode:i.economicCode||'',regNo:i.regNo||'',postalCode:i.postalCode||'',province:i.province||'',city:i.city||'',address:i.address||'',phone:i.phone||''});curId=null;save();showView('editor');return}
+    case 'accn-add':{const t=$(`[data-accnote="${CSS.escape(k)}"]`);const text=(t&&t.value||'').trim();if(!text){toast('متن یادداشت را بنویسید');return}
+      (A.notes[k]=A.notes[k]||[]).push({id:uid(),text,at:nowTs(),by:curUser()});save();break}
+    case 'accn-edit':{const n=(A.notes[k]||[]).find(x=>x.id===id);if(!n)return;const v=prompt('ویرایش یادداشت:',n.text);if(v==null||!v.trim())return;n.text=v.trim();n.ed=nowTs();save();break}
+    case 'accn-del':if(!confirm('این یادداشت حذف شود؟'))return;A.notes[k]=(A.notes[k]||[]).filter(x=>x.id!==id);save();break;
+    case 'accf-up':{const inp=$(`[data-accfile="${CSS.escape(k)}"]`);const files=inp&&inp.files?[...inp.files]:[];if(!files.length){toast('اول فایل را انتخاب کنید');return}
+      const cap=(($(`[data-acccap="${CSS.escape(k)}"]`)||{}).value||'').trim();b.disabled=true;await accUpload(k,files,cap);break}
+    case 'accf-open':accOpenFile(k,id,false);return;
+    case 'accf-dl':accOpenFile(k,id,true);return;
+    case 'accf-del':{if(!confirm('این فایل حذف شود؟ (برگشت‌پذیر نیست)'))return;await attDel(id);A.files[k]=(A.files[k]||[]).filter(x=>x.id!==id);save();break}
+  }
+  renderAcc();
 }
 
 /* ---------- home: today, money summary, pending work, last login, and the work menu ---------- */
@@ -2571,7 +2711,7 @@ function renderCrud(kind){
   const fl=C.fields.map(([k,l,cls,t])=>t==='cur'?`<label class="f ${cls}"><span>${l}</span><select data-crud="${k}">${opt('IRR','ریال',o[k]||'IRR')}${opt('IRT','تومان',o[k])}${opt('USD','دلار',o[k])}</select></label>`:`<label class="f ${cls}"><span>${l}</span><input data-crud="${k}" ${t==='num'?'class="num" data-dec="1"':t?'class="ltr"':''} ${k==='unit'?'list="unitList"':''} value="${esc(t==='num'?fmtInput(o[k],1):o[k]??'')}"></label>`).join('');
   const lab=k=>C.fields.find(f=>f[0]===k)[1];
   $('#v-'+kind).innerHTML=`<div class="stack"><div class="card"><h3>${ed?'ویرایش '+C.one:'افزودن '+C.one}</h3><div class="grid g3" id="crudForm">${fl}</div><div class="btns"><button class="btn pri" data-act="crud-save" data-kind="${kind}">${ed?'ذخیره‌ی تغییرات':'افزودن'}</button>${ed?`<button class="btn" data-act="crud-cancel" data-kind="${kind}">انصراف</button>`:''}</div></div>
-  <div class="card"><h3>${C.title} <small>${toFa(list.length)} مورد</small></h3><div class="tbl-wrap">${list.length?`<table class="list"><thead><tr>${C.cols.map(k=>`<th>${lab(k)}</th>`).join('')}<th></th></tr></thead><tbody>${list.map(x=>`<tr data-id="${x.id}">${C.cols.map(k=>`<td${k==='price'||k==='markup'||k==='code'?' class="n"':''}>${esc(crudCell(k,x))}</td>`).join('')}<td><div class="acts">${kind==='customers'?'<button class="btn sm" data-act="crud-use" data-kind="customers">سند جدید</button>':''}<button class="btn sm" data-act="crud-edit" data-kind="${kind}">ویرایش</button><button class="btn sm danger" data-act="crud-del" data-kind="${kind}">حذف</button></div></td></tr>`).join('')}</tbody></table>`:`<div class="empty">هنوز ${C.one}ی ثبت نشده است.</div>`}</div></div></div>`;
+  <div class="card"><h3>${C.title} <small>${toFa(list.length)} مورد</small></h3><div class="tbl-wrap">${list.length?`<table class="list"><thead><tr>${C.cols.map(k=>`<th>${lab(k)}</th>`).join('')}<th></th></tr></thead><tbody>${list.map(x=>`<tr data-id="${x.id}">${C.cols.map(k=>`<td${k==='price'||k==='markup'||k==='code'?' class="n"':''}>${esc(crudCell(k,x))}</td>`).join('')}<td><div class="acts">${kind==='customers'?'<button class="btn sm" data-act="crud-use" data-kind="customers">سند جدید</button>'+(!SRV||SRV.admin?'<button class="btn sm" data-act="crud-file" data-kind="customers" title="گزارش، سفارش‌ها، یادداشت‌ها و مدارک در حسابداری">پرونده</button>':''):''}<button class="btn sm" data-act="crud-edit" data-kind="${kind}">ویرایش</button><button class="btn sm danger" data-act="crud-del" data-kind="${kind}">حذف</button></div></td></tr>`).join('')}</tbody></table>`:`<div class="empty">هنوز ${C.one}ی ثبت نشده است.</div>`}</div></div></div>`;
 }
 function crudCell(k,x){if(k==='price')return fmtNum(x.price,x.currency==='USD'?2:0,true,0)+' '+CUR[x.currency||'IRR'].name;if(k==='markup')return Number(x.markup)?toFa(x.markup)+'٪':'—';return x[k]||'—'}
 function crudAction(a,btn){
@@ -2582,6 +2722,7 @@ function crudAction(a,btn){
     case 'crud-cancel':crudEdit[kind]=null;renderCrud(kind);break;
     case 'crud-edit':crudEdit[kind]=x.id;renderCrud(kind);window.scrollTo({top:0});break;
     case 'crud-del':if(!confirm('«'+x.name+'» حذف شود؟'))return;S[kind]=S[kind].filter(i=>i!==x);save();fillLists();renderCrud(kind);break;
+    case 'crud-file':ACCV.tab='cust';ACCV.cust=custKeyOf(x);ACCV.ord='';showView('acc');break;
     case 'crud-use':{const base=curDoc();S.draft=newDoc(base?base.companyId:S.companies[0].id);Object.assign(S.draft.buyer,{name:x.name,nationalId:x.nationalId||'',economicCode:x.economicCode||'',postalCode:x.postalCode||'',address:x.address||'',phone:x.phone||''});curId=null;save();showView('editor');break}
   }
 }
@@ -3554,6 +3695,12 @@ async function exportBackup(){
 /* ---------- version, changes, theme ---------- */
 const APP_VERSION=(document.querySelector('meta[name="app-version"]')||{}).content||'0';
 const APP_CHANGES=[
+ {v:'2.15.0',d:'1405/08/18',t:'پرونده‌ی مشتری در حسابداری',items:[
+  'در «حسابداری ← مشتریان و پرونده‌ها» هر مشتری یک پرونده دارد: جمع فاکتورها، دریافت‌شده، مانده‌ی تأییدشده، فاکتورهای تأیید پرداخت‌نشده، پیش‌فاکتورها، اولین و آخرین خرید، و خلاصه به تفکیک سال.',
+  'فهرست همه‌ی سفارش‌ها و سندهای هر مشتری با وضعیت مالی هرکدام. برای هر سفارش «پرونده‌ی سفارش» باز می‌شود: هر تعداد یادداشت (با تاریخ، ساعت و نام نویسنده؛ قابل ویرایش) و هر تعداد مدرک پیوست (عکس، PDF، Word، Excel و… تا ۸ مگابایت).',
+  'یک پرونده‌ی کلی هم برای خود مشتری هست، برای مدارکی که به سفارش خاصی مربوط نیست (قرارداد، کارت ملی، نامه‌ها).',
+  'مشتری‌ای که در «مشتریان» ذخیره نشده هم از روی فاکتورهایش (با شناسه‌ی ملی یا نام) پرونده دارد. در فهرست «مشتریان» دکمه‌ی «پرونده» مستقیم به پرونده‌ی همان مشتری می‌رود.',
+  'فایل‌ها جدا از اطلاعات اصلی و رمزشده نگه داشته می‌شوند: نسخه‌ی وب روی سرور، نسخه‌ی آفلاین در پوشه‌ی داده (یا اگر پوشه وصل نیست، در همین مرورگر). عکس‌های بزرگ پیش از بارگذاری کوچک می‌شوند.']},
  {v:'2.14.0',d:'1405/08/18',t:'اثر انگشت، پیامک، حسابداری و چاپگر مرکزی',items:[
   'ورود با اثر انگشت / چهره / پین گوشی و رایانه (مثل وبی): «تنظیمات عمومی ← ورود با اثر انگشت و پیامک ← ثبت اثر انگشت این دستگاه»، و در صفحه‌ی ورود دکمه‌ی «ورود با اثر انگشت». فقط روی دستگاهی کار می‌کند که همان‌جا فعالش کرده‌اید، چون کلید اطلاعات رمزشده با راز همان دستگاه باز می‌شود.',
   'پیامک با پنل sms.ir (فقط با الگو، مثل وبی): فرستادن لینک فایل (و اگر بخواهید رمز) برای مشتری از پنجره‌ی اشتراک‌گذاری، و «ورود با کد پیامکی» که مدیر روشن می‌کند. حالت آزمایشی، پیامک آزمایشی و گزارش پیامک‌ها هم دارد. کدِ لینک‌های تازه ۲۲ نویسه است تا در پیامک جا شود.',
@@ -3784,6 +3931,7 @@ function route(el,ev){
   if(el.id==='uiSize'&&ev==='change'){setUiFont(null,+el.value);return}
   if(el.id==='offUser'){try{localStorage.setItem('df-off-user',el.value.trim())}catch(e){}return}
   if(el.id==='uiTheme'&&ev==='change'){try{localStorage.setItem('df-theme',el.value)}catch(e){}applyTheme(el.value);return}
+  if(view==='acc'&&el.id==='accCq'&&ev==='input'){ACCV.cq=el.value;const pos=el.selectionStart;renderAcc();const n=$('#accCq');if(n){n.focus();try{n.setSelectionRange(pos,pos)}catch(_){}}return}
   if(view==='acc'&&(el.id==='accCarry'||el.dataset.accr||el.dataset.accp)){if(ev==='change'&&onAccField(el)&&el.id!=='accCarry')renderAcc();return}
   if(el.id==='fxPerDay'&&ev==='change'){setFxPerDay(+el.value);return}
   if(el.id==='bOrder'&&ev==='change'){const b=curBatch();if(b){b.printOrder=el.value;save();refreshBatch(true)}return}
@@ -3825,6 +3973,7 @@ document.addEventListener('click',e=>{
   if(a.startsWith('co-')||a==='go-settings')return coAction(a,b);
   if(a.startsWith('crud-'))return crudAction(a,b);
   if(a.startsWith('acc-'))return accAction(a,b);
+  if(/^acc[cnfo]-/.test(a))return accCustAction(a,b);
   if(a.startsWith('sec-'))return secAction(a,b);
   if(a.startsWith('sms-'))return smsAction(a,b);
   if(a.startsWith('pj-')||a.startsWith('ps-'))return pjAction(a,b);
