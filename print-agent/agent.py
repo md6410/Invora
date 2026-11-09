@@ -251,6 +251,8 @@ def html_to_pdf(html, pdf_path):
     exe = find_chrome()
     if not exe:
         raise RuntimeError("Edge یا Chrome روی این کامپیوتر پیدا نشد (مسیرش را در تنظیمات بنویسید).")
+    if _is_system_account() and "msedge" in os.path.basename(exe).lower():
+        raise RuntimeError("Microsoft Edge در حساب SYSTEM اجرا نمی‌شود؛ ایستگاه چاپ باید در حساب کاربر ویندوز اجرا شود (InvoraPrint.exe را دوباره اجرا کنید تا درست نصب شود).")
     wd = _work_dir()
     fd, tmp_html = tempfile.mkstemp(suffix=".html", prefix="invora-", dir=wd)
     with os.fdopen(fd, "w", encoding="utf-8") as f:
@@ -727,8 +729,10 @@ if IS_WINDOWS:
 #
 # دوبار کلیک روی InvoraPrint.exe:
 #   - اگر نصب نشده: اجازه‌ی Administrator می‌گیرد، خودش را در C:\ProgramData\InvoraPrint کپی می‌کند،
-#     config.json کنارش (نشانی سایت و توکن) را برمی‌دارد، در Task Scheduler طوری ثبت می‌شود که با روشن
-#     شدن ویندوز (حتی بدون ورود کاربر، با حساب SYSTEM) اجرا شود و اگر بسته شد هر ۵ دقیقه دوباره بالا بیاید،
+#     config.json کنارش (نشانی سایت و توکن) را برمی‌دارد، در Task Scheduler طوری ثبت می‌شود که با ورود هر
+#     کاربر به ویندوز (در حساب همان کاربر) اجرا شود و اگر بسته شد هر ۵ دقیقه دوباره بالا بیاید،
+#     — نه با حساب SYSTEM: Microsoft Edge در حساب SYSTEM اصلاً اجرا نمی‌شود (کد ۱۰۰۲) و چاپگرهای اشتراکیِ کاربر را هم
+#       نمی‌بیند. کارهای چاپ تا ورود کسی به ویندوز در صف سایت می‌مانند و بعد چاپ می‌شوند. —
 #     همان لحظه روشن می‌شود و صفحه‌ی تنظیمات را باز می‌کند؛
 #   - اگر نصب شده و روشن است: صفحه‌ی تنظیمات را باز می‌کند (و اگر نسخه‌ی تازه‌تر است، جایگزین می‌کند).
 # فرمان‌ها: InvoraPrint.exe install | uninstall | run | selftest --out file.json
@@ -806,11 +810,11 @@ def _task_xml(exe):
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo><Description>Invora print station: prints documents and labels sent from the Invora website.</Description></RegistrationInfo>
   <Triggers>
-    <BootTrigger><Enabled>true</Enabled><Delay>PT20S</Delay></BootTrigger>
+    <LogonTrigger><Enabled>true</Enabled><Delay>PT10S</Delay></LogonTrigger>
     <TimeTrigger><StartBoundary>2024-01-01T00:00:00</StartBoundary><Enabled>true</Enabled>
       <Repetition><Interval>PT5M</Interval><StopAtDurationEnd>false</StopAtDurationEnd></Repetition></TimeTrigger>
   </Triggers>
-  <Principals><Principal id="Author"><UserId>S-1-5-18</UserId><RunLevel>HighestAvailable</RunLevel></Principal></Principals>
+  <Principals><Principal id="Author"><GroupId>S-1-5-32-545</GroupId><RunLevel>LeastPrivilege</RunLevel></Principal></Principals>
   <Settings>
     <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
     <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
@@ -902,6 +906,7 @@ def install(quiet=False):
     _ilog("install %s (frozen=%s, admin=%s, from %s)" % (VERSION, FROZEN, _is_admin(), HERE))
     try:
         os.makedirs(INSTALL_DIR, exist_ok=True)
+        _ilog("icacls -> %s" % (_run_cmd(["icacls", INSTALL_DIR, "/grant", "*S-1-5-32-545:(OI)(CI)M", "/T", "/C", "/Q"]),))
         exe_dst = os.path.join(INSTALL_DIR, "InvoraPrint.exe" if FROZEN else "agent.py")
         # نسخه‌ی قبلی را ببند تا فایل آزاد شود
         _run_cmd(["schtasks", "/End", "/TN", TASK_NAME])
@@ -920,6 +925,7 @@ def install(quiet=False):
                 raise RuntimeError("فایل قبلی برنامه آزاد نشد؛ رایانه را یک بار ری‌استارت کنید و دوباره اجرا کنید.")
         steps.append("copied")
         cfg = _merge_config(HERE, os.path.join(INSTALL_DIR, "config.json"))
+        _run_cmd(["icacls", INSTALL_DIR, "/grant", "*S-1-5-32-545:(OI)(CI)M", "/T", "/C", "/Q"])
         steps.append("config")
         cmd_exe = exe_dst if FROZEN else '"%s" "%s"' % (sys.executable.replace("python.exe", "pythonw.exe"), exe_dst)
         xml_path = os.path.join(INSTALL_DIR, "task.xml")
@@ -943,17 +949,24 @@ def install(quiet=False):
         except Exception:
             pass
         ok = False
-        for _ in range(30):
+        for i in range(30):
             if _ui_alive():
                 ok = True
                 break
+            if i == 8:   # the task did not start (e.g. no interactive session): start it here, in this user's session
+                _ilog("task did not start; starting directly")
+                try:
+                    subprocess.Popen(([exe_dst] if FROZEN else [sys.executable, exe_dst]) + ["run"], cwd=INSTALL_DIR, close_fds=True,
+                                     creationflags=getattr(subprocess, "DETACHED_PROCESS", 0) | getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0) | getattr(subprocess, "CREATE_NO_WINDOW", 0))
+                except Exception as e:
+                    _ilog("direct start failed: %s" % e)
             time.sleep(1)
         steps.append("running" if ok else "not-yet")
         _ilog("done: " + ", ".join(steps))
         if not quiet:
             if ok:
                 _open_ui()
-                _msg("ایستگاه چاپ Invora نصب و روشن شد.\n\nاز این به بعد با روشن شدن رایانه خودش اجرا می‌شود (حتی بدون ورود کاربر) و اگر بسته شود خودش دوباره بالا می‌آید.\n\nدر صفحه‌ای که باز شد، کاغذ هر چاپگر را تعیین کنید و «چاپ آزمایشی» بزنید.\nمیان‌بر «Invora Print Station» هم روی دسکتاپ گذاشته شد.")
+                _msg("ایستگاه چاپ Invora نصب و روشن شد.\n\nاز این به بعد با ورود به ویندوز خودش اجرا می‌شود و اگر بسته شود خودش دوباره بالا می‌آید. (کارهای چاپی که وقتی کسی وارد ویندوز نشده برسند، در صف می‌مانند و بعد چاپ می‌شوند.)\n\nدر صفحه‌ای که باز شد، کاغذ هر چاپگر را تعیین کنید و «چاپ آزمایشی» بزنید.\nمیان‌بر «Invora Print Station» هم روی دسکتاپ گذاشته شد.")
             else:
                 _msg("نصب انجام شد ولی برنامه هنوز جواب نمی‌دهد. چند ثانیه بعد میان‌بر «Invora Print Station» روی دسکتاپ را باز کنید.\nجزئیات: " + os.path.join(INSTALL_DIR, "agent.log"))
         return 0

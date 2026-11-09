@@ -32,8 +32,9 @@ if ($do === 'download') {
             '2. Double-click InvoraPrint.exe and answer Yes.',
             '   If Windows SmartScreen says "Windows protected your PC": click "More info", then "Run anyway".',
             '3. The settings page opens (http://localhost:8766): set the paper of each printer and press "Test print".', '',
-            'It starts by itself with Windows (Task Scheduler, account SYSTEM, even before anyone logs in)',
-            'and starts again by itself if it ever stops. No Python or internet download is needed.',
+            'It starts by itself when someone logs in to Windows (Task Scheduler) and starts again if it ever stops.',
+            'Print jobs that arrive before anyone logs in wait in the queue and print after login.',
+            'No Python or internet download is needed.',
             'To update: download again from the site and run the new InvoraPrint.exe (settings are kept).',
             'To remove: open a Command Prompt here and run:  InvoraPrint.exe uninstall',
             'Files and log: C:\\ProgramData\\InvoraPrint', ''])];
