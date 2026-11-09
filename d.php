@@ -155,7 +155,7 @@ function media_page(string $h, string $t, string $plain, array $dev, string $non
         $type = (string)$it['type']; $name = df_h((string)($it['title'] ?: $it['name']));
         $desc = trim((string)($it['desc'] ?? '')) !== '' ? '<p class="d">' . nl2br(df_h((string)$it['desc'])) . '</p>' : '';
         $meta = '<small>' . df_h((string)$it['name']) . ' · ' . gal_fmt_size((int)$it['size']) . '</small>';
-        $dlb = '<a class="b" href="' . $u($n, '&amp;dl=1') . '">دانلود</a>';
+        $dlb = '<a class="b" data-dl="1" data-size="' . (int)$it['size'] . '" data-name="' . df_h((string)$it['name']) . '" href="' . $u($n, '&amp;dl=1') . '">دانلود</a><span class="pg" hidden><i></i></span><small class="pgt"></small>';
         if (preg_match('~^image/(jpeg|png|gif|webp|avif|bmp)$~', $type)) {
             $cards .= '<figure class="c"><a href="' . $u($n) . '" target="_blank" rel="noopener"><img loading="lazy" src="' . $u($n, !empty($it['thumb']) ? '&amp;thumb=1' : '') . '" alt=""></a><figcaption><b>' . $name . '</b>' . $desc . $meta . '<span class="bs"><a class="b" href="' . $u($n) . '" target="_blank" rel="noopener">اندازه‌ی کامل</a>' . $dlb . '</span></figcaption></figure>';
         } elseif (preg_match('~^(video|audio)/~', $type) && gal_inline_type($type)) {
@@ -187,8 +187,32 @@ function media_page(string $h, string $t, string $plain, array $dev, string $non
         . '.b{font-size:13px;padding:3px 12px;border:1px solid #1e5a55;border-radius:8px;color:#1e5a55;text-decoration:none}'
         . '.pi{max-width:1200px;margin:0 auto 16px;background:#fff;border:1px solid #d7dbd7;border-radius:12px;padding:16px;display:flex;gap:18px;flex-wrap:wrap}.pim{width:220px;max-width:100%;object-fit:contain;border-radius:8px;align-self:flex-start}.pt{flex:1;min-width:240px}.pt p{white-space:normal}'
         . '.pr{font-weight:800;color:#1e5a55;font-size:17px}.sp{border-collapse:collapse;width:100%;margin-top:8px}.sp th,.sp td{border-bottom:1px solid #e3e6e3;padding:6px 8px;text-align:right;vertical-align:top}.sp th{width:34%;color:#555;font-weight:600}'
-        . '@media (prefers-color-scheme:dark){.pi{background:#1a1f1e;border-color:#2e3533}.sp th{color:#9aa49f}.sp th,.sp td{border-color:#2e3533}.pr{color:#7fd0c2}}</style></head><body>'
-        . $head . '<div class="top">' . ($info ? '' : '<h1>' . df_h((string)($pack['title'] ?? 'فایل‌ها')) . '</h1>') . ($items ? '<small>' . df_fa_num((string)count($items)) . ' فایل</small>' : '') . '</div><div class="g">' . $cards . '</div></body></html>';
+        . '.pg{display:block;height:6px;background:#e3e6e3;border-radius:6px;overflow:hidden;width:100%;margin-top:6px}.pg i{display:block;height:100%;width:0;background:#1e5a55;transition:width .25s}.pgt{display:block;color:#6b736f}'
+        . '@media (prefers-color-scheme:dark){.pi{background:#1a1f1e;border-color:#2e3533}.sp th{color:#9aa49f}.sp th,.sp td{border-color:#2e3533}.pr{color:#7fd0c2}.pg{background:#2e3533}}</style></head><body>'
+        . $head . '<script nonce="' . $nonce . '">' . media_dl_js() . '</script><div class="top">' . ($info ? '' : '<h1>' . df_h((string)($pack['title'] ?? 'فایل‌ها')) . '</h1>') . ($items ? '<small>' . df_fa_num((string)count($items)) . ' فایل</small>' : '') . '</div><div class="g">' . $cards . '</div></body></html>';
+}
+
+/* دانلود با درصد: تکه‌های ۴ مگابایتی با Range؛ با قطع اینترنت صبر می‌کند و ادامه می‌دهد، و با زدن دوباره از همان‌جا ادامه می‌دهد */
+function media_dl_js(): string {
+    return <<<'JS'
+(function(){var CH=4194304;
+function fa(n){return String(n).replace(/\d/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[d]})}
+function mb(n){return fa((n/1048576).toFixed(1))+' مگابایت'}
+document.addEventListener('click',function(e){var a=e.target.closest?e.target.closest('a[data-dl]'):null;if(!a||!window.fetch||!window.Blob)return;e.preventDefault();go(a)});
+function go(a){var S=a._s||(a._s={got:0,parts:[],tries:0,busy:0});if(S.busy)return;S.busy=1;
+ var size=+a.getAttribute('data-size'),name=a.getAttribute('data-name')||'file',f=a.parentNode,bar=f.querySelector('.pg'),bi=bar.querySelector('i'),txt=f.querySelector('.pgt');bar.hidden=false;
+ function show(m){var p=size?Math.floor(S.got/size*100):0;bi.style.width=p+'%';txt.textContent=fa(p)+'٪ — '+mb(S.got)+' از '+mb(size)+(m?' · '+m:'');a.textContent='در حال دانلود…'}
+ function fin(){var u=URL.createObjectURL(new Blob(S.parts));var x=document.createElement('a');x.href=u;x.download=name;document.body.appendChild(x);x.click();x.remove();setTimeout(function(){URL.revokeObjectURL(u)},120000);S.parts=[];S.got=0;S.busy=0;a.textContent='دوباره دانلود';txt.textContent='دانلود شد ✓';bi.style.width='100%'}
+ function fail(m){S.busy=0;a.textContent='ادامه‌ی دانلود';show(m)}
+ function next(){if(S.got>=size){fin();return}
+  if(!navigator.onLine){show('اینترنت قطع است؛ با وصل شدن ادامه می‌دهد…');window.addEventListener('online',next,{once:true});return}
+  var end=Math.min(size,S.got+CH)-1,st=0;
+  fetch(a.href,{credentials:'same-origin',headers:{Range:'bytes='+S.got+'-'+end}}).then(function(r){st=r.status;if(st===410||st===404)throw {fatal:'این لینک دیگر فعال نیست.'};if(st!==206&&st!==200)throw new Error('HTTP '+st);return r.blob()})
+  .then(function(b){if(st===200){S.parts=[b];S.got=b.size;size=b.size}else{S.parts.push(b);S.got+=b.size}S.tries=0;show();next()})
+  .catch(function(err){if(err&&err.fatal){S.busy=0;a.textContent=err.fatal;return}S.tries++;if(S.tries>7){S.tries=0;fail('اتصال برقرار نشد؛ «ادامه‌ی دانلود» را بزنید.');return}show('اتصال قطع شد؛ تلاش دوباره…');setTimeout(next,Math.min(30000,1000*Math.pow(2,S.tries)))})}
+ show();next()}
+})();
+JS;
 }
 
 /* تبدیل زمان یونیکس به تاریخ شمسی برای نمایش */

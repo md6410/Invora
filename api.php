@@ -19,7 +19,7 @@ if (($_GET['a'] ?? '') === 'gal_chunk') {
     $id = (string)($_GET['id'] ?? ''); $i = (int)($_GET['i'] ?? -1);
     if (!gal_valid_id($id)) df_json(['ok' => false, 'error' => 'bad id'], 400);
     $bin = (string)file_get_contents('php://input', false, null, 0, GAL_CHUNK + 1);
-    if ($e = gal_put_chunk($id, $i, $bin, $dek)) df_json(['ok' => false, 'error' => $e], 400);
+    if ($e = gal_put_chunk($id, $i, $bin, $dek)) { $ns = strncmp($e, 'NOSPACE:', 8) === 0; df_json(['ok' => false, 'error' => $ns ? substr($e, 8) : $e, 'nospace' => $ns], $ns ? 507 : 400); }
     df_json(['ok' => true]);
 }
 $in = json_decode((string)file_get_contents('php://input'), true);
@@ -147,8 +147,17 @@ try {
             $size = (int)($in['size'] ?? 0);
             if ($size <= 0) df_json(['ok' => false, 'error' => 'فایل خالی است.'], 400);
             if ($size > GAL_MAX) df_json(['ok' => false, 'error' => 'فایل بزرگ‌تر از ۱ گیگابایت است.'], 413);
+            $sp = gal_space();
+            if ($size > $sp['avail']) df_json(['ok' => false, 'error' => 'فضای کافی روی سرور نیست: این فایل ' . gal_fmt_size($size) . ' است و فقط ' . gal_fmt_size($sp['avail']) . ' جا مانده.', 'space' => $sp], 507);
             $id = gal_new(gal_clean_meta((array)($in['meta'] ?? [])), $size, $dek, $user);
             df_json(['ok' => true, 'id' => $id, 'chunk' => GAL_CHUNK]);
+        }
+        case 'gal_space':
+            df_json(['ok' => true, 'space' => gal_space()]);
+        case 'gal_status': { /* کدام تکه‌ها رسیده‌اند (برای ادامه‌ی بارگذاری قطع‌شده) */
+            $id = (string)($in['id'] ?? ''); $it = gal_items()[$id] ?? null;
+            if (!$it) df_json(['ok' => false, 'error' => 'این بارگذاری روی سرور پیدا نشد (شاید پاک شده باشد).'], 404);
+            df_json(['ok' => true, 'have' => gal_have($id), 'chunks' => (int)$it['chunks'], 'size' => (int)$it['size'], 'done' => !empty($it['done']), 'chunk' => GAL_CHUNK]);
         }
         case 'gal_done': {
             $id = (string)($in['id'] ?? '');

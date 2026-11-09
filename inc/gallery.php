@@ -44,13 +44,45 @@ function gal_clean_meta(array $in, array $old = []): array {
     if (!preg_match('~^[a-z0-9.+\-]+/[a-z0-9.+\-]+$~', $type)) $type = 'application/octet-stream';
     return ['name' => preg_replace('~[\\\\/:*?"<>|\x00-\x1f]+~u', '-', $s('name', 160)) ?: 'file', 'type' => $type,
         'kind' => (($in['kind'] ?? $old['kind'] ?? '') === 'catalog') ? 'catalog' : 'media',
-        'title' => $s('title', 160), 'desc' => $s('desc', 2000), 'folder' => $s('folder', 80)];
+        'title' => $s('title', 160), 'desc' => $s('desc', 2000), 'folder' => $s('folder', 80),
+        'fp' => preg_replace('/[^A-Za-z0-9_.:|\-]/', '', $s('fp', 200))]; /* نشانه‌ی فایل روی رایانه‌ی کاربر (نام، اندازه، زمان) برای ادامه‌ی بارگذاری */
+}
+function gal_have(string $id): array {
+    $out = [];
+    foreach (glob(gal_dir($id) . '/*.bin') ?: [] as $f) { $b = basename($f, '.bin'); if (ctype_digit($b)) $out[] = (int)$b; }
+    sort($out);
+    return $out;
+}
+/* فضای سرور برای گالری: فضای آزاد دیسک منهای ذخیره‌ی همیشگی و منهای باقیِ بارگذاری‌های نیمه‌کاره، و سقف دلخواه */
+function gal_space(): array {
+    $items = gal_items(); $used = 0; $pending = 0;
+    foreach ($items as $id => $it) {
+        $used += (int)$it['size'];
+        if (empty($it['done'])) $pending += max(0, (int)$it['size'] - count(gal_have((string)$id)) * GAL_CHUNK);
+    }
+    $free = @disk_free_space(df_data_dir());
+    $reserve = max(0, (int)DF_GALLERY_RESERVE_MB) * 1048576;
+    $quota = max(0, (int)DF_GALLERY_QUOTA_MB) * 1048576;
+    $avail = $free === false ? PHP_INT_MAX : (int)$free - $reserve - $pending;
+    if ($quota > 0) $avail = min($avail, $quota - $used);
+    return ['free' => $free === false ? -1 : (int)$free, 'used' => $used, 'pending' => $pending, 'reserve' => $reserve, 'quota' => $quota,
+        'avail' => max(0, $avail), 'max' => GAL_MAX, 'chunk' => GAL_CHUNK];
+}
+function gal_cleanup_stale(): void { /* بارگذاری نیمه‌کاره‌ای که ۱۰ روز دست نخورده، پاک می‌شود */
+    foreach (gal_items() as $id => $it) {
+        if (!empty($it['done'])) continue;
+        $last = (int)$it['at'];
+        foreach (glob(gal_dir((string)$id) . '/*.bin') ?: [] as $f) $last = max($last, (int)@filemtime($f));
+        if ($last < time() - 10 * 86400) gal_delete((string)$id);
+    }
 }
 function gal_public(string $dek): array {
+    if (random_int(1, 10) === 1) gal_cleanup_stale();
     $out = [];
     foreach (gal_items() as $id => $it) {
         $m = gal_meta($it, $dek);
-        $out[] = ['id' => $id, 'size' => (int)$it['size'], 'done' => !empty($it['done']), 'thumb' => !empty($it['thumb']), 'at' => ((int)$it['at']) * 1000, 'by' => $it['by'] ?? ''] + $m;
+        $out[] = ['id' => $id, 'size' => (int)$it['size'], 'done' => !empty($it['done']), 'thumb' => !empty($it['thumb']), 'at' => ((int)$it['at']) * 1000, 'by' => $it['by'] ?? '',
+            'chunks' => (int)$it['chunks'], 'have' => empty($it['done']) ? count(gal_have((string)$id)) : (int)$it['chunks']] + $m;
     }
     usort($out, fn($a, $b) => $b['at'] <=> $a['at']);
     return $out;
@@ -68,6 +100,8 @@ function gal_put_chunk(string $id, int $i, string $bin, string $dek): ?string {
     if (!$it) return 'فایل پیدا نشد.';
     if (!empty($it['done'])) return 'بارگذاری این فایل تمام شده است.';
     if ($i < 0 || $i >= (int)$it['chunks']) return 'شماره‌ی تکه نامعتبر است.';
+    $free = @disk_free_space(df_data_dir());
+    if ($free !== false && $free < 3 * GAL_CHUNK + 20 * 1048576) return 'NOSPACE:فضای سرور پر شد؛ بارگذاری متوقف شد. فضا آزاد کنید و «ادامه» را بزنید.';
     $want = ($i === (int)$it['chunks'] - 1) ? (int)$it['size'] - $i * GAL_CHUNK : GAL_CHUNK;
     if (strlen($bin) !== $want) return 'اندازه‌ی تکه درست نیست.';
     $k = gal_key($it, $dek); if ($k === null) return 'کلید فایل باز نشد.';

@@ -31,3 +31,8 @@ defined('DF_SHARE_IP_MAX_FAILS_PER_HOUR') || define('DF_SHARE_IP_MAX_FAILS_PER_H
 defined('DF_RATE_MAX_FETCH_PER_DAY') || define('DF_RATE_MAX_FETCH_PER_DAY', 2);
 /* اختیاری: کلید API سایت navasan.tech (اگر خالی باشد از tgju.org خوانده می‌شود) */
 defined('DF_NAVASAN_KEY') || define('DF_NAVASAN_KEY', '');
+
+/* کاتالوگ و گالری: سقف فضای همه‌ی فایل‌ها به مگابایت (۰ = بدون سقف؛ فقط فضای آزاد هاست سنجیده می‌شود)
+   و فضایی که همیشه آزاد می‌ماند تا خود سایت و پشتیبان‌ها جا داشته باشند (مگابایت) */
+defined('DF_GALLERY_QUOTA_MB') || define('DF_GALLERY_QUOTA_MB', 0);
+defined('DF_GALLERY_RESERVE_MB') || define('DF_GALLERY_RESERVE_MB', 300);
