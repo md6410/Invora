@@ -77,23 +77,17 @@ echo Packages OK.
 %PY% -m pywin32_postinstall -install -silent >> install.log 2>&1
 
 echo.
-echo [2/4] Removing an older service ^(if any^)...
+echo [2/4] Removing an older Windows service ^(from earlier versions, if any^)...
 %PY% agent.py stop >nul 2>&1
 %PY% agent.py remove >nul 2>&1
 
-echo [3/4] Installing the Windows service "Invora Print Station" ^(starts with Windows^)...
-%PY% agent.py --startup auto install >> install.log 2>&1
+echo [3/4] Registering the print station to start with Windows ^(Task Scheduler, account SYSTEM^)...
+%PY% agent.py install --quiet >> install.log 2>&1
 if errorlevel 1 goto task
-sc failure InvoraPrint reset= 86400 actions= restart/5000/restart/5000/restart/30000 >nul 2>&1
 
-echo [4/4] Starting the service...
-%PY% agent.py start >> install.log 2>&1
-if errorlevel 1 goto task
-timeout /t 3 >nul
-echo.
-echo Done. The print station runs as a Windows service and starts by itself after every restart.
+echo [4/4] Done. The print station starts by itself with Windows and restarts itself if it stops.
 echo Settings page: http://localhost:8766
-echo done service >> install.log
+echo done task-scheduler >> install.log
 start "" http://localhost:8766
 pause
 exit /b 0

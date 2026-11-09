@@ -308,7 +308,11 @@ try {
 
         /* ---------- central printing (print stations) ---------- */
         case 'ps_list':
-            df_json(['ok' => true, 'stations' => prn_stations_public($dek), 'jobs' => prn_jobs_public($dek, (int)($in['limit'] ?? 40))]);
+            df_json(['ok' => true, 'stations' => prn_stations_public($dek), 'jobs' => prn_jobs_public($dek, (int)($in['limit'] ?? 40)), 'agent' => prn_exe_info()]);
+        case 'ps_agent': /* fetch the ready-made Windows program from GitHub now (also done automatically on download) */
+            if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
+            prn_exe(true);
+            df_json(['ok' => true, 'agent' => prn_exe_info()]);
         case 'ps_add': {
             if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
             [$sid] = prn_station_add((string)($in['name'] ?? ''), $dek, $user);

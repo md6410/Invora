@@ -141,7 +141,30 @@ function prn_status(string $sid, string $id, string $st, string $err): bool {
     return $ok;
 }
 
-/* ---------- بسته‌ی نصب برنامه‌ی ایستگاه (ZIP، با نشانی سایت و توکن آماده) ---------- */
+/* ---------- بسته‌ی نصب برنامه‌ی ایستگاه (ZIP، با نشانی سایت و توکن آماده) ----------
+   نسخه‌ی اصلی، برنامه‌ی آماده‌ی ویندوز است (InvoraPrint.exe: پایتون و همه‌ی کتابخانه‌ها داخلش) که GitHub Actions
+   روی ویندوز می‌سازد و می‌آزماید و در Release «print-agent» می‌گذارد. سایت آن را یک بار می‌گیرد و نگه می‌دارد
+   (هر ۶ ساعت نسخه‌اش را می‌سنجد)؛ پس نصب روی کامپیوتر دفتر به اینترنت و پایتون نیازی ندارد. */
+function prn_exe(bool $force = false): ?array {
+    $dir = df_path('agent-bin'); $exe = $dir . '/InvoraPrint.exe';
+    $meta = df_read('agent-bin.json', []);
+    if ($force || !is_file($exe) || (int)($meta['checked'] ?? 0) < time() - 6 * 3600) {
+        $base = DF_GH_WEB . '/' . DF_UPDATE_REPO . '/releases/download/print-agent/';
+        [$c, $v] = df_http($base . 'version.txt', 20);
+        $v = trim((string)$v);
+        if ($c === 200 && preg_match('/^[0-9][\w.\- ]{0,80}$/', $v) && ($v !== ($meta['ver'] ?? '') || !is_file($exe))) {
+            @set_time_limit(300);
+            [$c2, $b] = df_http($base . 'InvoraPrint.exe', 280);
+            if ($c2 === 200 && strlen($b) > 1000000 && strncmp($b, 'MZ', 2) === 0) { df_write_atomic($exe, $b); $meta['ver'] = $v; $meta['size'] = strlen($b); $meta['at'] = time(); }
+            else $meta['err'] = 'دانلود فایل برنامه از گیت‌هاب نشد (کد ' . $c2 . ').';
+        } elseif ($c !== 200) $meta['err'] = 'نسخه‌ی برنامه از گیت‌هاب خوانده نشد (کد ' . $c . ').';
+        if (is_file($exe) && ($meta['ver'] ?? '') === $v) unset($meta['err']);
+        $meta['checked'] = time();
+        df_write('agent-bin.json', $meta);
+    }
+    return is_file($exe) ? ['path' => $exe, 'ver' => (string)($meta['ver'] ?? ''), 'size' => (int)filesize($exe)] : null;
+}
+function prn_exe_info(): array { $m = df_read('agent-bin.json', []); $exe = df_path('agent-bin/InvoraPrint.exe'); return ['ready' => is_file($exe), 'ver' => (string)($m['ver'] ?? ''), 'size' => is_file($exe) ? (int)filesize($exe) : 0, 'err' => (string)($m['err'] ?? ''), 'checked' => (int)($m['checked'] ?? 0) * 1000]; }
 function prn_agent_files(): array {
     $dir = df_app_root() . '/print-agent';
     $out = [];
@@ -153,7 +176,8 @@ function prn_zip(array $files): string {
     $dt = (($t['year'] - 1980) << 25) | ($t['mon'] << 21) | ($t['mday'] << 16) | ($t['hours'] << 11) | ($t['minutes'] << 5) | intdiv($t['seconds'], 2);
     foreach ($files as $name => $body) {
         $name = 'invora-print/' . $name; $crc = crc32($body); $len = strlen($body); $off = strlen($data);
-        $comp = function_exists('gzdeflate') ? gzdeflate($body, 9) : $body; $m = function_exists('gzdeflate') ? 8 : 0;
+        $store = !function_exists('gzdeflate') || strlen($body) > 4 * 1048576;   /* the big .exe is stored (deflating it costs CPU and saves little) */
+        $comp = $store ? $body : gzdeflate($body, 9); $m = $store ? 0 : 8;
         $h = pack('vvvVVVVvv', 20, 0x0800, $m, $dt, $crc, strlen($comp), $len, strlen($name), 0);
         $data .= "PK\x03\x04" . $h . $name . $comp;
         $cd .= "PK\x01\x02" . pack('vvvvVVVVvvvvvVV', 20, 20, 0x0800, $m, $dt, $crc, strlen($comp), $len, strlen($name), 0, 0, 0, 0, 0, $off) . $name;

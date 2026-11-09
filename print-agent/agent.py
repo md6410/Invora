@@ -38,8 +38,11 @@ import urllib.request
 import zlib
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-VERSION = "1.0"
-HERE = os.path.dirname(os.path.abspath(__file__))
+VERSION = "2.0"
+FROZEN = bool(getattr(sys, "frozen", False))          # the ready-made InvoraPrint.exe (PyInstaller)
+HERE = os.path.dirname(os.path.abspath(sys.executable if FROZEN else __file__))
+INSTALL_DIR = os.path.join(os.environ.get("PROGRAMDATA", r"C:\ProgramData"), "InvoraPrint")
+TASK_NAME = "Invora Print Station"
 CONFIG_PATH = os.path.join(HERE, "config.json")
 LOG_PATH = os.path.join(HERE, "agent.log")
 IS_WINDOWS = os.name == "nt"
@@ -76,7 +79,8 @@ def log(msg, kind="info"):
         STATE["log"].append(line)
         STATE["log"] = STATE["log"][-200:]
     try:
-        print(line, flush=True)
+        if sys.stdout:
+            print(line, flush=True)
     except Exception:
         pass
     try:
@@ -642,7 +646,7 @@ def run():
 
 
 # ------------------------------------------------------------ سرویس ویندوز
-SERVICE_CMDS = {"install", "remove", "start", "stop", "restart", "update", "debug"}
+SERVICE_CMDS = {"service-install", "remove", "start", "stop", "restart", "update", "debug"}  # pywin32 service (python agent.py only)
 if IS_WINDOWS:
     try:
         import servicemanager
@@ -677,13 +681,322 @@ if IS_WINDOWS:
         InvoraPrintService = None
 
 
+# ------------------------------------------------------------ نصب خودکار روی ویندوز (برای InvoraPrint.exe)
+#
+# دوبار کلیک روی InvoraPrint.exe:
+#   - اگر نصب نشده: اجازه‌ی Administrator می‌گیرد، خودش را در C:\ProgramData\InvoraPrint کپی می‌کند،
+#     config.json کنارش (نشانی سایت و توکن) را برمی‌دارد، در Task Scheduler طوری ثبت می‌شود که با روشن
+#     شدن ویندوز (حتی بدون ورود کاربر، با حساب SYSTEM) اجرا شود و اگر بسته شد هر ۵ دقیقه دوباره بالا بیاید،
+#     همان لحظه روشن می‌شود و صفحه‌ی تنظیمات را باز می‌کند؛
+#   - اگر نصب شده و روشن است: صفحه‌ی تنظیمات را باز می‌کند (و اگر نسخه‌ی تازه‌تر است، جایگزین می‌کند).
+# فرمان‌ها: InvoraPrint.exe install | uninstall | run | selftest --out file.json
+
+def _msg(text, title="Invora Print Station", err=False):
+    if not IS_WINDOWS:
+        print(text)
+        return
+    try:
+        import ctypes
+        ctypes.windll.user32.MessageBoxW(0, text, title, 0x10 if err else 0x40)
+    except Exception:
+        print(text)
+
+
+def _is_admin():
+    try:
+        import ctypes
+        return bool(ctypes.windll.shell32.IsUserAnAdmin())
+    except Exception:
+        return False
+
+
+def _elevate(args):
+    """همین برنامه را با اجازه‌ی Administrator دوباره اجرا می‌کند."""
+    import ctypes
+    exe = sys.executable
+    params = " ".join('"%s"' % a for a in ([] if FROZEN else [os.path.abspath(__file__)]) + args)
+    r = ctypes.windll.shell32.ShellExecuteW(None, "runas", exe, params, HERE, 1)
+    return r > 32
+
+
+def _single_instance():
+    """فقط یک نسخه‌ی در حال اجرا (کار چاپی دو بار چاپ نشود)."""
+    if not IS_WINDOWS:
+        return True
+    try:
+        import ctypes
+        k = ctypes.windll.kernel32
+        k.CreateMutexW.restype = ctypes.c_void_p
+        h = k.CreateMutexW(None, False, "Global\\InvoraPrintStation")
+        err = k.GetLastError()
+        globals()["_MUTEX"] = h
+        return bool(h) and err not in (183, 5)          # ERROR_ALREADY_EXISTS / ACCESS_DENIED
+    except Exception:
+        return True
+
+
+def _ui_alive(timeout=1.5):
+    try:
+        with urllib.request.build_opener(urllib.request.ProxyHandler({})).open(
+                "http://127.0.0.1:%d/state" % int(num(CONFIG.get("web_port"), 8766)), timeout=timeout) as r:
+            return r.status == 200
+    except Exception:
+        return False
+
+
+def _open_ui():
+    import webbrowser
+    webbrowser.open("http://localhost:%d" % int(num(CONFIG.get("web_port"), 8766)))
+
+
+def _run_cmd(cmd, timeout=60):
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout,
+                           creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+        return r.returncode, (r.stdout or "") + (r.stderr or "")
+    except Exception as e:
+        return -1, str(e)
+
+
+def _task_xml(exe):
+    esc_ = htmlmod.escape
+    return """<?xml version="1.0" encoding="UTF-16"?>
+<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo><Description>Invora print station: prints documents and labels sent from the Invora website.</Description></RegistrationInfo>
+  <Triggers>
+    <BootTrigger><Enabled>true</Enabled><Delay>PT20S</Delay></BootTrigger>
+    <TimeTrigger><StartBoundary>2024-01-01T00:00:00</StartBoundary><Enabled>true</Enabled>
+      <Repetition><Interval>PT5M</Interval><StopAtDurationEnd>false</StopAtDurationEnd></Repetition></TimeTrigger>
+  </Triggers>
+  <Principals><Principal id="Author"><UserId>S-1-5-18</UserId><RunLevel>HighestAvailable</RunLevel></Principal></Principals>
+  <Settings>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+    <AllowHardTerminate>true</AllowHardTerminate>
+    <StartWhenAvailable>true</StartWhenAvailable>
+    <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>
+    <IdleSettings><StopOnIdleEnd>false</StopOnIdleEnd><RestartOnIdle>false</RestartOnIdle></IdleSettings>
+    <AllowStartOnDemand>true</AllowStartOnDemand>
+    <Enabled>true</Enabled>
+    <Hidden>false</Hidden>
+    <RunOnlyIfIdle>false</RunOnlyIfIdle>
+    <WakeToRun>false</WakeToRun>
+    <ExecutionTimeLimit>PT0S</ExecutionTimeLimit>
+    <Priority>6</Priority>
+    <RestartOnFailure><Interval>PT1M</Interval><Count>999</Count></RestartOnFailure>
+  </Settings>
+  <Actions Context="Author"><Exec><Command>%s</Command><Arguments>run</Arguments><WorkingDirectory>%s</WorkingDirectory></Exec></Actions>
+</Task>
+""" % (esc_(exe), esc_(os.path.dirname(exe)))
+
+
+def _task_exists():
+    return _run_cmd(["schtasks", "/Query", "/TN", TASK_NAME])[0] == 0
+
+
+def _merge_config(src_dir, dst_path):
+    """config.json کنار فایل دانلودشده (نشانی سایت، توکن) را با تنظیمات قبلیِ نصب‌شده یکی می‌کند."""
+    old = {}
+    try:
+        with open(dst_path, "r", encoding="utf-8-sig") as f:
+            old = json.load(f) or {}
+    except Exception:
+        pass
+    new = {}
+    try:
+        with open(os.path.join(src_dir, "config.json"), "r", encoding="utf-8-sig") as f:
+            new = json.load(f) or {}
+    except Exception:
+        pass
+    cfg = dict(DEFAULTS)
+    cfg.update(old)
+    for k in ("api_url", "token"):
+        if str(new.get(k) or "").strip():
+            cfg[k] = new[k]
+    if not isinstance(cfg.get("printers"), dict):
+        cfg["printers"] = {}
+    with open(dst_path, "w", encoding="utf-8") as f:
+        json.dump(cfg, f, ensure_ascii=False, indent=2)
+    return cfg
+
+
+def install(quiet=False):
+    if not IS_WINDOWS:
+        print("نصب خودکار فقط روی ویندوز است. روی لینوکس/مک: python3 agent.py")
+        return 1
+    if not _is_admin():
+        if _elevate(["install"] + (["--quiet"] if quiet else [])):
+            return 0
+        _msg("برای نصب، اجازه‌ی Administrator لازم است. دوباره اجرا کنید و «Yes» را بزنید.", err=True)
+        return 1
+    steps = []
+    try:
+        os.makedirs(INSTALL_DIR, exist_ok=True)
+        exe_dst = os.path.join(INSTALL_DIR, "InvoraPrint.exe" if FROZEN else "agent.py")
+        # نسخه‌ی قبلی را ببند تا فایل آزاد شود
+        _run_cmd(["schtasks", "/End", "/TN", TASK_NAME])
+        if FROZEN:
+            _run_cmd(["taskkill", "/F", "/IM", "InvoraPrint.exe", "/FI", "PID ne %d" % os.getpid()])
+        time.sleep(1.5)
+        src = sys.executable if FROZEN else os.path.abspath(__file__)
+        if os.path.normcase(os.path.abspath(src)) != os.path.normcase(os.path.abspath(exe_dst)):
+            for _ in range(10):
+                try:
+                    shutil.copy2(src, exe_dst)
+                    break
+                except PermissionError:
+                    time.sleep(1)
+            else:
+                raise RuntimeError("فایل قبلی برنامه آزاد نشد؛ رایانه را یک بار ری‌استارت کنید و دوباره اجرا کنید.")
+        steps.append("copied")
+        cfg = _merge_config(HERE, os.path.join(INSTALL_DIR, "config.json"))
+        steps.append("config")
+        cmd_exe = exe_dst if FROZEN else '"%s" "%s"' % (sys.executable.replace("python.exe", "pythonw.exe"), exe_dst)
+        xml_path = os.path.join(INSTALL_DIR, "task.xml")
+        with open(xml_path, "w", encoding="utf-16") as f:
+            f.write(_task_xml(exe_dst if FROZEN else sys.executable.replace("python.exe", "pythonw.exe")))
+        if not FROZEN:   # python agent.py: the task runs pythonw with the script
+            with open(xml_path, "r", encoding="utf-16") as f:
+                x = f.read().replace("<Arguments>run</Arguments>", "<Arguments>\"%s\" run</Arguments>" % htmlmod.escape(exe_dst))
+            with open(xml_path, "w", encoding="utf-16") as f:
+                f.write(x)
+        rc, out = _run_cmd(["schtasks", "/Create", "/TN", TASK_NAME, "/XML", xml_path, "/F"])
+        if rc != 0:
+            raise RuntimeError("ثبت در Task Scheduler نشد: " + out.strip()[:300])
+        steps.append("task")
+        _run_cmd(["schtasks", "/Run", "/TN", TASK_NAME])
+        try:   # میان‌بر صفحه‌ی تنظیمات روی دسکتاپ همه‌ی کاربران
+            pub = os.path.join(os.environ.get("PUBLIC", r"C:\Users\Public"), "Desktop", "Invora Print Station.url")
+            with open(pub, "w", encoding="utf-8") as f:
+                f.write("[InternetShortcut]\nURL=http://localhost:%d\n" % int(num(cfg.get("web_port"), 8766)))
+        except Exception:
+            pass
+        ok = False
+        for _ in range(30):
+            if _ui_alive():
+                ok = True
+                break
+            time.sleep(1)
+        steps.append("running" if ok else "not-yet")
+        if not quiet:
+            if ok:
+                _open_ui()
+                _msg("ایستگاه چاپ Invora نصب و روشن شد.\n\nاز این به بعد با روشن شدن رایانه خودش اجرا می‌شود (حتی بدون ورود کاربر) و اگر بسته شود خودش دوباره بالا می‌آید.\n\nدر صفحه‌ای که باز شد، کاغذ هر چاپگر را تعیین کنید و «چاپ آزمایشی» بزنید.\nمیان‌بر «Invora Print Station» هم روی دسکتاپ گذاشته شد.")
+            else:
+                _msg("نصب انجام شد ولی برنامه هنوز جواب نمی‌دهد. چند ثانیه بعد میان‌بر «Invora Print Station» روی دسکتاپ را باز کنید.\nجزئیات: " + os.path.join(INSTALL_DIR, "agent.log"))
+        return 0
+    except Exception as e:
+        if not quiet:
+            _msg("نصب کامل نشد:\n%s\n\nمراحل انجام‌شده: %s" % (e, ", ".join(steps) or "-"), err=True)
+        print("install failed:", e, steps)
+        return 1
+
+
+def uninstall(quiet=False):
+    if IS_WINDOWS and not _is_admin():
+        if _elevate(["uninstall"] + (["--quiet"] if quiet else [])):
+            return 0
+        return 1
+    _run_cmd(["schtasks", "/End", "/TN", TASK_NAME])
+    _run_cmd(["schtasks", "/Delete", "/TN", TASK_NAME, "/F"])
+    if FROZEN:
+        _run_cmd(["taskkill", "/F", "/IM", "InvoraPrint.exe", "/FI", "PID ne %d" % os.getpid()])
+    try:
+        os.remove(os.path.join(os.environ.get("PUBLIC", r"C:\Users\Public"), "Desktop", "Invora Print Station.url"))
+    except Exception:
+        pass
+    if not quiet:
+        _msg("ایستگاه چاپ Invora حذف شد. (تنظیمات در %s ماند)" % INSTALL_DIR)
+    return 0
+
+
+def selftest(out_path):
+    """برای آزمون خودکار در GitHub Actions و عیب‌یابی: همه‌ی بخش‌های لازم را امتحان می‌کند."""
+    res = {"version": VERSION, "frozen": FROZEN, "python": sys.version.split()[0], "user": os.environ.get("USERNAME", ""), "ok": True, "checks": {}}
+
+    def chk(name, fn):
+        try:
+            res["checks"][name] = {"ok": True, "info": fn()}
+        except Exception as e:
+            res["checks"][name] = {"ok": False, "info": "%s: %s" % (type(e).__name__, e)}
+            res["ok"] = False
+    chk("cryptography", lambda: __import__("cryptography").__version__)
+    chk("decrypt", _selftest_decrypt)
+    chk("pypdfium2", lambda: __import__("pypdfium2").V_PDFIUM if hasattr(__import__("pypdfium2"), "V_PDFIUM") else "ok")
+    chk("pillow", lambda: __import__("PIL").__version__)
+    if IS_WINDOWS:
+        chk("pywin32", lambda: "%d printer(s)" % len(__import__("win32print").EnumPrinters(6)))
+    chk("printers", lambda: system_printers()[0])
+    chk("browser", lambda: find_chrome() or (_ for _ in ()).throw(RuntimeError("Edge/Chrome not found")))
+    chk("html_to_pdf_and_render", _selftest_render)
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(res, f, ensure_ascii=False, indent=2)
+    return 0 if res["ok"] else 1
+
+
+def _selftest_decrypt():
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    tok = "selftest-token-0123456789"
+    body = json.dumps({"title": "t", "html": "<b>ok</b>"}).encode()
+    comp = zlib.compressobj(6, zlib.DEFLATED, -15)
+    plain = b"\x01" + comp.compress(body) + comp.flush()
+    iv = os.urandom(12)
+    ct = AESGCM(job_key(tok)).encrypt(iv, plain, b"pjob")
+    blob = b"DFE1" + iv + ct[-16:] + ct[:-16]
+    return decrypt_job(base64.b64encode(blob).decode(), tok)["html"]
+
+
+def _selftest_render():
+    html = ("<!doctype html><html lang='fa' dir='rtl'><head><meta charset='utf-8'><style>@page{size:100mm 150mm;margin:0}"
+            "body{margin:0;font:14pt Tahoma}</style></head><body><div style='padding:10mm'>آزمون چاپ ۱۲۳</div></body></html>")
+    fd, pdf = tempfile.mkstemp(suffix=".pdf")
+    os.close(fd)
+    try:
+        html_to_pdf(html, pdf)
+        pages = pdf_pages(pdf, 100)
+        return "pdf %d bytes, %d page(s), %dx%d px" % (os.path.getsize(pdf), len(pages), pages[0].size[0], pages[0].size[1])
+    finally:
+        try:
+            os.remove(pdf)
+        except Exception:
+            pass
+
+
 def main():
     args = sys.argv[1:]
-    if args and any(a in SERVICE_CMDS for a in args):
+    quiet = "--quiet" in args
+    cmd = next((a for a in args if not a.startswith("-")), "")
+    if cmd == "selftest":
+        out = args[args.index("--out") + 1] if "--out" in args else os.path.join(HERE, "selftest.json")
+        sys.exit(selftest(out))
+    if cmd == "install":
+        sys.exit(install(quiet))
+    if cmd == "uninstall":
+        sys.exit(uninstall(quiet))
+    if cmd in SERVICE_CMDS:
         if not IS_WINDOWS or InvoraPrintService is None:
             print("سرویس ویندوز فقط روی ویندوز و با pywin32 ممکن است: pip install pywin32")
             sys.exit(1)
+        sys.argv = [sys.argv[0]] + ["install" if a == "service-install" else a for a in args]
         win32serviceutil.HandleCommandLine(InvoraPrintService)
+        return
+    if cmd == "" and FROZEN and IS_WINDOWS:
+        # دوبار کلیک روی InvoraPrint.exe
+        installed = os.path.isfile(os.path.join(INSTALL_DIR, "InvoraPrint.exe")) and _task_exists()
+        here_is_installed = os.path.normcase(HERE) == os.path.normcase(INSTALL_DIR)
+        if installed and (here_is_installed or not os.path.isfile(os.path.join(HERE, "config.json"))):
+            if not _ui_alive():
+                _run_cmd(["schtasks", "/Run", "/TN", TASK_NAME])
+                for _ in range(15):
+                    if _ui_alive():
+                        break
+                    time.sleep(1)
+            _open_ui()
+            return
+        sys.exit(install(quiet))
+    # cmd == "run" (Task Scheduler) or "python agent.py"
+    if not _single_instance():
         return
     try:
         run()

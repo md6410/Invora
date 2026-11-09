@@ -9,3 +9,6 @@
 /inc/config.local.php
 /.invora-deploy
 /inc/release.json
+/print-agent/dist/
+/print-agent/build/
+/print-agent/*.spec

@@ -17,13 +17,31 @@ if ($do === 'download') {
     df_headers('api');
     df_session_start();
     if (!df_logged_in()) { http_response_code(401); header('Content-Type: text/plain; charset=utf-8'); exit('ابتدا وارد برنامه شوید.'); }
-    $files = prn_agent_files();
-    if (!isset($files['agent.py'])) { http_response_code(404); header('Content-Type: text/plain; charset=utf-8'); exit('فایل‌های برنامه‌ی ایستگاه روی سایت نیست.'); }
     $cfg = ['api_url' => df_base_url() . 'print-api.php', 'token' => '', 'poll_seconds' => 4, 'web_port' => 8766, 'printers' => new stdClass()];
     $sid = (string)($_GET['sid'] ?? '');
     $dek = df_dek();
-    if ($sid !== '' && $dek && !empty($_SESSION['admin'])) $cfg['token'] = (string)(prn_station_token($sid, $dek) ?? '');
-    $files['config.json'] = json_encode($cfg, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $isAdmin = !empty($_SESSION['admin']);
+    session_write_close();
+    if ($sid !== '' && $dek && $isAdmin) $cfg['token'] = (string)(prn_station_token($sid, $dek) ?? '');
+    $cfgJson = json_encode($cfg, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $exe = isset($_GET['py']) ? null : prn_exe();
+    if ($exe) {
+        $files = ['InvoraPrint.exe' => (string)file_get_contents($exe['path']), 'config.json' => $cfgJson, 'README.txt' => implode("\r\n", [
+            'Invora Print Station ' . $exe['ver'], '',
+            '1. Unzip this folder first (do not run it from inside the ZIP).',
+            '2. Double-click InvoraPrint.exe and answer Yes.',
+            '   If Windows SmartScreen says "Windows protected your PC": click "More info", then "Run anyway".',
+            '3. The settings page opens (http://localhost:8766): set the paper of each printer and press "Test print".', '',
+            'It starts by itself with Windows (Task Scheduler, account SYSTEM, even before anyone logs in)',
+            'and starts again by itself if it ever stops. No Python or internet download is needed.',
+            'To update: download again from the site and run the new InvoraPrint.exe (settings are kept).',
+            'To remove: open a Command Prompt here and run:  InvoraPrint.exe uninstall',
+            'Files and log: C:\\ProgramData\\InvoraPrint', ''])];
+    } else {
+        $files = prn_agent_files();
+        if (!isset($files['agent.py'])) { http_response_code(404); header('Content-Type: text/plain; charset=utf-8'); exit('فایل‌های برنامه‌ی ایستگاه روی سایت نیست.'); }
+        $files['config.json'] = $cfgJson;
+    }
     header('Content-Type: application/zip');
     header('Content-Disposition: attachment; filename="invora-print.zip"');
     echo prn_zip($files);
