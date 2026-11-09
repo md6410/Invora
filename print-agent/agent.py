@@ -791,6 +791,20 @@ def _task_xml(exe):
 """ % (esc_(exe), esc_(os.path.dirname(exe)))
 
 
+def _kill_others():
+    """نسخه‌های دیگرِ در حال اجرا را می‌بندد. InvoraPrint.exe (تک‌فایلی) دو پردازش دارد: راه‌انداز و خود برنامه؛
+    هر دوی خودمان (این پردازش و پدرش) باید از کشتن معاف باشند، وگرنه راه‌اندازِ خودمان بسته می‌شود."""
+    me = {os.getpid()}
+    try:
+        me.add(os.getppid())
+    except Exception:
+        pass
+    cmd = ["taskkill", "/F", "/IM", "InvoraPrint.exe"]
+    for pid in me:
+        cmd += ["/FI", "PID ne %d" % pid]
+    _run_cmd(cmd)
+
+
 def _task_exists():
     return _run_cmd(["schtasks", "/Query", "/TN", TASK_NAME])[0] == 0
 
@@ -850,7 +864,7 @@ def install(quiet=False):
         # نسخه‌ی قبلی را ببند تا فایل آزاد شود
         _run_cmd(["schtasks", "/End", "/TN", TASK_NAME])
         if FROZEN:
-            _run_cmd(["taskkill", "/F", "/IM", "InvoraPrint.exe", "/FI", "PID ne %d" % os.getpid()])
+            _kill_others()
         time.sleep(1.5)
         src = sys.executable if FROZEN else os.path.abspath(__file__)
         if os.path.normcase(os.path.abspath(src)) != os.path.normcase(os.path.abspath(exe_dst)):
@@ -917,7 +931,7 @@ def uninstall(quiet=False):
     _run_cmd(["schtasks", "/End", "/TN", TASK_NAME])
     _run_cmd(["schtasks", "/Delete", "/TN", TASK_NAME, "/F"])
     if FROZEN:
-        _run_cmd(["taskkill", "/F", "/IM", "InvoraPrint.exe", "/FI", "PID ne %d" % os.getpid()])
+        _kill_others()
     try:
         os.remove(os.path.join(os.environ.get("PUBLIC", r"C:\Users\Public"), "Desktop", "Invora Print Station.url"))
     except Exception:
