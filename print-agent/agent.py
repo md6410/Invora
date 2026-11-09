@@ -821,6 +821,18 @@ def _merge_config(src_dir, dst_path):
     return cfg
 
 
+def _ilog(msg):
+    """گزارش نصب: کنار فایل دانلودشده و در پوشه‌ی نصب (برنامه پنجره‌ی متنی ندارد)."""
+    line = time.strftime("%Y-%m-%d %H:%M:%S") + "  " + str(msg) + "\n"
+    for d in (HERE, INSTALL_DIR):
+        try:
+            os.makedirs(d, exist_ok=True)
+            with open(os.path.join(d, "install.log"), "a", encoding="utf-8") as f:
+                f.write(line)
+        except Exception:
+            pass
+
+
 def install(quiet=False):
     if not IS_WINDOWS:
         print("نصب خودکار فقط روی ویندوز است. روی لینوکس/مک: python3 agent.py")
@@ -831,6 +843,7 @@ def install(quiet=False):
         _msg("برای نصب، اجازه‌ی Administrator لازم است. دوباره اجرا کنید و «Yes» را بزنید.", err=True)
         return 1
     steps = []
+    _ilog("install %s (frozen=%s, admin=%s, from %s)" % (VERSION, FROZEN, _is_admin(), HERE))
     try:
         os.makedirs(INSTALL_DIR, exist_ok=True)
         exe_dst = os.path.join(INSTALL_DIR, "InvoraPrint.exe" if FROZEN else "agent.py")
@@ -862,10 +875,11 @@ def install(quiet=False):
             with open(xml_path, "w", encoding="utf-16") as f:
                 f.write(x)
         rc, out = _run_cmd(["schtasks", "/Create", "/TN", TASK_NAME, "/XML", xml_path, "/F"])
+        _ilog("schtasks /Create -> %s %s" % (rc, out.strip()))
         if rc != 0:
             raise RuntimeError("ثبت در Task Scheduler نشد: " + out.strip()[:300])
         steps.append("task")
-        _run_cmd(["schtasks", "/Run", "/TN", TASK_NAME])
+        _ilog("schtasks /Run -> %s" % (_run_cmd(["schtasks", "/Run", "/TN", TASK_NAME]),))
         try:   # میان‌بر صفحه‌ی تنظیمات روی دسکتاپ همه‌ی کاربران
             pub = os.path.join(os.environ.get("PUBLIC", r"C:\Users\Public"), "Desktop", "Invora Print Station.url")
             with open(pub, "w", encoding="utf-8") as f:
@@ -879,6 +893,7 @@ def install(quiet=False):
                 break
             time.sleep(1)
         steps.append("running" if ok else "not-yet")
+        _ilog("done: " + ", ".join(steps))
         if not quiet:
             if ok:
                 _open_ui()
@@ -887,6 +902,7 @@ def install(quiet=False):
                 _msg("نصب انجام شد ولی برنامه هنوز جواب نمی‌دهد. چند ثانیه بعد میان‌بر «Invora Print Station» روی دسکتاپ را باز کنید.\nجزئیات: " + os.path.join(INSTALL_DIR, "agent.log"))
         return 0
     except Exception as e:
+        _ilog("FAILED after %s: %s\n%s" % (steps, e, traceback.format_exc()))
         if not quiet:
             _msg("نصب کامل نشد:\n%s\n\nمراحل انجام‌شده: %s" % (e, ", ".join(steps) or "-"), err=True)
         print("install failed:", e, steps)

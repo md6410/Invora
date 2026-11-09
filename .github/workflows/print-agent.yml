@@ -40,7 +40,8 @@ jobs:
           '{"api_url":"https://example.invalid/print-api.php","token":"ci-test-token-0123456789abcd"}' | Set-Content dist\config.json -Encoding utf8
           $p = Start-Process dist\InvoraPrint.exe -ArgumentList 'install','--quiet' -Wait -PassThru
           "install exit code: $($p.ExitCode)"
-          if ($p.ExitCode -ne 0) { throw "install failed" }
+          Get-Content dist\install.log -ErrorAction SilentlyContinue
+          if ($p.ExitCode -ne 0) { Get-Content C:\ProgramData\InvoraPrint\task.xml -ErrorAction SilentlyContinue; throw "install failed" }
           schtasks /Query /TN "Invora Print Station" /V /FO LIST | Select-String 'Status|Run As User|Task To Run'
           $ok = $false
           for ($i = 0; $i -lt 40; $i++) { try { $r = Invoke-WebRequest http://127.0.0.1:8766/state -UseBasicParsing -TimeoutSec 2; "state: $($r.Content)"; $ok = $true; break } catch { Start-Sleep 1 } }
