@@ -40,3 +40,5 @@ print-agent/install-windows.bat
 print-agent/run-windows.bat
 media.php
 inc/gallery.php
+v.php
+inc/verify.php

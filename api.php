@@ -201,6 +201,24 @@ try {
             df_json(['ok' => true, 'events' => df_share_log_read($h, $dek)]);
         }
 
+        /* ---------- QR تأیید اصالت (inc/verify.php) ---------- */
+        case 'vf_put': {
+            $t = (string)($in['tok'] ?? ''); $doc = (string)($in['docId'] ?? '');
+            if (!vf_valid_token($t) || $doc === '' || strlen($doc) > 64) df_json(['ok' => false, 'error' => 'bad input'], 400);
+            $html = isset($in['html']) ? (string)$in['html'] : null;
+            if ($html !== null && ($html === '' || strlen($html) > 8 * 1024 * 1024)) df_json(['ok' => false, 'error' => 'bad input'], 400);
+            df_log_keys_ensure($dek);
+            $r = vf_put($t, $doc, $html, trim((string)($in['name'] ?? '')), (string)($in['mobile'] ?? ''), !empty($in['dead']), $user);
+            if (!$r['ok']) df_json($r, 409);
+            df_json(['ok' => true, 'vf' => vf_public($r['id'], vf_all()[$r['id']] ?? []), 'sms' => sms_ready()]);
+        }
+        case 'vf_info': {
+            $t = (string)($in['tok'] ?? '');
+            if (!vf_valid_token($t)) df_json(['ok' => false, 'error' => 'bad input'], 400);
+            $h = vf_hash($t); $r = vf_all()[$h] ?? null;
+            df_json(['ok' => true, 'vf' => $r ? vf_public($h, $r) : null, 'events' => $r && !empty($in['log']) ? df_share_log_read($h, $dek) : []]);
+        }
+
         case 'share_sms': { /* لینک (و اگر خواستید رمز) با پیامک الگو برای مشتری */
             $h = (string)($in['id'] ?? '');
             $sh = df_read('shares.json', [])[$h] ?? null;

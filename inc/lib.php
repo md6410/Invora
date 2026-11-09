@@ -13,6 +13,7 @@ require __DIR__ . '/passkey.php';
 require __DIR__ . '/sms.php';
 require __DIR__ . '/print.php';
 require __DIR__ . '/gallery.php';
+require __DIR__ . '/verify.php';
 
 /* ---------------- storage ---------------- */
 function df_deny_htaccess(): string {
