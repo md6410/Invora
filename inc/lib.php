@@ -12,6 +12,7 @@ require __DIR__ . '/update.php';
 require __DIR__ . '/passkey.php';
 require __DIR__ . '/sms.php';
 require __DIR__ . '/print.php';
+require __DIR__ . '/gallery.php';
 
 /* ---------------- storage ---------------- */
 function df_deny_htaccess(): string {
@@ -104,7 +105,7 @@ function df_headers(string $kind, string $nonce = ''): void {
     if ($kind === 'app') {
         header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'");
     } elseif ($kind === 'share') {
-        header("Content-Security-Policy: default-src 'none'; script-src 'nonce-$nonce'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src data: https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src data:; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
+        header("Content-Security-Policy: default-src 'none'; script-src 'nonce-$nonce'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data:; media-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
         header('X-Robots-Tag: noindex, nofollow');
     } else {
         header("Content-Security-Policy: default-src 'none'; frame-ancestors 'none'");
@@ -309,7 +310,8 @@ function df_share_public(string $h, array $s, string $dek): array {
     elseif (($s['max'] ?? 0) > 0 && ($s['used'] ?? 0) >= $s['max']) $state = 'exhausted';
     $t = !empty($s['te']) ? df_dec((string)base64_decode($s['te']), $dek, 'tok') : null;
     $pin = !empty($s['pe']) ? df_dec((string)base64_decode($s['pe']), $dek, 'pin') : null;
-    return ['id' => $h, 'url' => $t ? df_base_url() . 'd.php?t=' . $t : '', 'pin' => $pin ?? '', 'doc' => $s['doc'] ?? '',
+    $title = ($t && ($s['kind'] ?? '') === 'media') ? (string)(df_dec((string)base64_decode((string)($s['tt'] ?? '')), df_share_title_key($t), 'title') ?? '') : '';
+    return ['id' => $h, 'url' => $t ? df_base_url() . 'd.php?t=' . $t : '', 'pin' => $pin ?? '', 'doc' => $s['doc'] ?? '', 'kind' => $s['kind'] ?? 'doc', 'title' => $title, 'cnt' => (int)($s['cnt'] ?? 0),
         'created' => ($s['created'] ?? 0) * 1000, 'exp' => ($s['exp'] ?? 0) * 1000, 'max' => $s['max'] ?? 0, 'used' => $s['used'] ?? 0,
         'fails' => $s['fails'] ?? 0, 'by' => $s['by'] ?? '', 'state' => $state, 'deadAt' => ($s['deadAt'] ?? 0) * 1000,
         'events' => is_file(df_share_log_file($h)) ? count(file(df_share_log_file($h), FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES) ?: []) : 0];

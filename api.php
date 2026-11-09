@@ -14,6 +14,14 @@ $admin = !empty($_SESSION['admin']);
 $dek = df_dek();
 session_write_close(); /* no session writes below (except pass_change); avoids blocking parallel requests */
 
+/* gallery upload: one raw 1 MB piece per request (no base64, stays under post_max_size), encrypted on arrival */
+if (($_GET['a'] ?? '') === 'gal_chunk') {
+    $id = (string)($_GET['id'] ?? ''); $i = (int)($_GET['i'] ?? -1);
+    if (!gal_valid_id($id)) df_json(['ok' => false, 'error' => 'bad id'], 400);
+    $bin = (string)file_get_contents('php://input', false, null, 0, GAL_CHUNK + 1);
+    if ($e = gal_put_chunk($id, $i, $bin, $dek)) df_json(['ok' => false, 'error' => $e], 400);
+    df_json(['ok' => true]);
+}
 $in = json_decode((string)file_get_contents('php://input'), true);
 if (!is_array($in)) df_json(['ok' => false, 'error' => 'bad request'], 400);
 $a = (string)($in['a'] ?? '');
@@ -108,6 +116,60 @@ try {
                 'pe' => base64_encode(df_enc($pin, $dek, 'pin'))]; /* the PIN, readable only after login, so the sender can see it again */
             df_update('shares.json', function (array &$all) use ($h, $rec) { $all[$h] = $rec; });
             df_json(['ok' => true, 'pin' => $pin, 'share' => df_share_public($h, $rec, $dek)]);
+        }
+        case 'share_media': { /* one protected link for several catalog/gallery files — same rules as invoice links */
+            $ids = array_values(array_filter(array_map('strval', (array)($in['ids'] ?? [])), 'gal_valid_id'));
+            $title = mb_substr(trim((string)($in['title'] ?? '')), 0, 160) ?: 'فایل‌ها';
+            if (!$ids || count($ids) > 300) df_json(['ok' => false, 'error' => 'دست‌کم یک فایل انتخاب کنید.'], 400);
+            $pack = gal_pack($ids, $title, $dek);
+            if (!$pack) df_json(['ok' => false, 'error' => 'فایل‌های انتخاب‌شده پیدا نشدند یا بارگذاری‌شان تمام نشده است.'], 400);
+            $exp = (int)floor(((int)($in['exp'] ?? 0)) / 1000);
+            if ($exp !== 0 && ($exp < time() + 60 || $exp > time() + 366 * 86400)) df_json(['ok' => false, 'error' => 'زمان انقضا معتبر نیست.'], 400);
+            $max = max(0, min(10000, (int)($in['max'] ?? 0)));
+            $pin = df_pin_norm((string)($in['pin'] ?? ''));
+            if ($pin === '') $pin = str_pad((string)random_int(0, 99999), 5, '0', STR_PAD_LEFT);
+            elseif (!preg_match('/^\d{4,5}$/', $pin)) df_json(['ok' => false, 'error' => 'رمز باید ۴ یا ۵ رقم باشد.'], 400);
+            df_log_keys_ensure($dek);
+            $t = df_b64u(random_bytes(16)); $h = df_share_hash($t);
+            df_write_atomic(df_share_file($h), df_enc(json_encode($pack, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), df_share_file_key($t, $pin, 1), 'share'));
+            $rec = ['doc' => 'gal', 'kind' => 'media', 'cnt' => count($pack['items']), 'created' => time(), 'by' => $user, 'exp' => $exp, 'max' => $max, 'used' => 0, 'fails' => 0, 'last' => 0,
+                'pin' => password_hash($pin, PASSWORD_DEFAULT), 'pk' => 1, 'dead' => '',
+                'te' => base64_encode(df_enc($t, $dek, 'tok')), 'tt' => base64_encode(df_enc($title, df_share_title_key($t), 'title')), 'pe' => base64_encode(df_enc($pin, $dek, 'pin'))];
+            df_update('shares.json', function (array &$all) use ($h, $rec) { $all[$h] = $rec; });
+            df_json(['ok' => true, 'pin' => $pin, 'share' => df_share_public($h, $rec, $dek)]);
+        }
+
+        /* ---------- catalogs & gallery (files encrypted in 1 MB pieces) ---------- */
+        case 'gal_list':
+            df_json(['ok' => true, 'items' => gal_public($dek)]);
+        case 'gal_new': {
+            $size = (int)($in['size'] ?? 0);
+            if ($size <= 0) df_json(['ok' => false, 'error' => 'فایل خالی است.'], 400);
+            if ($size > GAL_MAX) df_json(['ok' => false, 'error' => 'فایل بزرگ‌تر از ۱ گیگابایت است.'], 413);
+            $id = gal_new(gal_clean_meta((array)($in['meta'] ?? [])), $size, $dek, $user);
+            df_json(['ok' => true, 'id' => $id, 'chunk' => GAL_CHUNK]);
+        }
+        case 'gal_done': {
+            $id = (string)($in['id'] ?? '');
+            if (!gal_valid_id($id)) df_json(['ok' => false, 'error' => 'bad id'], 400);
+            if ($e = gal_finish($id)) df_json(['ok' => false, 'error' => $e], 400);
+            df_json(['ok' => true]);
+        }
+        case 'gal_thumb': {
+            $id = (string)($in['id'] ?? ''); $bin = base64_decode((string)($in['data'] ?? ''), true);
+            if (!gal_valid_id($id) || !$bin || strlen($bin) > 600000) df_json(['ok' => false, 'error' => 'bad thumb'], 400);
+            gal_put_thumb($id, $bin, $dek);
+            df_json(['ok' => true]);
+        }
+        case 'gal_edit': {
+            $id = (string)($in['id'] ?? ''); $it = gal_items()[$id] ?? null;
+            if (!$it) df_json(['ok' => false, 'error' => 'فایل پیدا نشد.'], 404);
+            gal_set_meta($id, gal_clean_meta((array)($in['meta'] ?? []), gal_meta($it, $dek)), $dek);
+            df_json(['ok' => true]);
+        }
+        case 'gal_del': {
+            foreach ((array)($in['ids'] ?? []) as $id) if (gal_valid_id((string)$id)) gal_delete((string)$id);
+            df_json(['ok' => true]);
         }
         case 'share_list': {
             $doc = (string)($in['docId'] ?? '');

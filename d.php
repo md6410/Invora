@@ -38,7 +38,8 @@ $blocked = function (array $s): ?array {
 };
 
 $passOk = isset($_SESSION['sh'][$h]) && time() - (int)$_SESSION['sh'][$h] < DF_SHARE_PASS_MINUTES * 60 && df_sess_get('sf:' . $h) !== null;
-if (!$passOk && ($b = $blocked($s))) { df_share_log($h, 'blocked', ['why' => $b[1]] + $dev); share_msg($b[0], 410); }
+/* a revoked, locked or expired link stops at once, even for someone who already entered the PIN (files keep streaming otherwise) */
+if ($b = $blocked($s)) { if (!$passOk || !isset($_GET['f'])) df_share_log($h, 'blocked', ['why' => $b[1]] + $dev); if (isset($_GET['f'])) { http_response_code(410); exit; } share_msg($b[0], 410); }
 $err = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$passOk) {
@@ -117,6 +118,7 @@ if (!$passOk) {
 
 $html = df_dec((string)file_get_contents(df_share_file($h)), (string)df_sess_get('sf:' . $h), 'share');
 if ($html === null) share_msg('فایل باز نشد.', 500);
+if (($s['kind'] ?? '') === 'media') { media_page($h, $t, $html, $dev, $nonce); exit; }
 $html = preg_replace('~<script\b[^>]*>.*?</script>~is', '', $html);
 $name = preg_replace('~[\\\\/:*?"<>|\x00-\x1f]+~u', '-', $title ?: 'فاکتور') . '.html';
 if (isset($_GET['dl'])) {
@@ -133,6 +135,48 @@ $html = preg_replace('~<div class="bar">.*?</div>~s', '', $html, 1);
 $html = preg_replace('~<body>~', '<body>' . $bar, $html, 1);
 header('Content-Type: text/html; charset=utf-8');
 echo $html;
+
+/* لینکِ کاتالوگ و گالری: صفحه‌ی فایل‌ها، یا پخش/دانلود یکی از آن‌ها (با Range) */
+function media_page(string $h, string $t, string $plain, array $dev, string $nonce): void {
+    $pack = json_decode($plain, true);
+    $items = is_array($pack['items'] ?? null) ? $pack['items'] : [];
+    if (isset($_GET['f'])) {
+        $n = (int)$_GET['f']; $it = $items[$n] ?? null;
+        if (!$it || !gal_valid_id((string)$it['id']) || !isset(gal_items()[$it['id']])) { http_response_code(404); header('Content-Type: text/plain; charset=utf-8'); exit('این فایل دیگر در دسترس نیست.'); }
+        $thumb = isset($_GET['thumb']); $dl = isset($_GET['dl']);
+        $r = (string)($_SERVER['HTTP_RANGE'] ?? '');
+        if (!$thumb && ($r === '' || preg_match('/^bytes=0-/', $r))) df_share_log($h, $dl ? 'download' : 'media', ['item' => (string)$it['name']] + $dev);
+        gal_stream((string)$it['id'], (string)base64_decode((string)$it['k']), (string)$it['type'], (string)$it['name'], $dl, $thumb);
+    }
+    df_share_log($h, 'view', $dev);
+    $u = fn(int $n, string $q = '') => 'd.php?t=' . rawurlencode($t) . '&amp;f=' . $n . $q;
+    $cards = '';
+    foreach ($items as $n => $it) {
+        $type = (string)$it['type']; $name = df_h((string)($it['title'] ?: $it['name']));
+        $desc = trim((string)($it['desc'] ?? '')) !== '' ? '<p class="d">' . nl2br(df_h((string)$it['desc'])) . '</p>' : '';
+        $meta = '<small>' . df_h((string)$it['name']) . ' · ' . gal_fmt_size((int)$it['size']) . '</small>';
+        $dlb = '<a class="b" href="' . $u($n, '&amp;dl=1') . '">دانلود</a>';
+        if (preg_match('~^image/(jpeg|png|gif|webp|avif|bmp)$~', $type)) {
+            $cards .= '<figure class="c"><a href="' . $u($n) . '" target="_blank" rel="noopener"><img loading="lazy" src="' . $u($n, !empty($it['thumb']) ? '&amp;thumb=1' : '') . '" alt=""></a><figcaption><b>' . $name . '</b>' . $desc . $meta . '<span class="bs"><a class="b" href="' . $u($n) . '" target="_blank" rel="noopener">اندازه‌ی کامل</a>' . $dlb . '</span></figcaption></figure>';
+        } elseif (preg_match('~^(video|audio)/~', $type) && gal_inline_type($type)) {
+            $tag = strpos($type, 'audio/') === 0 ? 'audio' : 'video';
+            $cards .= '<figure class="c"><' . $tag . ' controls preload="metadata" playsinline' . (!empty($it['thumb']) && $tag === 'video' ? ' poster="' . $u($n, '&amp;thumb=1') . '"' : '') . ' src="' . $u($n) . '"></' . $tag . '><figcaption><b>' . $name . '</b>' . $desc . $meta . '<span class="bs">' . $dlb . '</span></figcaption></figure>';
+        } else {
+            $open = gal_inline_type($type) ? '<a class="b" href="' . $u($n) . '" target="_blank" rel="noopener">باز کردن</a>' : '';
+            $cards .= '<figure class="c f">' . (!empty($it['thumb']) ? '<img loading="lazy" src="' . $u($n, '&amp;thumb=1') . '" alt="">' : '<div class="ic">' . df_h(strtoupper(pathinfo((string)$it['name'], PATHINFO_EXTENSION) ?: 'FILE')) . '</div>') . '<figcaption><b>' . $name . '</b>' . $desc . $meta . '<span class="bs">' . $open . $dlb . '</span></figcaption></figure>';
+        }
+    }
+    header('Content-Type: text/html; charset=utf-8');
+    echo '<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>' . df_h((string)($pack['title'] ?? 'فایل‌ها')) . '</title>'
+        . '<style>:root{color-scheme:light dark}*{box-sizing:border-box}body{margin:0;background:#eef0ee;color:#1d2321;font:15px/1.8 Vazirmatn,Tahoma,sans-serif;padding:16px}'
+        . '@media (prefers-color-scheme:dark){body{background:#121615;color:#e4e8e6}.c{background:#1a1f1e!important;border-color:#2e3533!important}.b{color:#7fd0c2!important;border-color:#7fd0c2!important}}'
+        . 'h1{font-size:20px;margin:0 0 4px}.top{max-width:1200px;margin:0 auto 14px}.g{max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}'
+        . '.c{margin:0;background:#fff;border:1px solid #d7dbd7;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}.c img,.c video{width:100%;max-height:340px;object-fit:contain;background:#000;display:block}.c audio{width:100%}'
+        . '.c.f img{object-fit:cover;background:#f1f3f1}.ic{height:150px;display:grid;place-items:center;font:800 28px system-ui;color:#1e5a55;background:#e1edeb}'
+        . 'figcaption{padding:10px 12px;display:flex;flex-direction:column;gap:4px}figcaption small{color:#6b736f}.d{margin:0;font-size:13.5px}.bs{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}'
+        . '.b{font-size:13px;padding:3px 12px;border:1px solid #1e5a55;border-radius:8px;color:#1e5a55;text-decoration:none}</style></head><body>'
+        . '<div class="top"><h1>' . df_h((string)($pack['title'] ?? 'فایل‌ها')) . '</h1><small>' . df_fa_num((string)count($items)) . ' فایل</small></div><div class="g">' . $cards . '</div></body></html>';
+}
 
 /* تبدیل زمان یونیکس به تاریخ شمسی برای نمایش */
 function jdate_str(int $ts): string {
