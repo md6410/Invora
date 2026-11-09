@@ -225,33 +225,75 @@ def find_chrome():
     return None
 
 
+def _is_system_account():
+    u = (os.environ.get("USERNAME") or "").lower()
+    return IS_WINDOWS and (u.endswith("$") or u == "system" or "systemprofile" in (os.environ.get("USERPROFILE") or "").lower())
+
+
+def _work_dir():
+    """پوشه‌ی کار موقت: زیر پوشه‌ی برنامه (برای حساب SYSTEM که Temp ویندوز را محدود دارد)، وگرنه Temp معمول."""
+    for d in ((os.path.join(INSTALL_DIR, "tmp"),) if IS_WINDOWS and os.path.isdir(INSTALL_DIR) else ()) + (tempfile.gettempdir(),):
+        try:
+            os.makedirs(d, exist_ok=True)
+            t = os.path.join(d, ".w%d" % os.getpid())
+            open(t, "w").close()
+            os.remove(t)
+            return d
+        except Exception:
+            continue
+    return None
+
+
+BROWSER_MODE = {"ok": None}   # the first set of flags that worked on this computer is reused
+
+
 def html_to_pdf(html, pdf_path):
     exe = find_chrome()
     if not exe:
         raise RuntimeError("Edge یا Chrome روی این کامپیوتر پیدا نشد (مسیرش را در تنظیمات بنویسید).")
-    fd, tmp_html = tempfile.mkstemp(suffix=".html", prefix="invora-")
+    wd = _work_dir()
+    fd, tmp_html = tempfile.mkstemp(suffix=".html", prefix="invora-", dir=wd)
     with os.fdopen(fd, "w", encoding="utf-8") as f:
         f.write(html)
-    profile = tempfile.mkdtemp(prefix="invora-chrome-")
     url = "file:///" + tmp_html.replace("\\", "/").lstrip("/")
-    cmd = [exe, "--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check", "--disable-extensions",
-           "--user-data-dir=" + profile, "--no-pdf-header-footer", "--print-to-pdf-no-header",
-           "--print-to-pdf=" + pdf_path, "--virtual-time-budget=10000", "--run-all-compositor-stages-before-draw"]
-    # Chrome does not start as root on Linux, nor reliably inside a Windows service (session 0), without this.
+    base = ["--disable-gpu", "--no-first-run", "--no-default-browser-check", "--disable-extensions", "--disable-sync",
+            "--disable-background-networking", "--disable-component-update", "--disable-crash-reporter", "--no-pdf-header-footer",
+            "--print-to-pdf-no-header", "--virtual-time-budget=10000", "--run-all-compositor-stages-before-draw"]
+    # Chrome/Edge do not start as root on Linux, nor in the SYSTEM account / a service (session 0), with their sandbox.
     # The page is our own document from the site, not arbitrary web content.
-    if AS_SERVICE or (not IS_WINDOWS and hasattr(os, "geteuid") and os.geteuid() == 0):
-        cmd.append("--no-sandbox")
-    cmd.append(url)
+    nosb = AS_SERVICE or _is_system_account() or (not IS_WINDOWS and hasattr(os, "geteuid") and os.geteuid() == 0)
+    modes = [["--headless=new"] + (["--no-sandbox"] if nosb else []), ["--headless=new", "--no-sandbox"], ["--headless=old", "--no-sandbox"],
+             ["--headless", "--no-sandbox", "--disable-features=RendererCodeIntegrity"]]
+    if BROWSER_MODE["ok"]:
+        modes.insert(0, BROWSER_MODE["ok"])
+    seen, errors = [], []
     try:
-        r = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
-        if not os.path.isfile(pdf_path) or os.path.getsize(pdf_path) < 400:
-            raise RuntimeError(((r.stderr or r.stdout or "").strip()[:300]) or "PDF ساخته نشد")
+        for m in modes:
+            if m in seen:
+                continue
+            seen.append(m)
+            profile = tempfile.mkdtemp(prefix="invora-chrome-", dir=wd)
+            try:
+                if os.path.exists(pdf_path):
+                    os.remove(pdf_path)
+                r = subprocess.run([exe] + m + base + ["--user-data-dir=" + profile, "--print-to-pdf=" + pdf_path, url],
+                                   capture_output=True, text=True, timeout=120, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+                if os.path.isfile(pdf_path) and os.path.getsize(pdf_path) >= 400:
+                    if BROWSER_MODE["ok"] != m:
+                        BROWSER_MODE["ok"] = m
+                        log("موتور چاپ: %s با %s" % (os.path.basename(exe), " ".join(m)), "ok")
+                    return " ".join(m)
+                errors.append("%s → %s" % (" ".join(m), ((r.stderr or r.stdout or "").strip().splitlines() or ["بدون پیام"])[-1][:200]))
+            except subprocess.TimeoutExpired:
+                errors.append("%s → زمان تمام شد" % " ".join(m))
+            finally:
+                shutil.rmtree(profile, ignore_errors=True)
+        raise RuntimeError("PDF ساخته نشد (%s): %s" % (os.path.basename(exe), " | ".join(errors)))
     finally:
         try:
             os.remove(tmp_html)
         except Exception:
             pass
-        shutil.rmtree(profile, ignore_errors=True)
 
 
 def pdf_pages(pdf_path, dpi):
@@ -983,9 +1025,9 @@ def _selftest_render():
     fd, pdf = tempfile.mkstemp(suffix=".pdf")
     os.close(fd)
     try:
-        html_to_pdf(html, pdf)
+        mode = html_to_pdf(html, pdf)
         pages = pdf_pages(pdf, 100)
-        return "pdf %d bytes, %d page(s), %dx%d px" % (os.path.getsize(pdf), len(pages), pages[0].size[0], pages[0].size[1])
+        return "pdf %d bytes, %d page(s), %dx%d px, browser flags: %s, system account: %s" % (os.path.getsize(pdf), len(pages), pages[0].size[0], pages[0].size[1], mode, _is_system_account())
     finally:
         try:
             os.remove(pdf)
