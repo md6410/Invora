@@ -93,7 +93,22 @@ function gal_delete(string $id): void {
     @rmdir(gal_dir($id));
 }
 /* «بسته‌ی لینک»: فهرست فایل‌های انتخاب‌شده همراه کلید هرکدام (بعد با کلید لینک رمز می‌شود) */
-function gal_pack(array $ids, string $title, string $dek): ?array {
+/* اطلاعات پروفایل محصول که در لینک می‌رود (عنوان، توضیح، جدول مشخصات، قیمت) */
+function gal_clean_info($in): ?array {
+    if (!is_array($in)) return null;
+    $specs = [];
+    foreach (array_slice((array)($in['specs'] ?? []), 0, 60) as $r) {
+        if (!is_array($r)) continue;
+        $k = mb_substr(trim((string)($r[0] ?? '')), 0, 120); $v = mb_substr(trim((string)($r[1] ?? '')), 0, 600);
+        if ($k !== '' || $v !== '') $specs[] = [$k, $v];
+    }
+    $o = ['name' => mb_substr(trim((string)($in['name'] ?? '')), 0, 160), 'about' => mb_substr(trim((string)($in['about'] ?? '')), 0, 6000), 'specs' => $specs,
+        'price' => mb_substr(trim((string)($in['price'] ?? '')), 0, 80), 'img' => ''];
+    $img = (string)($in['img'] ?? '');
+    if (preg_match('~^data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$~', $img) && strlen($img) < 400000) $o['img'] = $img;
+    return ($o['name'] !== '' || $o['about'] !== '' || $specs) ? $o : null;
+}
+function gal_pack(array $ids, string $title, string $dek, ?array $info = null): ?array {
     $all = gal_items(); $items = [];
     foreach ($ids as $id) {
         $id = (string)$id; $it = $all[$id] ?? null;
@@ -103,7 +118,7 @@ function gal_pack(array $ids, string $title, string $dek): ?array {
         $items[] = ['id' => $id, 'name' => $m['name'] ?? 'file', 'type' => $m['type'] ?? 'application/octet-stream', 'kind' => $m['kind'] ?? 'media',
             'title' => $m['title'] ?? '', 'desc' => $m['desc'] ?? '', 'size' => (int)$it['size'], 'thumb' => !empty($it['thumb']), 'k' => base64_encode($k)];
     }
-    return $items ? ['v' => 1, 'title' => $title, 'items' => $items] : null;
+    return ($items || $info) ? ['v' => 1, 'title' => $title, 'items' => $items] + ($info ? ['info' => $info] : []) : null;
 }
 function gal_inline_type(string $type): bool {
     return (bool)preg_match('~^(image/(jpeg|png|gif|webp|avif|bmp)|video/(mp4|webm|ogg|quicktime|x-m4v)|audio/(mpeg|mp4|ogg|wav|webm|x-m4a)|application/pdf)$~', $type);

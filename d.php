@@ -166,6 +166,16 @@ function media_page(string $h, string $t, string $plain, array $dev, string $non
             $cards .= '<figure class="c f">' . (!empty($it['thumb']) ? '<img loading="lazy" src="' . $u($n, '&amp;thumb=1') . '" alt="">' : '<div class="ic">' . df_h(strtoupper(pathinfo((string)$it['name'], PATHINFO_EXTENSION) ?: 'FILE')) . '</div>') . '<figcaption><b>' . $name . '</b>' . $desc . $meta . '<span class="bs">' . $open . $dlb . '</span></figcaption></figure>';
         }
     }
+    $info = is_array($pack['info'] ?? null) ? $pack['info'] : null; $head = '';
+    if ($info) {
+        $rows = '';
+        foreach ((array)($info['specs'] ?? []) as $r) $rows .= '<tr><th>' . df_h((string)($r[0] ?? '')) . '</th><td>' . nl2br(df_h((string)($r[1] ?? ''))) . '</td></tr>';
+        $head = '<div class="pi">' . (preg_match('~^data:image/(jpeg|png|webp);base64,~', (string)($info['img'] ?? '')) ? '<img class="pim" src="' . df_h((string)$info['img']) . '" alt="">' : '')
+            . '<div class="pt"><h1>' . df_h((string)($info['name'] ?: ($pack['title'] ?? ''))) . '</h1>'
+            . ((string)($info['price'] ?? '') !== '' ? '<div class="pr">' . df_h((string)$info['price']) . '</div>' : '')
+            . ((string)($info['about'] ?? '') !== '' ? '<p>' . nl2br(df_h((string)$info['about'])) . '</p>' : '')
+            . ($rows ? '<table class="sp">' . $rows . '</table>' : '') . '</div></div>';
+    }
     header('Content-Type: text/html; charset=utf-8');
     echo '<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>' . df_h((string)($pack['title'] ?? 'فایل‌ها')) . '</title>'
         . '<style>:root{color-scheme:light dark}*{box-sizing:border-box}body{margin:0;background:#eef0ee;color:#1d2321;font:15px/1.8 Vazirmatn,Tahoma,sans-serif;padding:16px}'
@@ -174,8 +184,11 @@ function media_page(string $h, string $t, string $plain, array $dev, string $non
         . '.c{margin:0;background:#fff;border:1px solid #d7dbd7;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}.c img,.c video{width:100%;max-height:340px;object-fit:contain;background:#000;display:block}.c audio{width:100%}'
         . '.c.f img{object-fit:cover;background:#f1f3f1}.ic{height:150px;display:grid;place-items:center;font:800 28px system-ui;color:#1e5a55;background:#e1edeb}'
         . 'figcaption{padding:10px 12px;display:flex;flex-direction:column;gap:4px}figcaption small{color:#6b736f}.d{margin:0;font-size:13.5px}.bs{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}'
-        . '.b{font-size:13px;padding:3px 12px;border:1px solid #1e5a55;border-radius:8px;color:#1e5a55;text-decoration:none}</style></head><body>'
-        . '<div class="top"><h1>' . df_h((string)($pack['title'] ?? 'فایل‌ها')) . '</h1><small>' . df_fa_num((string)count($items)) . ' فایل</small></div><div class="g">' . $cards . '</div></body></html>';
+        . '.b{font-size:13px;padding:3px 12px;border:1px solid #1e5a55;border-radius:8px;color:#1e5a55;text-decoration:none}'
+        . '.pi{max-width:1200px;margin:0 auto 16px;background:#fff;border:1px solid #d7dbd7;border-radius:12px;padding:16px;display:flex;gap:18px;flex-wrap:wrap}.pim{width:220px;max-width:100%;object-fit:contain;border-radius:8px;align-self:flex-start}.pt{flex:1;min-width:240px}.pt p{white-space:normal}'
+        . '.pr{font-weight:800;color:#1e5a55;font-size:17px}.sp{border-collapse:collapse;width:100%;margin-top:8px}.sp th,.sp td{border-bottom:1px solid #e3e6e3;padding:6px 8px;text-align:right;vertical-align:top}.sp th{width:34%;color:#555;font-weight:600}'
+        . '@media (prefers-color-scheme:dark){.pi{background:#1a1f1e;border-color:#2e3533}.sp th{color:#9aa49f}.sp th,.sp td{border-color:#2e3533}.pr{color:#7fd0c2}}</style></head><body>'
+        . $head . '<div class="top">' . ($info ? '' : '<h1>' . df_h((string)($pack['title'] ?? 'فایل‌ها')) . '</h1>') . ($items ? '<small>' . df_fa_num((string)count($items)) . ' فایل</small>' : '') . '</div><div class="g">' . $cards . '</div></body></html>';
 }
 
 /* تبدیل زمان یونیکس به تاریخ شمسی برای نمایش */

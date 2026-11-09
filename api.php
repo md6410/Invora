@@ -120,8 +120,9 @@ try {
         case 'share_media': { /* one protected link for several catalog/gallery files — same rules as invoice links */
             $ids = array_values(array_filter(array_map('strval', (array)($in['ids'] ?? [])), 'gal_valid_id'));
             $title = mb_substr(trim((string)($in['title'] ?? '')), 0, 160) ?: 'فایل‌ها';
-            if (!$ids || count($ids) > 300) df_json(['ok' => false, 'error' => 'دست‌کم یک فایل انتخاب کنید.'], 400);
-            $pack = gal_pack($ids, $title, $dek);
+            $info = gal_clean_info($in['info'] ?? null);
+            if ((!$ids && !$info) || count($ids) > 300) df_json(['ok' => false, 'error' => 'دست‌کم یک فایل انتخاب کنید.'], 400);
+            $pack = gal_pack($ids, $title, $dek, $info);
             if (!$pack) df_json(['ok' => false, 'error' => 'فایل‌های انتخاب‌شده پیدا نشدند یا بارگذاری‌شان تمام نشده است.'], 400);
             $exp = (int)floor(((int)($in['exp'] ?? 0)) / 1000);
             if ($exp !== 0 && ($exp < time() + 60 || $exp > time() + 366 * 86400)) df_json(['ok' => false, 'error' => 'زمان انقضا معتبر نیست.'], 400);
