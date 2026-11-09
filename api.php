@@ -99,7 +99,7 @@ try {
             if ($pin === '') $pin = str_pad((string)random_int(0, 99999), 5, '0', STR_PAD_LEFT);
             elseif (!preg_match('/^\d{4,5}$/', $pin)) df_json(['ok' => false, 'error' => 'رمز باید ۴ یا ۵ رقم باشد.'], 400);
             df_log_keys_ensure($dek);
-            $t = bin2hex(random_bytes(16)); $h = df_share_hash($t);
+            $t = df_b64u(random_bytes(16)); $h = df_share_hash($t); /* ۲۲ نویسه: در پیامک sms.ir (سقف ۲۵ نویسه برای هر پارامتر) جا می‌شود */
             df_write_atomic(df_share_file($h), df_enc($html, df_share_file_key($t, $pin, 1), 'share'));
             $title = mb_substr((string)($in['title'] ?? ''), 0, 160);
             $rec = ['doc' => $doc, 'created' => time(), 'by' => $user, 'exp' => $exp, 'max' => $max, 'used' => 0, 'fails' => 0, 'last' => 0,
@@ -127,6 +127,120 @@ try {
             $h = (string)($in['id'] ?? '');
             if (!preg_match('/^[a-f0-9]{64}$/', $h)) df_json(['ok' => false, 'error' => 'bad id'], 400);
             df_json(['ok' => true, 'events' => df_share_log_read($h, $dek)]);
+        }
+
+        case 'share_sms': { /* لینک (و اگر خواستید رمز) با پیامک الگو برای مشتری */
+            $h = (string)($in['id'] ?? '');
+            $sh = df_read('shares.json', [])[$h] ?? null;
+            if (!$sh) df_json(['ok' => false, 'error' => 'لینک پیدا نشد.'], 404);
+            $t = !empty($sh['te']) ? df_dec((string)base64_decode($sh['te']), $dek, 'tok') : null;
+            if (!$t) df_json(['ok' => false, 'error' => 'لینک خوانده نشد.'], 400);
+            if (strlen($t) > 25) df_json(['ok' => false, 'error' => 'این لینک قدیمی است و برای پیامک بلند است؛ یک لینک تازه بسازید.'], 400);
+            $withPin = !empty($in['pin']);
+            $pin = !empty($sh['pe']) ? (string)df_dec((string)base64_decode($sh['pe']), $dek, 'pin') : '';
+            if ($withPin && $pin === '') df_json(['ok' => false, 'error' => 'رمز این لینک ذخیره نشده است.'], 400);
+            $r = sms_send((string)($in['mobile'] ?? ''), $withPin ? 'link_pin' : 'link', $withPin ? ['LINK' => $t, 'PIN' => $pin] : ['LINK' => $t], 'لینک فایل · ' . $user);
+            if ($r['ok']) df_share_log($h, 'sms', ['to' => sms_mask(sms_mobile((string)($in['mobile'] ?? ''))), 'pin' => $withPin ? 1 : 0, 'by' => $user, 'test' => !empty($r['test']) ? 1 : 0]);
+            df_json(['ok' => $r['ok'], 'error' => $r['ok'] ? '' : $r['msg'], 'msg' => $r['msg']], $r['ok'] ? 200 : 502);
+        }
+
+        /* ---------- my account: fingerprint, trusted devices, mobile ---------- */
+        case 'sec_get':
+            df_json(['ok' => true, 'sec' => df_dev_public($user), 'rp' => pk_rp_id(), 'https' => df_is_https(), 'smsLogin' => !empty(sms_cfg()['login'])]);
+        case 'pk_reg_options':
+            df_session_start(); $o = pk_reg_options($user, !empty($in['compat'])); session_write_close();
+            df_json(['ok' => true, 'options' => $o]);
+        case 'pk_reg_verify': {
+            df_session_start(); $e = pk_reg_verify($user, $dek, (array)($in['cred'] ?? [])); session_write_close();
+            if ($e) df_json(['ok' => false, 'error' => $e], 400);
+            df_json(['ok' => true, 'sec' => df_dev_public($user)]);
+        }
+        case 'pk_del':
+            df_pk_remove($user, (string)($in['id'] ?? ''));
+            df_json(['ok' => true, 'sec' => df_dev_public($user)]);
+        case 'dev_sms': { /* ورود با پیامک روی همین دستگاه */
+            if (!empty($in['on'])) {
+                if (sms_mobile((string)(df_users()[$user]['mobile'] ?? '')) === '') df_json(['ok' => false, 'error' => 'اول شماره‌ی موبایل خودتان را ثبت کنید.'], 400);
+                df_dev_ensure($user, $dek, ['sms' => true]);
+            } elseif (($did = df_dev_id()) !== '') {
+                df_update('users.json', function (array &$d) use ($user, $did) {
+                    if (!isset($d['users'][$user]['devs'][$did])) return;
+                    $d['users'][$user]['devs'][$did]['sms'] = false;
+                    if (empty($d['users'][$user]['devs'][$did]['pk'])) unset($d['users'][$user]['devs'][$did]);
+                }, ['users' => []]);
+            }
+            df_json(['ok' => true, 'sec' => df_dev_public($user)]);
+        }
+        case 'dev_del':
+            df_dev_remove($user, (string)($in['id'] ?? ''));
+            df_json(['ok' => true, 'sec' => df_dev_public($user)]);
+        case 'me_mobile': {
+            $m = trim((string)($in['mobile'] ?? ''));
+            $mm = $m === '' ? '' : sms_mobile($m);
+            if ($m !== '' && $mm === '') df_json(['ok' => false, 'error' => 'شماره‌ی موبایل درست نیست (مثلاً ۰۹۱۲۱۲۳۴۵۶۷).'], 400);
+            df_update('users.json', function (array &$d) use ($user, $mm) { if (isset($d['users'][$user])) $d['users'][$user]['mobile'] = $mm; }, ['users' => []]);
+            df_json(['ok' => true, 'sec' => df_dev_public($user)]);
+        }
+
+        /* ---------- SMS settings (sms.ir) ---------- */
+        case 'sms_get': {
+            $c = sms_cfg(); $k = (string)$c['key'];
+            df_json(['ok' => true, 'sms' => ['hasKey' => $k !== '', 'keyTail' => $k !== '' ? substr($k, -4) : '', 'keyInConfig' => defined('DF_SMSIR_KEY') && DF_SMSIR_KEY !== '',
+                'tpl' => (object)$c['tpl'], 'login' => !empty($c['login']), 'test' => !empty($c['test']), 'base' => df_base_url(), 'tpls' => DF_SMS_TPLS]]);
+        }
+        case 'sms_set': {
+            if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
+            df_update('sms.json', function (array &$c) use ($in) {
+                if (isset($in['key']) && trim((string)$in['key']) !== '') $c['key'] = trim((string)$in['key']);
+                if (!empty($in['clearKey'])) $c['key'] = '';
+                foreach (array_keys(DF_SMS_TPLS) as $k) if (isset($in['tpl'][$k])) $c['tpl'][$k] = max(0, (int)df_fa_digits((string)$in['tpl'][$k]));
+                if (isset($in['login'])) $c['login'] = (bool)$in['login'];
+                if (isset($in['test'])) $c['test'] = (bool)$in['test'];
+            });
+            df_json(['ok' => true]);
+        }
+        case 'sms_test': {
+            if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
+            $k = (string)($in['tpl'] ?? 'otp');
+            if (!isset(DF_SMS_TPLS[$k])) df_json(['ok' => false, 'error' => 'الگو نامعتبر است.'], 400);
+            $vals = ['CODE' => '12345', 'LINK' => 'TEST-link-123', 'PIN' => '54321'];
+            $r = sms_send((string)($in['mobile'] ?? ''), $k, array_intersect_key($vals, array_flip(DF_SMS_TPLS[$k][1])), 'آزمایش · ' . $user);
+            df_json(['ok' => $r['ok'], 'error' => $r['ok'] ? '' : $r['msg'], 'msg' => $r['msg']], $r['ok'] ? 200 : 502);
+        }
+        case 'sms_log':
+            if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
+            df_json(['ok' => true, 'items' => sms_log_read($dek)]);
+
+        /* ---------- central printing (print stations) ---------- */
+        case 'ps_list':
+            df_json(['ok' => true, 'stations' => prn_stations_public($dek), 'jobs' => prn_jobs_public($dek, (int)($in['limit'] ?? 40))]);
+        case 'ps_add': {
+            if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
+            [$sid] = prn_station_add((string)($in['name'] ?? ''), $dek, $user);
+            df_json(['ok' => true, 'id' => $sid, 'stations' => prn_stations_public($dek)]);
+        }
+        case 'ps_del':
+            if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
+            prn_station_del((string)($in['id'] ?? ''));
+            df_json(['ok' => true, 'stations' => prn_stations_public($dek)]);
+        case 'pj_send': {
+            $sid = (string)($in['sid'] ?? '');
+            if (!isset(prn_stations()[$sid])) df_json(['ok' => false, 'error' => 'ایستگاه چاپ پیدا نشد.'], 404);
+            $html = (string)($in['html'] ?? '');
+            if ($html === '' || strlen($html) > 12 * 1024 * 1024) df_json(['ok' => false, 'error' => 'محتوای چاپ خالی یا خیلی بزرگ است.'], 400);
+            $id = prn_job_add($sid, (array)($in['meta'] ?? []), $html, $dek, $user);
+            df_json(['ok' => true, 'id' => $id]);
+        }
+        case 'pj_retry':
+            $id = (string)($in['id'] ?? '');
+            if (!is_file(prn_blob($id))) df_json(['ok' => false, 'error' => 'محتوای این کار دیگر روی سرور نیست (کارهای چاپ‌شده پاک می‌شوند)؛ دوباره از خود سند چاپ بزنید.'], 410);
+            prn_job_set($id, function (array &$x) { $x['st'] = 'queued'; $x['tries'] = 0; $x['err'] = ''; $x['at'] = time(); });
+            df_json(['ok' => true]);
+        case 'pj_cancel': {
+            $id = (string)($in['id'] ?? '');
+            prn_job_set($id, function (array &$x) { if (in_array($x['st'], ['queued', 'claimed', 'error'], true)) { $x['st'] = 'canceled'; $x['done'] = time(); } });
+            @unlink(prn_blob($id));
+            df_json(['ok' => true]);
         }
 
         /* ---------- USD rate ---------- */

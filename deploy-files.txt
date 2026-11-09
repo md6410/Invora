@@ -27,3 +27,14 @@ fonts/shabnam-medium.woff2
 fonts/shabnam.woff2
 fonts/vazirmatn-arabic.woff2
 fonts/vazirmatn-latin.woff2
+auth.php
+print-api.php
+inc/passkey.php
+inc/sms.php
+inc/print.php
+print-agent/.htaccess
+print-agent/agent.py
+print-agent/requirements.txt
+print-agent/README.md
+print-agent/install-windows.bat
+print-agent/run-windows.bat

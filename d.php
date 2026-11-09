@@ -24,7 +24,7 @@ const DEAD_MSG = ['locked' => 'این لینک به دلیل ۵ بار وارد 
                   'revoked' => 'این لینک توسط فرستنده غیرفعال شده است.'];
 
 $t = (string)($_GET['t'] ?? '');
-if (!preg_match('/^[a-f0-9]{32}$/', $t)) share_msg('لینک نامعتبر است.', 404);
+if (!preg_match('/^([a-f0-9]{32}|[A-Za-z0-9_-]{22})$/', $t)) share_msg('لینک نامعتبر است.', 404);
 $h = df_share_hash($t);
 $s = df_read('shares.json', [])[$h] ?? null;
 if (!$s || !is_file(df_share_file($h))) share_msg('این لینک وجود ندارد.', 404);

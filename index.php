@@ -81,8 +81,32 @@ if (!df_logged_in()) {
             . '<p class="muted"><a href="' . df_h(df_base_path()) . '">بازگشت به ورود</a></p>');
         exit;
     }
+    $pkOn = df_pk_any(); $smsOn = !empty(sms_cfg()['login']);
+    $alt = '';
+    if ($pkOn || $smsOn) {
+        $alt = '<div id="xMsg" class="muted" hidden></div>'
+            . ($pkOn ? '<button type="button" id="pkBtn" hidden style="background:#fff;color:#1e5a55;border:1px solid #1e5a55">ورود با اثر انگشت / چهره</button>' : '')
+            . ($smsOn ? '<details id="smsBox"><summary style="cursor:pointer;font-size:13.5px">ورود با کد پیامکی</summary><div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">'
+                . '<label>نام کاربری<input id="smsU" dir="ltr" autocomplete="username"></label><button type="button" id="smsSend" style="background:#fff;color:#1e5a55;border:1px solid #1e5a55">فرستادن کد</button>'
+                . '<label id="smsCodeL" hidden>کد پیامک‌شده<input id="smsCode" class="pin" inputmode="numeric" autocomplete="one-time-code" maxlength="12"></label><button type="button" id="smsGo" hidden>ورود با کد</button></div></details>' : '')
+            . '<script>(function(){var C=(document.querySelector("input[name=csrf]")||{}).value||"";'
+            . 'function b2(s){s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";var b=atob(s),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u.buffer}'
+            . 'function u2(b){b=new Uint8Array(b);var s="";for(var i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s).replace(/\\+/g,"-").replace(/\\//g,"_").replace(/=+$/,"")}'
+            . 'function post(d){return fetch("auth.php",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json","X-CSRF-Token":C},body:JSON.stringify(d)}).then(function(r){return r.json().catch(function(){return{ok:false,error:"پاسخ سرور خوانده نشد؛ صفحه را تازه کنید."}})})}'
+            . 'var M=document.getElementById("xMsg");function say(t,bad){M.textContent=t||"";M.className=bad?"err":"muted";M.hidden=!t}'
+            . 'var pk=document.getElementById("pkBtn");'
+            . 'if(pk&&window.PublicKeyCredential&&navigator.credentials&&window.isSecureContext){pk.hidden=false;pk.onclick=function(){say("اثر انگشت یا چهره را روی دستگاه تأیید کنید…");'
+            . 'post({a:"pk_options"}).then(function(r){if(!r.ok)throw new Error(r.error);var o=r.options;o.challenge=b2(o.challenge);(o.allowCredentials||[]).forEach(function(c){c.id=b2(c.id)});return navigator.credentials.get({publicKey:o})})'
+            . '.then(function(c){if(!c)throw new Error("پاسخی از دستگاه نیامد.");var R=c.response;return post({a:"pk_login",cred:{id:c.id,clientDataJSON:u2(R.clientDataJSON),authenticatorData:u2(R.authenticatorData),signature:u2(R.signature)}})})'
+            . '.then(function(r){if(!r.ok)throw new Error(r.error);location.href=r.go})'
+            . '.catch(function(e){say(e&&(e.name==="NotAllowedError"||e.name==="AbortError")?"انجام نشد یا لغو شد. اگر اثر انگشت این دستگاه را ثبت نکرده‌اید، با رمز وارد شوید و از «تنظیمات عمومی ← حساب کاربری» ثبتش کنید.":(e&&e.message)||"انجام نشد.",true)})}}'
+            . 'var sb=document.getElementById("smsSend");if(sb){sb.onclick=function(){var u=document.getElementById("smsU").value.trim();if(!u){say("نام کاربری را بنویسید.",true);return}sb.disabled=true;'
+            . 'post({a:"otp_send",u:u}).then(function(r){sb.disabled=false;if(!r.ok){say(r.error,true);return}say(r.msg+(r.show?" — حالت آزمایشی، کد: "+r.show:""));document.getElementById("smsCodeL").hidden=false;document.getElementById("smsGo").hidden=false;document.getElementById("smsCode").focus()})};'
+            . 'document.getElementById("smsGo").onclick=function(){post({a:"otp_login",code:document.getElementById("smsCode").value}).then(function(r){if(!r.ok){say(r.error,true);return}location.href=r.go})}}'
+            . '})();</script>';
+    }
     df_page('ورود به دفتر فاکتور', '<h1>ورود به دفتر فاکتور</h1>' . $errBox
-        . $form('login', '<label>نام کاربری<input name="u" dir="ltr" required autocomplete="username" autofocus></label><label>رمز عبور<input name="p" type="password" dir="ltr" required autocomplete="current-password"></label><button>ورود</button>')
+        . $form('login', '<label>نام کاربری<input name="u" dir="ltr" required autocomplete="username webauthn" autofocus></label><label>رمز عبور<input name="p" type="password" dir="ltr" required autocomplete="current-password"></label><button>ورود</button>') . $alt
         . '<p class="muted">بعد از ' . df_fa_num((string)DF_LOGIN_MAX_FAILS) . ' بار رمز اشتباه، ورود ' . df_fa_num((string)DF_LOGIN_LOCK_MINUTES) . ' دقیقه بسته می‌شود. · <a href="?m=recover">رمز را فراموش کرده‌ام</a></p>');
     exit;
 }
@@ -100,7 +124,7 @@ if (($rc = df_sess_get('rc')) !== null) {
 $app = @file_get_contents(__DIR__ . '/app.html');
 if ($app === false) { http_response_code(500); exit('app.html not found'); }
 $cfg = ['api' => df_base_path() . 'api.php', 'home' => df_base_path(), 'csrf' => df_csrf(), 'user' => $_SESSION['u'], 'admin' => !empty($_SESSION['admin']),
-    'since' => (int)($_SESSION['since'] ?? 0) * 1000, 'prevLogin' => (int)($_SESSION['prev']['at'] ?? 0) * 1000, 'prevIp' => (string)($_SESSION['prev']['ip'] ?? '')];
+    'since' => (int)($_SESSION['since'] ?? 0) * 1000, 'prevLogin' => (int)($_SESSION['prev']['at'] ?? 0) * 1000, 'prevIp' => (string)($_SESSION['prev']['ip'] ?? ''), 'prevHow' => (string)($_SESSION['prev']['how'] ?? ''), 'how' => (string)($_SESSION['how'] ?? '')];
 $inject = df_icon_links() . '<script>window.DF_SERVER=' . json_encode($cfg, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . ';</script>';
 $pos = stripos($app, '</head>');
 echo $pos === false ? $inject . $app : substr($app, 0, $pos) . $inject . substr($app, $pos);

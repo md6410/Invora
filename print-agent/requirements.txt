@@ -1,0 +1,6 @@
+# ایستگاه چاپ Invora — بسته‌های لازم
+# نصب:  python -m pip install -r requirements.txt
+cryptography>=41      # باز کردن محتوای رمزشده‌ی کارهای چاپ
+pillow>=10.0          # تصویر صفحه برای چاپ مستقیم و TSPL
+pypdfium2>=4.30       # تبدیل PDF به تصویر با اندازه‌ی دقیق
+pywin32>=306 ; sys_platform == "win32"   # فهرست چاپگرها، چاپ مستقیم و سرویس ویندوز

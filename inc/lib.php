@@ -9,6 +9,9 @@ const DF_DOCS_DIR = 'اسناد';
 define('DF_TRASH_DIR', 'حذف' . "\u{200C}" . 'شده');
 require __DIR__ . '/crypto.php';
 require __DIR__ . '/update.php';
+require __DIR__ . '/passkey.php';
+require __DIR__ . '/sms.php';
+require __DIR__ . '/print.php';
 
 /* ---------------- storage ---------------- */
 function df_deny_htaccess(): string {
@@ -221,13 +224,19 @@ function df_login(string $user, string $pass): ?string {
     } else {
         return 'حساب شما هنوز به کلید رمزنگاری اطلاعات وصل نشده است. از مدیر بخواهید در «تنظیمات عمومی ← کاربران» برایتان رمز تعیین کند.';
     }
+    df_login_finish($user, $dek, $newCode, 'رمز عبور');
+    return null;
+}
+/* the common last step of every way in (password, fingerprint, SMS code): new session holding the data key */
+function df_login_finish(string $user, string $dek, ?string $newCode = null, string $how = ''): void {
+    $u = df_users()[$user] ?? [];
     /* remember this login; the previous one is shown on the app's home page (the IP is stored encrypted) */
-    $prev = df_update('users.json', function (array &$d) use ($user, $dek) {
+    $prev = df_update('users.json', function (array &$d) use ($user, $dek, $how) {
         if (!isset($d['users'][$user])) return [];
         $x = &$d['users'][$user];
         $ip = !empty($x['lastIp']) ? df_dec((string)base64_decode((string)$x['lastIp']), $dek, 'lastip') : null;
-        $p = ['at' => (int)($x['lastAt'] ?? 0), 'ip' => (string)($ip ?? '')];
-        $x['lastAt'] = time(); $x['lastIp'] = base64_encode(df_enc(df_ip(), $dek, 'lastip'));
+        $p = ['at' => (int)($x['lastAt'] ?? 0), 'ip' => (string)($ip ?? ''), 'how' => (string)($x['lastHow'] ?? '')];
+        $x['lastAt'] = time(); $x['lastIp'] = base64_encode(df_enc(df_ip(), $dek, 'lastip')); $x['lastHow'] = $how;
         return $p;
     }, ['users' => []]);
     session_regenerate_id(true);
@@ -236,9 +245,9 @@ function df_login(string $user, string $pass): ?string {
     $_SESSION['since'] = $_SESSION['t'] = time();
     $_SESSION['admin'] = !empty($u['admin']);
     $_SESSION['csrf'] = bin2hex(random_bytes(32));
+    $_SESSION['how'] = $how;
     df_sess_put('dek', $dek);
     if ($newCode) df_sess_put('rc', $newCode);
-    return null;
 }
 /* reset a password with the recovery code */
 function df_recover(string $user, string $code, string $pass): ?string {
