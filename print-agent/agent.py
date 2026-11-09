@@ -983,6 +983,47 @@ def uninstall(quiet=False):
     return 0
 
 
+def browsertest(out_path):
+    """عیب‌یابی: ترکیب‌های مختلف اجرای Edge/Chrome را امتحان می‌کند و نتیجه و گزارش داخلی هرکدام را می‌نویسد."""
+    exe = find_chrome()
+    wd = _work_dir() or tempfile.gettempdir()
+    html = "<!doctype html><html><head><meta charset='utf-8'><style>@page{size:100mm 150mm;margin:0}</style></head><body>test</body></html>"
+    fd, h = tempfile.mkstemp(suffix=".html", dir=wd)
+    with os.fdopen(fd, "w", encoding="utf-8") as f:
+        f.write(html)
+    url = "file:///" + h.replace("\\", "/").lstrip("/")
+    combos = [["--headless=new"], ["--headless=new", "--no-sandbox"], ["--headless=new", "--no-sandbox", "--single-process"],
+              ["--headless=new", "--no-sandbox", "--no-zygote", "--single-process"], ["--headless=new", "--no-sandbox", "--disable-gpu", "--disable-software-rasterizer"],
+              ["--headless=old", "--no-sandbox"], ["--headless=old", "--no-sandbox", "--single-process"],
+              ["--headless=new", "--no-sandbox", "--disable-features=RendererAppContainer,RendererCodeIntegrity,NetworkServiceSandbox"],
+              ["--headless=new", "--no-sandbox", "--disable-features=RendererAppContainer,RendererCodeIntegrity", "--single-process"],
+              ["--headless=new", "--no-sandbox", "--disable-gpu", "--use-angle=swiftshader", "--in-process-gpu"]]
+    out = {"exe": exe, "user": os.environ.get("USERNAME", ""), "system": _is_system_account(), "workdir": wd, "results": []}
+    for i, m in enumerate(combos):
+        pdf = os.path.join(wd, "bt%d.pdf" % i)
+        prof = tempfile.mkdtemp(prefix="bt-", dir=wd)
+        rec = {"flags": " ".join(m)}
+        try:
+            t0 = time.time()
+            r = subprocess.run([exe] + m + ["--disable-extensions", "--no-first-run", "--enable-logging", "--v=0", "--user-data-dir=" + prof,
+                                            "--print-to-pdf=" + pdf, url], capture_output=True, text=True, timeout=60,
+                               creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+            rec.update(rc=r.returncode, sec=round(time.time() - t0, 1), pdf=os.path.getsize(pdf) if os.path.isfile(pdf) else 0,
+                       err=(r.stderr or r.stdout or "")[-400:])
+        except Exception as e:
+            rec["exc"] = str(e)[:300]
+        try:
+            with open(os.path.join(prof, "chrome_debug.log"), "r", encoding="utf-8", errors="replace") as f:
+                rec["log"] = f.read()[-1200:]
+        except Exception:
+            pass
+        shutil.rmtree(prof, ignore_errors=True)
+        out["results"].append(rec)
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, indent=1)
+    return 0
+
+
 def selftest(out_path):
     """برای آزمون خودکار در GitHub Actions و عیب‌یابی: همه‌ی بخش‌های لازم را امتحان می‌کند."""
     res = {"version": VERSION, "frozen": FROZEN, "python": sys.version.split()[0], "user": os.environ.get("USERNAME", ""), "ok": True, "checks": {}}
@@ -1042,6 +1083,9 @@ def main():
     if cmd == "selftest":
         out = args[args.index("--out") + 1] if "--out" in args else os.path.join(HERE, "selftest.json")
         sys.exit(selftest(out))
+    if cmd == "browsertest":
+        out = args[args.index("--out") + 1] if "--out" in args else os.path.join(HERE, "browsertest.json")
+        sys.exit(browsertest(out))
     if cmd == "install":
         sys.exit(install(quiet))
     if cmd == "uninstall":
