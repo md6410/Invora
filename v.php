@@ -80,8 +80,8 @@ if (!$passOk) {
         . 'var v=JSON.stringify(d);Array.prototype.forEach.call(document.querySelectorAll("input[name=dev]"),function(i){i.value=v});'
         . ($c['m'] !== '' && !$sent && $_SERVER['REQUEST_METHOD'] !== 'POST' ? 'var f=document.getElementById("sf");if(f&&!sessionStorage.getItem("vfs' . substr($h, 0, 12) . '")){sessionStorage.setItem("vfs' . substr($h, 0, 12) . '","1");f.submit()}' : '')
         /* اندروید: رمز خودش از پیامک برداشته و فرستاده می‌شود (WebOTP؛ خطِ آخرِ پیامک «@دامنه #رمز») */
-        . 'var pi=document.querySelector("input[name=pin]");if(pi&&"OTPCredential" in window&&navigator.credentials){var ac=new AbortController();pi.form.addEventListener("submit",function(){ac.abort()});'
-        . 'navigator.credentials.get({otp:{transport:["sms"]},signal:ac.signal}).then(function(o){var c=nm(o&&o.code);if(c){pi.value=c;pi.form.submit()}}).catch(function(){})}'
+        . 'var pi=document.querySelector("input[name=pin]");if(pi&&"OTPCredential" in window&&navigator.credentials){var ac=new AbortController();window.addEventListener("pagehide",function(){ac.abort()});'
+        . 'navigator.credentials.get({otp:{transport:["sms"]},signal:ac.signal}).then(function(o){var c=nm(o&&o.code);if(c){pi.focus();pi.value=c;pi.form.submit()}}).catch(function(){})}'
         . 'function nm(x){var s=String(x||"").replace(/[\u06F0-\u06F9]/g,function(d){return d.charCodeAt(0)-1776}).replace(/[\u0660-\u0669]/g,function(d){return d.charCodeAt(0)-1632});var m=s.match(/\d{5}/g);return m?m[m.length-1]:""}'
         . 'if(pi)pi.addEventListener("input",function(){if(/[^0-9]/.test(pi.value)||pi.value.length>5){var c=nm(pi.value);if(c)pi.value=c}});'
         . '})();';
