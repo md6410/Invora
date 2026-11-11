@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$passOk) {
         if (!preg_match('/^\d{5}$/', $pin)) $err = 'رمز ۵ رقمی را کامل وارد کنید.';
         elseif (!is_array($o) || (int)$o['exp'] < time()) { unset($_SESSION['vf'][$h]['h']); $err = 'رمزی برای این مرورگر فرستاده نشده یا مهلتش تمام شده؛ «فرستادن رمز» را بزنید.'; }
         elseif ((int)$o['tries'] >= 5) $err = 'رمز ۵ بار اشتباه زده شد؛ رمز تازه بخواهید.';
-        elseif (!password_verify($pin, (string)$o['h'])) {
+        elseif (!array_filter((array)($o['hs'] ?? [$o['h']]), fn($x) => $x !== '' && password_verify($pin, (string)$x))) {
             $_SESSION['vf'][$h]['tries'] = (int)$o['tries'] + 1;
             df_update('share-ip.json', function (array &$a) use ($ip) {
                 foreach ($a as $k => $v) { $a[$k] = array_values(array_filter($v, fn($x) => $x > time() - 3600)); if (!$a[$k]) unset($a[$k]); }

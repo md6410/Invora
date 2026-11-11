@@ -316,7 +316,7 @@ try {
             if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
             $k = (string)($in['tpl'] ?? 'otp');
             if (!isset(DF_SMS_TPLS[$k])) df_json(['ok' => false, 'error' => 'الگو نامعتبر است.'], 400);
-            $vals = ['CODE' => '12345', 'LINK' => 'TEST-link-123', 'PIN' => '54321'];
+            $vals = ['CODE' => '12345', 'VERIFICATIONCODE' => '#12345', 'LINK' => 'TEST-link-123', 'PIN' => '54321'];
             $r = sms_send((string)($in['mobile'] ?? ''), $k, array_intersect_key($vals, array_flip(DF_SMS_TPLS[$k][1])), 'آزمایش · ' . $user);
             df_json(['ok' => $r['ok'], 'error' => $r['ok'] ? '' : $r['msg'], 'msg' => $r['msg']], $r['ok'] ? 200 : 502);
         }

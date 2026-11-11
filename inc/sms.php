@@ -12,10 +12,10 @@ declare(strict_types=1);
 if (!defined('DF')) { http_response_code(403); exit; }
 
 const DF_SMS_TPLS = [
-    'otp'      => ['کد ورود', ['CODE']],
+    'otp'      => ['کد ورود', ['CODE', 'VERIFICATIONCODE']],
     'link'     => ['لینک فایل برای مشتری', ['LINK']],
     'link_pin' => ['لینک فایل همراه رمز', ['LINK', 'PIN']],
-    'vcode'    => ['رمز دیدن سند با QR اصالت (اگر خالی بماند، الگوی «کد ورود» به کار می‌رود)', ['CODE']],
+    'vcode'    => ['رمز دیدن سند با QR اصالت (اگر خالی بماند، الگوی «کد ورود» به کار می‌رود)', ['CODE', 'VERIFICATIONCODE']],
 ];
 
 function sms_cfg(): array {
@@ -29,6 +29,20 @@ function sms_mobile(string $m): string {
     $m = preg_replace('/\D+/', '', df_fa_digits($m));
     if (preg_match('/^(?:0098|98)?0?(9\d{9})$/', (string)$m, $x)) return '0' . $x[1];
     return '';
+}
+/* پارامترهای پیامکِ کد — مثل وبی (includes/sms.php ‎otp_webotp_suffix‎):
+   CODE = خودِ کد، VERIFICATIONCODE = «#کد» برای خطِ آخرِ «@دامنه #VERIFICATIONCODE#» (WebOTP ِ اندروید).
+   علامتِ # در متنِ الگو کنارِ پارامتر نمی‌نشیند (sms.ir آن را جزوِ نامِ پارامتر می‌خواند و پیامک «@دامنه 12345» می‌شد)،
+   پس جزوِ مقدار است. */
+function sms_code_params(string $code): array { return ['CODE' => $code, 'VERIFICATIONCODE' => '#' . $code]; }
+/** کد را می‌فرستد؛ اگر الگوی قدیمیِ کاربر VERIFICATIONCODE نداشت و sms.ir رد کرد، فقط با CODE دوباره */
+function sms_send_code(string $mobile, string $tpl, string $code, string $note): array {
+    $r = sms_send($mobile, $tpl, sms_code_params($code), $note);
+    if (!$r['ok'] && empty($r['test']) && !preg_match('/موبایل|کلید|curl|ارتباط|شناسه‌ی الگوی/u', $r['msg'])) {
+        $r2 = sms_send($mobile, $tpl, ['CODE' => $code], $note . ' (بی VERIFICATIONCODE)');
+        if ($r2['ok']) return $r2;
+    }
+    return $r;
 }
 function sms_mask(string $m): string { return strlen($m) === 11 ? substr($m, 0, 4) . '***' . substr($m, -4) : $m; }
 
@@ -102,15 +116,20 @@ function sms_otp_send(string $user): array {
         sms_log(['to' => $mobile, 'tpl' => 'otp', 'ok' => false, 'note' => 'کد ورود ' . $user, 'msg' => 'فرستاده نشد: '
             . (!$u ? 'چنین کاربری نیست.' : ($mobile === '' ? 'برای این کاربر شماره‌ی موبایل ثبت نشده است (تنظیمات عمومی ← کاربران).'
             : 'ورود پیامکی روی این دستگاه روشن نیست؛ کاربر یک بار روی همین دستگاه با رمز وارد شود.'))]);
-        $_SESSION['otp'] = ['u' => $user, 'h' => '', 'exp' => time() + 120, 'tries' => 0];
+        if (!is_array($_SESSION['otp'] ?? null) || ($_SESSION['otp']['u'] ?? '') !== $user) $_SESSION['otp'] = ['u' => $user, 'hs' => [], 'exp' => time() + 120, 'tries' => 0];
         return ['ok' => true, 'msg' => $generic . ' (اگر نیامد: یک بار با رمز وارد شوید و در «تنظیمات عمومی ← حساب کاربری» ورود با پیامک را برای همین دستگاه روشن کنید.)'];
     }
     $last = (int)(df_read('otp.json', [])[$user] ?? 0);
     if ($last > time() - 60) return ['ok' => false, 'msg' => 'کد قبلی همین الان فرستاده شد؛ ' . df_fa_num((string)(60 - (time() - $last))) . ' ثانیه‌ی دیگر دوباره بخواهید.'];
     df_update('otp.json', function (array &$a) use ($user) { foreach ($a as $k => $t) if ($t < time() - 3600) unset($a[$k]); $a[$user] = time(); });
     $code = str_pad((string)random_int(0, 99999), 5, '0', STR_PAD_LEFT);
-    $_SESSION['otp'] = ['u' => $user, 'h' => password_hash($code, PASSWORD_DEFAULT), 'exp' => time() + 180, 'tries' => 0];
-    $r = sms_send($mobile, 'otp', ['CODE' => $code], 'کد ورود ' . $user);
+    /* کدهای قبلیِ همین کاربر تا پایانِ مهلتشان معتبر می‌مانند: اگر کاربر دوباره «فرستادن کد» زد و کدِ پیامکِ اول را
+       وارد کرد، «کد درست نیست» نگیرد (پیامک‌ها گاهی جابه‌جا می‌رسند) */
+    $o = $_SESSION['otp'] ?? null;
+    $hs = is_array($o) && ($o['u'] ?? '') === $user && (int)($o['exp'] ?? 0) > time() ? array_slice(array_values(array_filter((array)($o['hs'] ?? [($o['h'] ?? '')]))), -2) : [];
+    $hs[] = password_hash($code, PASSWORD_DEFAULT);
+    $_SESSION['otp'] = ['u' => $user, 'hs' => $hs, 'exp' => time() + 300, 'tries' => 0];
+    $r = sms_send_code($mobile, 'otp', $code, 'کد ورود ' . $user);
     if (!$r['ok']) return ['ok' => false, 'msg' => 'پیامک فرستاده نشد: ' . $r['msg']];
     return ['ok' => true, 'msg' => 'کد ورود به ' . df_fa_num(sms_mask($mobile)) . ' فرستاده شد.'] + (!empty($r['test']) ? ['show' => $code] : []);
 }
@@ -121,7 +140,9 @@ function sms_otp_check(string $code): array {
     $code = df_pin_norm($code);
     $_SESSION['otp']['tries'] = (int)$o['tries'] + 1;
     if ($_SESSION['otp']['tries'] > 5) { unset($_SESSION['otp']); return [null, 'تعداد تلاش‌ها زیاد شد؛ کد تازه بخواهید.']; }
-    if ($o['h'] === '' || !password_verify($code, (string)$o['h'])) { df_login_attempt((string)$o['u'], false); return [null, 'کد درست نیست.']; }
+    $ok = false;
+    foreach ((array)($o['hs'] ?? [($o['h'] ?? '')]) as $h) if ($h !== '' && password_verify($code, (string)$h)) { $ok = true; break; }
+    if (!$ok) { df_login_attempt((string)$o['u'], false); return [null, 'کد درست نیست.' . ($code === '' ? '' : ' (اگر چند بار «فرستادن کد» زده‌اید، کدِ آخرین پیامک را بنویسید.)')]; }
     unset($_SESSION['otp']);
     return [(string)$o['u'], null];
 }

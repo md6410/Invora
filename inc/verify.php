@@ -75,9 +75,13 @@ function vf_send_code(string $h, string $t, array $dev): array {
     if ($ok !== 'ok') return [false, $ok === 'gone' ? 'این کد وجود ندارد.' : 'برای این سند در ' . ($ok === 'hour' ? 'یک ساعت' : 'یک روز') . ' گذشته رمزِ زیادی فرستاده شده؛ بعداً امتحان کنید یا مستقیم با رابط تماس بگیرید.', ''];
     $code = str_pad((string)random_int(0, 99999), 5, '0', STR_PAD_LEFT);
     $tpl = sms_tpl_id('vcode') > 0 || !sms_tpl_id('otp') ? 'vcode' : 'otp';
-    $res = sms_send($c['m'], $tpl, ['CODE' => $code], 'رمز QR اصالت');
+    $res = sms_send_code($c['m'], $tpl, $code, 'رمز QR اصالت');
     if (!$res['ok']) { df_share_log($h, 'vf_sms_fail', ['msg' => $res['msg']] + $dev); return [false, 'پیامک فرستاده نشد. با رابط یا صادرکنندهٔ سند تماس بگیرید.', '']; }
-    $_SESSION['vf'][$h] = ['h' => password_hash($code, PASSWORD_DEFAULT), 'exp' => time() + DF_VF_CODE_MINUTES * 60, 'tries' => 0, 'at' => time()];
+    /* رمزهای قبلیِ همین مرورگر تا پایانِ مهلتشان معتبر می‌مانند (رمزِ پیامکِ اول بعد از «فرستادن دوباره» رد نشود) */
+    $old = $_SESSION['vf'][$h] ?? null;
+    $hs = is_array($old) && (int)($old['exp'] ?? 0) > time() ? array_slice(array_values(array_filter((array)($old['hs'] ?? [($old['h'] ?? '')]))), -2) : [];
+    $hs[] = password_hash($code, PASSWORD_DEFAULT);
+    $_SESSION['vf'][$h] = ['h' => end($hs), 'hs' => $hs, 'exp' => time() + DF_VF_CODE_MINUTES * 60, 'tries' => 0, 'at' => time()];
     df_share_log($h, 'vf_sms', ['to' => sms_mask($c['m'])] + $dev);
     return [true, '✓ رمز فرستاده شد.', !empty($res['test']) ? $code : ''];
 }
