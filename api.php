@@ -399,13 +399,26 @@ try {
         case 'users_list': {
             if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
             $out = [];
-            foreach (df_users() as $n => $u) $out[] = ['u' => $n, 'admin' => !empty($u['admin']), 'created' => ($u['created'] ?? 0) * 1000, 'keyed' => !empty($u['wk'])];
+            foreach (df_users() as $n => $u) $out[] = ['u' => $n, 'admin' => !empty($u['admin']), 'created' => ($u['created'] ?? 0) * 1000, 'keyed' => !empty($u['wk']),
+                'mobile' => (string)($u['mobile'] ?? ''), 'smsDevs' => count(array_filter((array)($u['devs'] ?? []), fn($x) => !empty($x['sms'])))];
             $k = df_keys();
             df_json(['ok' => true, 'users' => $out, 'rcAt' => ($k['rkAt'] ?? 0) * 1000]);
         }
         case 'user_add': {
             if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
-            $e = df_user_add(trim((string)($in['u'] ?? '')), (string)($in['p'] ?? ''), !empty($in['admin']), $dek);
+            $m = trim((string)($in['mobile'] ?? '')); $mm = $m === '' ? '' : sms_mobile($m);
+            if ($m !== '' && $mm === '') df_json(['ok' => false, 'error' => 'شماره‌ی موبایل درست نیست (مثلاً ۰۹۱۲۱۲۳۴۵۶۷).'], 400);
+            $nu = trim((string)($in['u'] ?? ''));
+            $e = df_user_add($nu, (string)($in['p'] ?? ''), !empty($in['admin']), $dek);
+            if ($e) df_json(['ok' => false, 'error' => $e], 400);
+            if ($mm !== '') df_update('users.json', function (array &$d) use ($nu, $mm) { if (isset($d['users'][$nu])) $d['users'][$nu]['mobile'] = $mm; }, ['users' => []]);
+            df_json(['ok' => true]);
+        }
+        case 'user_mobile': { /* مدیر شماره‌ی موبایل هر کاربر را ثبت می‌کند (برای ورود پیامکی) */
+            if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
+            $n = (string)($in['u'] ?? ''); $m = trim((string)($in['mobile'] ?? '')); $mm = $m === '' ? '' : sms_mobile($m);
+            if ($m !== '' && $mm === '') df_json(['ok' => false, 'error' => 'شماره‌ی موبایل درست نیست (مثلاً ۰۹۱۲۱۲۳۴۵۶۷).'], 400);
+            $e = df_update('users.json', function (array &$d) use ($n, $mm) { if (!isset($d['users'][$n])) return 'کاربر پیدا نشد.'; $d['users'][$n]['mobile'] = $mm; return null; }, ['users' => []]);
             if ($e) df_json(['ok' => false, 'error' => $e], 400);
             df_json(['ok' => true]);
         }
