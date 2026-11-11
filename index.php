@@ -87,7 +87,10 @@ if (!df_logged_in()) {
         $alt = '<div id="xMsg" class="muted" hidden></div>'
             . ($pkOn ? '<button type="button" id="pkBtn" hidden style="background:#fff;color:#1e5a55;border:1px solid #1e5a55">ورود با اثر انگشت / چهره</button>' : '')
             . ($smsOn ? '<details id="smsBox"><summary style="cursor:pointer;font-size:13.5px">ورود با کد پیامکی</summary><div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">'
-                . '<label>نام کاربری<input id="smsU" dir="ltr" autocomplete="username"></label><button type="button" id="smsSend" style="background:#fff;color:#1e5a55;border:1px solid #1e5a55">فرستادن کد</button>'
+                . '<label>نام کاربری<input id="smsU" dir="ltr" autocomplete="username"></label><div id="capBox" hidden style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px">بررسی امنیتی: عددهای تصویر را بنویسید <small class="muted">(اگر جمع است، حاصل را)</small></span>'
+                . '<div style="display:flex;gap:8px;align-items:center"><img id="capImg" alt="" width="200" height="64" style="border-radius:8px;border:1px solid #c9cfcb;background:#f6f7f5"><button type="button" id="capNew" title="تصویر تازه" style="background:#fff;color:#1e5a55;border:1px solid #1e5a55;padding:6px 10px">↻</button></div>'
+                . '<input id="capIn" class="pin" inputmode="numeric" autocomplete="off" maxlength="8"></div>'
+                . '<button type="button" id="smsSend" style="background:#fff;color:#1e5a55;border:1px solid #1e5a55">فرستادن کد</button>'
                 . '<label id="smsCodeL" hidden>کد پیامک‌شده<input id="smsCode" class="pin" inputmode="numeric" autocomplete="one-time-code" maxlength="12"></label><button type="button" id="smsGo" hidden>ورود با کد</button></div></details>' : '')
             . '<script>(function(){var C=(document.querySelector("input[name=csrf]")||{}).value||"";'
             . 'function b2(s){s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";var b=atob(s),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u.buffer}'
@@ -101,8 +104,11 @@ if (!df_logged_in()) {
             . '.then(function(r){if(!r.ok)throw new Error(r.error);location.href=r.go})'
             . '.catch(function(e){say(e&&(e.name==="NotAllowedError"||e.name==="AbortError")?"انجام نشد یا لغو شد. اگر اثر انگشت این دستگاه را ثبت نکرده‌اید، با رمز وارد شوید و از «تنظیمات عمومی ← حساب کاربری» ثبتش کنید.":(e&&e.message)||"انجام نشد.",true)})}}'
             . 'var sb=document.getElementById("smsSend");if(sb){sb.onclick=function(){var u=document.getElementById("smsU").value.trim();if(!u){say("نام کاربری را بنویسید.",true);return}sb.disabled=true;'
-            . 'post({a:"otp_send",u:u}).then(function(r){sb.disabled=false;if(!r.ok){say(r.error,true);return}say(r.msg+(r.show?" — حالت آزمایشی، کد: "+r.show:""));document.getElementById("smsCodeL").hidden=false;document.getElementById("smsGo").hidden=false;document.getElementById("smsCode").focus();otpAuto()})};'
+            . 'var cb=document.getElementById("capBox"),ci=document.getElementById("capIn");'
+            . 'post({a:"otp_send",u:u,cap:cb.hidden?"":ci.value.trim()}).then(function(r){sb.disabled=false;'
+            . 'if(r.captcha){cb.hidden=false;cb.style.display="flex";ci.value="";capLoad();ci.focus();say(r.error,true);return}cb.hidden=true;cb.style.display="none";if(!r.ok){say(r.error,true);return}say(r.msg+(r.show?" — حالت آزمایشی، کد: "+r.show:""));document.getElementById("smsCodeL").hidden=false;document.getElementById("smsGo").hidden=false;document.getElementById("smsCode").focus();otpAuto()})};'
             /* اندروید (Chrome): کد خودش از پیامک برداشته و وارد می‌شود (WebOTP) — خطِ آخرِ پیامک باید «@دامنه #کد» باشد؛ آیفون کد را بالای صفحه‌کلید پیشنهاد می‌دهد */
+            . 'function capLoad(){document.getElementById("capImg").src="auth.php?a=captcha&r="+Date.now()}document.getElementById("capNew").onclick=capLoad;document.getElementById("capBox").style.display="none";'
             . 'var otpAC=null;function otpAuto(){if(!("OTPCredential" in window)||!navigator.credentials)return;if(otpAC)otpAC.abort();otpAC=new AbortController();'
             . 'navigator.credentials.get({otp:{transport:["sms"]},signal:otpAC.signal}).then(function(o){if(o&&o.code){document.getElementById("smsCode").value=o.code;document.getElementById("smsGo").click()}}).catch(function(){})}'
             . 'document.getElementById("smsGo").onclick=function(){if(otpAC){otpAC.abort();otpAC=null}post({a:"otp_login",code:document.getElementById("smsCode").value}).then(function(r){if(!r.ok){say(r.error,true);return}location.href=r.go})}}'

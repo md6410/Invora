@@ -14,6 +14,7 @@ require __DIR__ . '/sms.php';
 require __DIR__ . '/print.php';
 require __DIR__ . '/gallery.php';
 require __DIR__ . '/verify.php';
+require __DIR__ . '/captcha.php';
 
 /* ---------------- storage ---------------- */
 function df_deny_htaccess(): string {
@@ -226,6 +227,11 @@ function df_login(string $user, string $pass): ?string {
     } else {
         return 'حساب شما هنوز به کلید رمزنگاری اطلاعات وصل نشده است. از مدیر بخواهید در «تنظیمات عمومی ← کاربران» برایتان رمز تعیین کند.';
     }
+    /* دستگاهی که با رمز وارد شد، برای ورود پیامکی هم مورد اعتماد می‌شود (اگر ورود پیامکی روشن است و کاربر شماره دارد)؛
+       وگرنه کد ورود روی این دستگاه فرستاده نمی‌شد و کاربر نمی‌دانست چرا. از «حساب کاربری» خاموش می‌شود. */
+    try {
+        if (!empty(sms_cfg()['login']) && sms_mobile((string)(df_users()[$user]['mobile'] ?? '')) !== '') df_dev_ensure($user, $dek, ['sms' => true]);
+    } catch (Throwable $e) { error_log('daftar-factor sms device: ' . $e->getMessage()); }
     df_login_finish($user, $dek, $newCode, 'رمز عبور');
     return null;
 }

@@ -42,3 +42,4 @@ media.php
 inc/gallery.php
 v.php
 inc/verify.php
+inc/captcha.php

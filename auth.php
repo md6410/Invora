@@ -10,6 +10,7 @@ df_headers('api');
 df_session_start();
 header('Content-Type: application/json; charset=utf-8');
 $out = function (array $d, int $code = 200): void { http_response_code($code); echo json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); exit; };
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && ($_GET['a'] ?? '') === 'captcha') { header_remove('Content-Type'); df_cap_image(); exit; }
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') $out(['ok' => false, 'error' => 'method'], 405);
 if (!df_csrf_ok((string)($_SERVER['HTTP_X_CSRF_TOKEN'] ?? ''))) $out(['ok' => false, 'error' => 'مهلت صفحه تمام شده؛ صفحه را تازه کنید.'], 403);
 if (df_logged_in()) $out(['ok' => true, 'go' => df_base_path()]);
@@ -42,6 +43,13 @@ try {
             $user = trim((string)($in['u'] ?? ''));
             if (!df_valid_username($user)) $out(['ok' => false, 'error' => 'نام کاربری را درست بنویسید.'], 400);
             if (($w = df_login_locked($user)) > 0) $out(['ok' => false, 'error' => 'ورود تا ' . df_fa_num((string)ceil($w / 60)) . ' دقیقه‌ی دیگر بسته است.'], 429);
+            /* از درخواستِ چهارم در یک ساعت: کپچا (جلوی ربات و خالی شدنِ اعتبار پیامک) */
+            if (df_cap_needed()) {
+                $cap = (string)($in['cap'] ?? '');
+                if ($cap === '') $out(['ok' => false, 'captcha' => true, 'error' => 'برای فرستادن دوباره‌ی کد، عددهای تصویر را بنویسید.'], 400);
+                if (!df_cap_check($cap)) $out(['ok' => false, 'captcha' => true, 'error' => 'عددهای تصویر درست نبود؛ تصویر تازه را بنویسید.'], 400);
+            }
+            df_cap_count();
             $r = sms_otp_send($user);
             $out(['ok' => $r['ok'], 'msg' => $r['msg'], 'error' => $r['ok'] ? '' : $r['msg'], 'show' => $r['show'] ?? ''], $r['ok'] ? 200 : 400);
         }
