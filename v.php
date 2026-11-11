@@ -79,6 +79,9 @@ if (!$passOk) {
     $devJs = '(function(){var d={};try{var n=navigator,s=screen;d.scr=s.width+"x"+s.height;d.dpr=window.devicePixelRatio;d.tz=Intl.DateTimeFormat().resolvedOptions().timeZone;d.langs=(n.languages||[n.language]).join(",");d.plat=n.platform;d.touch=n.maxTouchPoints;}catch(e){}'
         . 'var v=JSON.stringify(d);Array.prototype.forEach.call(document.querySelectorAll("input[name=dev]"),function(i){i.value=v});'
         . ($c['m'] !== '' && !$sent && $_SERVER['REQUEST_METHOD'] !== 'POST' ? 'var f=document.getElementById("sf");if(f&&!sessionStorage.getItem("vfs' . substr($h, 0, 12) . '")){sessionStorage.setItem("vfs' . substr($h, 0, 12) . '","1");f.submit()}' : '')
+        /* اندروید: رمز خودش از پیامک برداشته و فرستاده می‌شود (WebOTP؛ خطِ آخرِ پیامک «@دامنه #رمز») */
+        . 'var pi=document.querySelector("input[name=pin]");if(pi&&"OTPCredential" in window&&navigator.credentials){var ac=new AbortController();pi.form.addEventListener("submit",function(){ac.abort()});'
+        . 'navigator.credentials.get({otp:{transport:["sms"]},signal:ac.signal}).then(function(o){if(o&&o.code){pi.value=o.code;pi.form.submit()}}).catch(function(){})}'
         . '})();';
     $body = '<h1>تأیید اصالت سند</h1>'
         . '<p style="margin:0">این کد در سامانهٔ صادرکنندهٔ سند ثبت شده است. برای دیدنِ خودِ سند و مقایسه با نسخه‌ای که در دست دارید، رمزِ پیامک‌شده را وارد کنید.</p>'

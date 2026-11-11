@@ -101,8 +101,11 @@ if (!df_logged_in()) {
             . '.then(function(r){if(!r.ok)throw new Error(r.error);location.href=r.go})'
             . '.catch(function(e){say(e&&(e.name==="NotAllowedError"||e.name==="AbortError")?"انجام نشد یا لغو شد. اگر اثر انگشت این دستگاه را ثبت نکرده‌اید، با رمز وارد شوید و از «تنظیمات عمومی ← حساب کاربری» ثبتش کنید.":(e&&e.message)||"انجام نشد.",true)})}}'
             . 'var sb=document.getElementById("smsSend");if(sb){sb.onclick=function(){var u=document.getElementById("smsU").value.trim();if(!u){say("نام کاربری را بنویسید.",true);return}sb.disabled=true;'
-            . 'post({a:"otp_send",u:u}).then(function(r){sb.disabled=false;if(!r.ok){say(r.error,true);return}say(r.msg+(r.show?" — حالت آزمایشی، کد: "+r.show:""));document.getElementById("smsCodeL").hidden=false;document.getElementById("smsGo").hidden=false;document.getElementById("smsCode").focus()})};'
-            . 'document.getElementById("smsGo").onclick=function(){post({a:"otp_login",code:document.getElementById("smsCode").value}).then(function(r){if(!r.ok){say(r.error,true);return}location.href=r.go})}}'
+            . 'post({a:"otp_send",u:u}).then(function(r){sb.disabled=false;if(!r.ok){say(r.error,true);return}say(r.msg+(r.show?" — حالت آزمایشی، کد: "+r.show:""));document.getElementById("smsCodeL").hidden=false;document.getElementById("smsGo").hidden=false;document.getElementById("smsCode").focus();otpAuto()})};'
+            /* اندروید (Chrome): کد خودش از پیامک برداشته و وارد می‌شود (WebOTP) — خطِ آخرِ پیامک باید «@دامنه #کد» باشد؛ آیفون کد را بالای صفحه‌کلید پیشنهاد می‌دهد */
+            . 'var otpAC=null;function otpAuto(){if(!("OTPCredential" in window)||!navigator.credentials)return;if(otpAC)otpAC.abort();otpAC=new AbortController();'
+            . 'navigator.credentials.get({otp:{transport:["sms"]},signal:otpAC.signal}).then(function(o){if(o&&o.code){document.getElementById("smsCode").value=o.code;document.getElementById("smsGo").click()}}).catch(function(){})}'
+            . 'document.getElementById("smsGo").onclick=function(){if(otpAC){otpAC.abort();otpAC=null}post({a:"otp_login",code:document.getElementById("smsCode").value}).then(function(r){if(!r.ok){say(r.error,true);return}location.href=r.go})}}'
             . '})();</script>';
     }
     df_page('ورود به دفتر فاکتور', '<h1>ورود به دفتر فاکتور</h1>' . $errBox
