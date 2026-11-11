@@ -81,7 +81,9 @@ if (!$passOk) {
         . ($c['m'] !== '' && !$sent && $_SERVER['REQUEST_METHOD'] !== 'POST' ? 'var f=document.getElementById("sf");if(f&&!sessionStorage.getItem("vfs' . substr($h, 0, 12) . '")){sessionStorage.setItem("vfs' . substr($h, 0, 12) . '","1");f.submit()}' : '')
         /* اندروید: رمز خودش از پیامک برداشته و فرستاده می‌شود (WebOTP؛ خطِ آخرِ پیامک «@دامنه #رمز») */
         . 'var pi=document.querySelector("input[name=pin]");if(pi&&"OTPCredential" in window&&navigator.credentials){var ac=new AbortController();pi.form.addEventListener("submit",function(){ac.abort()});'
-        . 'navigator.credentials.get({otp:{transport:["sms"]},signal:ac.signal}).then(function(o){if(o&&o.code){pi.value=o.code;pi.form.submit()}}).catch(function(){})}'
+        . 'navigator.credentials.get({otp:{transport:["sms"]},signal:ac.signal}).then(function(o){var c=nm(o&&o.code);if(c){pi.value=c;pi.form.submit()}}).catch(function(){})}'
+        . 'function nm(x){var s=String(x||"").replace(/[\u06F0-\u06F9]/g,function(d){return d.charCodeAt(0)-1776}).replace(/[\u0660-\u0669]/g,function(d){return d.charCodeAt(0)-1632});var m=s.match(/\d{5}/g);return m?m[m.length-1]:""}'
+        . 'if(pi)pi.addEventListener("input",function(){if(/[^0-9]/.test(pi.value)||pi.value.length>5){var c=nm(pi.value);if(c)pi.value=c}});'
         . '})();';
     $body = '<h1>تأیید اصالت سند</h1>'
         . '<p style="margin:0">این کد در سامانهٔ صادرکنندهٔ سند ثبت شده است. برای دیدنِ خودِ سند و مقایسه با نسخه‌ای که در دست دارید، رمزِ پیامک‌شده را وارد کنید.</p>'
@@ -93,7 +95,7 @@ if (!$passOk) {
     } else {
         $body .= '<p style="margin:0">رمز به ' . $who . ' پیامک ' . ($sent || $info ? 'شد' : 'می‌شود') . '. رمز را از ایشان بگیرید.</p>'
             . '<form method="post" autocomplete="off" style="display:flex;flex-direction:column;gap:10px"><input type="hidden" name="csrf" value="' . $csrf . '"><input type="hidden" name="act" value="pin"><input type="hidden" name="dev" value="">'
-            . '<label>رمز ۵ رقمی<input class="pin" name="pin" type="text" inputmode="numeric" maxlength="24" autocomplete="one-time-code" required' . ($sent || $info ? ' autofocus' : '') . '></label><button>دیدن سند</button></form>'
+            . '<label>رمز ۵ رقمی<input class="pin" name="pin" type="text" inputmode="numeric" maxlength="400" autocomplete="one-time-code" required' . ($sent || $info ? ' autofocus' : '') . '></label><button>دیدن سند</button></form>'
             . '<form id="sf" method="post"><input type="hidden" name="csrf" value="' . $csrf . '"><input type="hidden" name="act" value="send"><input type="hidden" name="dev" value="">'
             . '<button style="background:transparent;color:#1e5a55;border:1px solid #1e5a55;width:100%">' . ($sent || $info ? 'فرستادن دوبارهٔ رمز' : 'فرستادن رمز') . '</button></form>'
             . '<p class="muted" style="margin:0">رمز ' . df_fa_num((string)DF_VF_CODE_MINUTES) . ' دقیقه اعتبار دارد. هر اسکن و هر بار دیدن سند با آی‌پی و مشخصات دستگاه ثبت می‌شود.</p>';
