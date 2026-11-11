@@ -86,12 +86,14 @@ if (!df_logged_in()) {
     if ($pkOn || $smsOn) {
         $alt = '<div id="xMsg" class="muted" hidden></div>'
             . ($pkOn ? '<button type="button" id="pkBtn" hidden style="background:#fff;color:#1e5a55;border:1px solid #1e5a55">ورود با اثر انگشت / چهره</button>' : '')
-            . ($smsOn ? '<details id="smsBox"><summary style="cursor:pointer;font-size:13.5px">ورود با کد پیامکی</summary><div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">'
+            /* «ورود با کد پیامکی»: فرمِ رمز، اثر انگشت و پانویس پنهان می‌شوند و فقط نام کاربری و کد می‌ماند (انتخاب در همین مرورگر به یاد می‌ماند) */
+            . ($smsOn ? '<button type="button" id="smsOpen" style="background:#fff;color:#1e5a55;border:1px solid #1e5a55">ورود با کد پیامکی</button><div id="smsBox" style="display:none;flex-direction:column;gap:10px">'
                 . '<label>نام کاربری<input id="smsU" dir="ltr" autocomplete="username"></label><div id="capBox" hidden style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px">بررسی امنیتی: عددهای تصویر را بنویسید <small class="muted">(اگر جمع است، حاصل را)</small></span>'
                 . '<div style="display:flex;gap:8px;align-items:center"><img id="capImg" alt="" width="200" height="64" style="border-radius:8px;border:1px solid #c9cfcb;background:#f6f7f5"><button type="button" id="capNew" title="تصویر تازه" style="background:#fff;color:#1e5a55;border:1px solid #1e5a55;padding:6px 10px">↻</button></div>'
                 . '<input id="capIn" class="pin" inputmode="numeric" autocomplete="off" maxlength="8"></div>'
-                . '<button type="button" id="smsSend" style="background:#fff;color:#1e5a55;border:1px solid #1e5a55">فرستادن کد</button>'
-                . '<label id="smsCodeL" hidden>کد پیامک‌شده<input id="smsCode" class="pin" inputmode="numeric" autocomplete="one-time-code" maxlength="400"></label><button type="button" id="smsGo" hidden>ورود با کد</button><button type="button" id="smsPaste" hidden style="background:#fff;color:#1e5a55;border:1px solid #1e5a55">📋 چسباندن کدِ کپی‌شده</button></div></details>' : '')
+                . '<button type="button" id="smsSend">فرستادن کد</button>'
+                . '<label id="smsCodeL" hidden>کد پیامک‌شده<input id="smsCode" class="pin" inputmode="numeric" autocomplete="one-time-code" maxlength="400"></label><button type="button" id="smsGo" hidden>ورود</button>'
+                . '<div style="display:flex;justify-content:space-between;gap:8px;font-size:13px"><a href="#" id="smsBack">← ورود با رمز</a><a href="#" id="smsPaste" hidden>چسباندن کدِ کپی‌شده</a></div></div>' : '')
             . '<script>(function(){var C=(document.querySelector("input[name=csrf]")||{}).value||"";'
             . 'function b2(s){s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";var b=atob(s),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u.buffer}'
             . 'function u2(b){b=new Uint8Array(b);var s="";for(var i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s).replace(/\\+/g,"-").replace(/\\//g,"_").replace(/=+$/,"")}'
@@ -106,7 +108,7 @@ if (!df_logged_in()) {
             . 'var sb=document.getElementById("smsSend");if(sb){sb.onclick=function(){var u=document.getElementById("smsU").value.trim();if(!u){say("نام کاربری را بنویسید.",true);return}sb.disabled=true;'
             . 'var cb=document.getElementById("capBox"),ci=document.getElementById("capIn");'
             . 'post({a:"otp_send",u:u,cap:cb.hidden?"":ci.value.trim()}).then(function(r){sb.disabled=false;'
-            . 'if(r.captcha){cb.hidden=false;cb.style.display="flex";ci.value="";capLoad();ci.focus();say(r.error,true);return}cb.hidden=true;cb.style.display="none";if(!r.ok){say(r.error,true);return}say(r.msg+(r.show?" — حالت آزمایشی، کد: "+r.show:""));document.getElementById("smsCodeL").hidden=false;document.getElementById("smsGo").hidden=false;var spb=document.getElementById("smsPaste");if(spb&&navigator.clipboard&&navigator.clipboard.readText)spb.hidden=false;document.getElementById("smsCode").focus();otpAuto()})};'
+            . 'if(r.captcha){cb.hidden=false;cb.style.display="flex";ci.value="";capLoad();ci.focus();say(r.error,true);return}cb.hidden=true;cb.style.display="none";if(!r.ok){say(r.error,true);return}say(r.msg+(r.show?" — حالت آزمایشی، کد: "+r.show:""));document.getElementById("smsCodeL").hidden=false;document.getElementById("smsGo").hidden=false;sb.textContent="فرستادن دوباره‌ی کد";sb.style.cssText="background:#fff;color:#1e5a55;border:1px solid #1e5a55";var spb=document.getElementById("smsPaste");if(spb&&navigator.clipboard&&navigator.clipboard.readText)spb.hidden=false;document.getElementById("smsCode").focus();otpAuto()})};'
             /* اندروید (Chrome): کد خودش از پیامک برداشته و وارد می‌شود (WebOTP) — خطِ آخرِ پیامک باید «@دامنه #کد» باشد؛ آیفون کد را بالای صفحه‌کلید پیشنهاد می‌دهد */
             . 'function capLoad(){document.getElementById("capImg").src="auth.php?a=captcha&r="+Date.now()}document.getElementById("capNew").onclick=capLoad;document.getElementById("capBox").style.display="none";'
             /* مثل وبی (assets/js/main.js): درخواستِ WebOTP فقط یک بار ساخته می‌شود و فقط با ترکِ صفحه لغو می‌شود —
@@ -121,14 +123,18 @@ if (!df_logged_in()) {
             . '.catch(function(e){otpOn=false;lg("rejected: "+(e&&e.name)+" — "+(e&&e.message));if(e&&e.name!=="AbortError")say("خواندن خودکار کد انجام نشد ("+(e.name||"")+")؛ کد را بنویسید یا متن پیامک را این‌جا بچسبانید.",true)})}'
             /* کد: رقم‌های فارسی/عربی هم؛ از متنِ کاملِ پیامک (چسبانده یا خوانده‌شده) آخرین عددِ ۴ تا ۸ رقمی */
             . 'function otpNorm(x){var s=String(x||"").replace(/[\u06F0-\u06F9]/g,function(d){return d.charCodeAt(0)-1776}).replace(/[\u0660-\u0669]/g,function(d){return d.charCodeAt(0)-1632});var m=s.match(/\d{4,8}/g);return m?m[m.length-1]:""}'
+            . 'var sbx=document.getElementById("smsBox");if(sbx){var pwb=document.getElementById("pwBox"),h1=document.getElementById("lgH"),so=document.getElementById("smsOpen"),pkb=document.getElementById("pkBtn");'
+            . 'var smsMode=function(on){var ft=document.getElementById("lgFoot");pwb.style.display=on?"none":"";so.style.display=on?"none":"";if(ft)ft.style.display=on?"none":"";if(pkb)pkb.style.display=on?"none":"";sbx.style.display=on?"flex":"none";h1.textContent=on?"ورود با کد پیامکی":"ورود به دفتر فاکتور";'
+            . 'try{localStorage.setItem("df-login-sms",on?"1":"")}catch(e){}if(on){var su=document.getElementById("smsU"),pu=document.querySelector("#pwBox input[name=u]");if(pu&&pu.value&&!su.value)su.value=pu.value;(su.value?document.getElementById("smsSend"):su).focus()}};'
+            . 'so.onclick=function(){smsMode(true)};document.getElementById("smsBack").onclick=function(e){e.preventDefault();smsMode(false)};var mem="";try{mem=localStorage.getItem("df-login-sms")||""}catch(e){}if(mem){smsMode(true);document.addEventListener("DOMContentLoaded",function(){smsMode(true)})}}'
             . 'var icx=document.getElementById("smsCode");icx.addEventListener("input",function(){var v=icx.value;if(/[^0-9]/.test(v)||v.length>8){var c=otpNorm(v);if(c&&c!==v){icx.value=c;if(c.length===5)document.getElementById("smsGo").click()}}});'
-            . 'var pb=document.getElementById("smsPaste");if(pb){if(!(navigator.clipboard&&navigator.clipboard.readText))pb.hidden=true;pb.onclick=function(){navigator.clipboard.readText().then(function(t){var c=otpNorm(t);if(!c){say("در حافظه کدی پیدا نشد؛ اول کد یا متن پیامک را کپی کنید.",true);return}icx.value=c;document.getElementById("smsGo").click()}).catch(function(){say("اجازه‌ی خواندن حافظه داده نشد؛ کد را بنویسید.",true)})}}'
+            . 'var pb=document.getElementById("smsPaste");if(pb){if(!(navigator.clipboard&&navigator.clipboard.readText))pb.hidden=true;pb.onclick=function(ev){if(ev)ev.preventDefault();navigator.clipboard.readText().then(function(t){var c=otpNorm(t);if(!c){say("در حافظه کدی پیدا نشد؛ اول کد یا متن پیامک را کپی کنید.",true);return}icx.value=c;document.getElementById("smsGo").click()}).catch(function(){say("اجازه‌ی خواندن حافظه داده نشد؛ کد را بنویسید.",true)})}}'
             . 'var goBusy=false;document.getElementById("smsGo").onclick=function(){if(goBusy)return;var cv=otpNorm(document.getElementById("smsCode").value);if(!cv){say("کد را بنویسید.",true);return}goBusy=true;lg("submitting "+cv);post({a:"otp_login",code:cv}).then(function(r){goBusy=false;lg("login: "+(r.ok?"ok":r.error));if(!r.ok){say(r.error,true);return}location.href=r.go},function(){goBusy=false})}}'
             . '})();</script>';
     }
-    df_page('ورود به دفتر فاکتور', '<h1>ورود به دفتر فاکتور</h1>' . $errBox
-        . $form('login', '<label>نام کاربری<input name="u" dir="ltr" required autocomplete="username webauthn" autofocus></label><label>رمز عبور<input name="p" type="password" dir="ltr" required autocomplete="current-password"></label><button>ورود</button>') . $alt
-        . '<p class="muted">بعد از ' . df_fa_num((string)DF_LOGIN_MAX_FAILS) . ' بار رمز اشتباه، ورود ' . df_fa_num((string)DF_LOGIN_LOCK_MINUTES) . ' دقیقه بسته می‌شود. · <a href="?m=recover">رمز را فراموش کرده‌ام</a></p>');
+    df_page('ورود به دفتر فاکتور', '<h1 id="lgH">ورود به دفتر فاکتور</h1>' . $errBox
+        . '<div id="pwBox">' . $form('login', '<label>نام کاربری<input name="u" dir="ltr" required autocomplete="username webauthn" autofocus></label><label>رمز عبور<input name="p" type="password" dir="ltr" required autocomplete="current-password"></label><button>ورود</button>') . '</div>' . $alt
+        . '<p class="muted" id="lgFoot">بعد از ' . df_fa_num((string)DF_LOGIN_MAX_FAILS) . ' بار رمز اشتباه، ورود ' . df_fa_num((string)DF_LOGIN_LOCK_MINUTES) . ' دقیقه بسته می‌شود. · <a href="?m=recover">رمز را فراموش کرده‌ام</a></p>');
     exit;
 }
 
