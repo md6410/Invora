@@ -211,6 +211,8 @@ function df_login_attempt(string $user, bool $ok): void {
         }
     });
 }
+function df_any_wk(): bool { foreach (df_users() as $u) if (!empty($u['wk'])) return true; return false; }
+function df_state_encrypted(): bool { $f = df_path('state.json'); if (!is_file($f)) return false; $h = @fopen($f, 'rb'); if (!$h) return false; $b = (string)fread($h, 4); fclose($h); return df_is_enc($b); }
 function df_login(string $user, string $pass): ?string {
     $wait = df_login_locked($user);
     if ($wait > 0) return 'به دلیل تلاش‌های ناموفق زیاد، ورود تا ' . df_fa_num((string)ceil($wait / 60)) . ' دقیقه‌ی دیگر بسته است.';
@@ -224,13 +226,17 @@ function df_login(string $user, string $pass): ?string {
     if (!empty($u['wk'])) {
         $dek = df_unwrap($u, $pass);
         if ($dek === null) return 'کلید رمزنگاری اطلاعات با این رمز باز نشد. از مدیر بخواهید رمز تازه‌ای برایتان تعیین کند، یا با «کد بازیابی» رمز را عوض کنید.';
-    } elseif (!df_has_dek()) {
-        /* first login ever (or an install from before encryption): create the key and encrypt existing data */
+    } elseif (!df_has_dek() || (!df_any_wk() && !df_state_encrypted())) {
+        /* first login ever (or an install from before encryption): create the key and encrypt existing data.
+           Also a first login that was cut off half-way (keys.json written, but no user ever got a wrapped key and
+           no data was encrypted yet): nothing can be lost, so start again instead of locking everybody out. */
         $dek = random_bytes(32);
-        df_update('keys.json', function (array &$k) use ($dek) { $k['kcv'] = df_kcv($dek); $k['created'] = time(); });
+        df_update('keys.json', function (array &$k) { $k = []; });
         df_log_keys_ensure($dek);
         $newCode = df_rc_set($dek);
         df_update('users.json', function (array &$d) use ($user, $dek, $pass) { $d['users'][$user] = array_merge($d['users'][$user], df_wrap($dek, $pass)); }, ['users' => []]);
+        /* the key counts as "created" only now, when a user can open it: a failure before this point leaves a clean state */
+        df_update('keys.json', function (array &$k) use ($dek) { $k['kcv'] = df_kcv($dek); $k['created'] = time(); });
         df_migrate_plain($dek);
     } else {
         return 'حساب شما هنوز به کلید رمزنگاری اطلاعات وصل نشده است. از مدیر بخواهید در «تنظیمات عمومی ← کاربران» برایتان رمز تعیین کند.';
