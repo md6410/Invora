@@ -339,7 +339,7 @@ try {
             df_json(['ok' => true]);
         }
         case 'mail_send': {
-            if (!df_perm('letters')) df_json(['ok' => false, 'error' => 'دسترسی ندارید'], 403);
+            if (!df_perm_any(['letters', 'docs', 'files', 'cdocs', 'hr'])) df_json(['ok' => false, 'error' => 'دسترسی ندارید'], 403);
             $c = mail_cfg($dek);
             $to = mail_parse_addrs((string)($in['to'] ?? '')); $cc = mail_parse_addrs((string)($in['cc'] ?? ''));
             if (!$to) df_json(['ok' => false, 'error' => 'نشانی ایمیل گیرنده درست نیست.'], 400);

@@ -141,7 +141,8 @@ function df_csrf(): string {
 function df_csrf_ok(string $t): bool { return !empty($_SESSION['csrf']) && is_string($t) && hash_equals($_SESSION['csrf'], $t); }
 
 /* بخش‌هایی که مدیر می‌تواند برای هر کاربر باز یا بسته کند (مدیر همه را دارد؛ کاربری که perms ندارد هم همه را دارد) */
-const DF_PERMS = ['docs', 'acc', 'customers', 'phone', 'products', 'gal', 'letters', 'assets', 'hr', 'payroll', 'print', 'settings'];
+const DF_PERMS = ['docs', 'acc', 'customers', 'phone', 'products', 'gal', 'letters', 'assets', 'hr', 'payroll', 'files', 'cdocs', 'print', 'settings'];
+function df_perm_any(array $ps): bool { foreach ($ps as $p) if (df_perm($p)) return true; return false; }
 function df_perm(string $p): bool {
     if (!empty($_SESSION['admin'])) return true;
     $u = df_users()[$_SESSION['u'] ?? ''] ?? null;

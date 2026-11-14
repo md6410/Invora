@@ -43,7 +43,9 @@ function gal_clean_meta(array $in, array $old = []): array {
     $type = strtolower($s('type', 120));
     if (!preg_match('~^[a-z0-9.+\-]+/[a-z0-9.+\-]+$~', $type)) $type = 'application/octet-stream';
     return ['name' => preg_replace('~[\\\\/:*?"<>|\x00-\x1f]+~u', '-', $s('name', 160)) ?: 'file', 'type' => $type,
-        'kind' => (($in['kind'] ?? $old['kind'] ?? '') === 'catalog') ? 'catalog' : 'media',
+        'kind' => in_array(($k = (string)($in['kind'] ?? $old['kind'] ?? '')), ['catalog', 'company', 'official', 'other'], true) ? $k : 'media',
+        'origin' => in_array(($o = $s('origin', 20)), ['official', 'company', 'assets', 'hr', 'letters', 'products', 'media', 'catalog', 'other'], true) ? $o : '',
+        'exp' => preg_replace('~[^0-9/]~', '', $s('exp', 12)), 'co' => preg_replace('~[^A-Za-z0-9]~', '', $s('co', 20)),
         'title' => $s('title', 160), 'desc' => $s('desc', 2000), 'folder' => $s('folder', 80),
         'fp' => preg_replace('/[^A-Za-z0-9_.:|\-]/', '', $s('fp', 200))]; /* نشانه‌ی فایل روی رایانه‌ی کاربر (نام، اندازه، زمان) برای ادامه‌ی بارگذاری */
 }
