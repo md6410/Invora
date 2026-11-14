@@ -18,7 +18,10 @@ session_write_close(); /* no session writes below (except pass_change); avoids b
 if (($_GET['a'] ?? '') === 'gal_chunk') {
     $id = (string)($_GET['id'] ?? ''); $i = (int)($_GET['i'] ?? -1);
     if (!gal_valid_id($id)) df_json(['ok' => false, 'error' => 'bad id'], 400);
-    $bin = (string)file_get_contents('php://input', false, null, 0, GAL_CHUNK + 1);
+    /* enc=b64: the piece comes as base64 text (some hosts' firewalls refuse raw binary request bodies with 403) */
+    $b64 = ($_GET['enc'] ?? '') === 'b64';
+    $bin = (string)file_get_contents('php://input', false, null, 0, $b64 ? intdiv(GAL_CHUNK * 4, 3) + 64 : GAL_CHUNK + 1);
+    if ($b64) { $bin = base64_decode(trim($bin), true); if ($bin === false) df_json(['ok' => false, 'error' => 'تکه‌ی فایل خوانده نشد.'], 400); }
     if ($e = gal_put_chunk($id, $i, $bin, $dek)) { $ns = strncmp($e, 'NOSPACE:', 8) === 0; df_json(['ok' => false, 'error' => $ns ? substr($e, 8) : $e, 'nospace' => $ns], $ns ? 507 : 400); }
     df_json(['ok' => true]);
 }
