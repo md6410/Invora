@@ -153,7 +153,7 @@ function prn_exe(bool $force = false): ?array {
         [$c, $v] = df_http($base . 'version.txt', 20);
         $v = trim((string)$v);
         if ($c === 200 && preg_match('/^[0-9][\w.\- ]{0,80}$/', $v) && ($v !== ($meta['ver'] ?? '') || !is_file($exe))) {
-            @set_time_limit(300);
+            if (function_exists("set_time_limit")) @set_time_limit(300);
             [$c2, $b] = df_http($base . 'InvoraPrint.exe', 280);
             if ($c2 === 200 && strlen($b) > 1000000 && strncmp($b, 'MZ', 2) === 0) { df_write_atomic($exe, $b); $meta['ver'] = $v; $meta['size'] = strlen($b); $meta['at'] = time(); }
             else $meta['err'] = 'دانلود فایل برنامه از گیت‌هاب نشد (کد ' . $c2 . ').';

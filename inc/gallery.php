@@ -59,6 +59,12 @@ function gal_have(string $id): array {
     sort($out);
     return $out;
 }
+/* free disk space, or false when unknown — some hosts disable disk_free_space() (disable_functions), which is an Error, not a warning */
+function gal_free() {
+    if (!function_exists('disk_free_space')) return false;
+    try { $f = @disk_free_space(df_data_dir()); } catch (Throwable $e) { return false; }
+    return is_numeric($f) ? (float)$f : false;
+}
 /* فضای سرور برای گالری: فضای آزاد دیسک منهای ذخیره‌ی همیشگی و منهای باقیِ بارگذاری‌های نیمه‌کاره، و سقف دلخواه */
 function gal_space(): array {
     $items = gal_items(); $used = 0; $pending = 0;
@@ -66,7 +72,7 @@ function gal_space(): array {
         $used += (int)($it['size'] ?? 0);
         if (empty($it['done'])) $pending += max(0, (int)($it['size'] ?? 0) - count(gal_have((string)$id)) * GAL_CHUNK);
     }
-    $free = @disk_free_space(df_data_dir());
+    $free = gal_free();
     $reserve = max(0, (int)DF_GALLERY_RESERVE_MB) * 1048576;
     $quota = max(0, (int)DF_GALLERY_QUOTA_MB) * 1048576;
     $avail = $free === false ? PHP_INT_MAX : (int)$free - $reserve - $pending;
@@ -106,7 +112,7 @@ function gal_put_chunk(string $id, int $i, string $bin, string $dek): ?string {
     if (!$it) return 'فایل پیدا نشد.';
     if (!empty($it['done'])) return 'بارگذاری این فایل تمام شده است.';
     if ($i < 0 || $i >= (int)$it['chunks']) return 'شماره‌ی تکه نامعتبر است.';
-    $free = @disk_free_space(df_data_dir());
+    $free = gal_free();
     if ($free !== false && $free < 3 * GAL_CHUNK + 20 * 1048576) return 'NOSPACE:فضای سرور پر شد؛ بارگذاری متوقف شد. فضا آزاد کنید و «ادامه» را بزنید.';
     $want = ($i === (int)$it['chunks'] - 1) ? (int)$it['size'] - $i * GAL_CHUNK : GAL_CHUNK;
     if (strlen($bin) !== $want) return 'اندازه‌ی تکه درست نیست.';
@@ -182,7 +188,7 @@ function gal_stream(string $id, string $k, string $type, string $name, bool $dl,
         $code = 206;
     }
     $inline = !$dl && gal_inline_type($type);
-    @set_time_limit(0);
+    if (function_exists("set_time_limit")) @set_time_limit(0);
     http_response_code($code);
     header('Content-Type: ' . ($inline ? $type : 'application/octet-stream'));
     header('Accept-Ranges: bytes');

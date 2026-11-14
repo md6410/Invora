@@ -60,6 +60,7 @@ function mail_build(array $c, array $to, array $cc, string $subject, string $htm
 function mail_smtp(array $c, array $rcpts, string $data): array {
     $host = trim((string)$c['host']); $port = (int)$c['port']; $sec = (string)$c['sec'];
     if ($host === '' || $c['from'] === '' || !$rcpts) return ['ok' => false, 'msg' => 'تنظیمات ایمیل کامل نیست.'];
+    if (!function_exists('stream_socket_client')) return ['ok' => false, 'msg' => 'هاست اجازه‌ی اتصال به سرور ایمیل را نمی‌دهد (stream_socket_client غیرفعال است).'];
     $fp = @stream_socket_client(($sec === 'ssl' ? 'ssl://' : '') . $host . ':' . $port, $en, $es, 20, STREAM_CLIENT_CONNECT, stream_context_create(['ssl' => ['SNI_enabled' => true, 'peer_name' => $host]]));
     if (!$fp) return ['ok' => false, 'msg' => 'اتصال به سرور ایمیل ممکن نشد: ' . ($es ?: 'بی‌پاسخ')];
     stream_set_timeout($fp, 25);
