@@ -35,10 +35,11 @@ import traceback
 import urllib.error
 import urllib.parse
 import urllib.request
+import uuid
 import zlib
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-VERSION = "2.0"
+VERSION = "2.1"
 FROZEN = bool(getattr(sys, "frozen", False))          # the ready-made InvoraPrint.exe (PyInstaller)
 HERE = os.path.dirname(os.path.abspath(sys.executable if FROZEN else __file__))
 INSTALL_DIR = os.path.join(os.environ.get("PROGRAMDATA", r"C:\ProgramData"), "InvoraPrint")
@@ -48,7 +49,8 @@ LOG_PATH = os.path.join(HERE, "agent.log")
 IS_WINDOWS = os.name == "nt"
 
 DEFAULTS = {
-    "api_url": "",
+    "sites": [],             # چند سایت Invora: [{id, name, api_url, token, enabled, printer}] — همه با همین یک برنامه
+    "api_url": "",           # (قدیمی: اگر sites خالی باشد به‌عنوان نخستین سایت منتقل می‌شود)
     "token": "",
     "poll_seconds": 4,
     "web_port": 8766,
@@ -67,7 +69,8 @@ PAPERS = [
 STD_DM = ((297, 420, 8), (210, 297, 9), (148, 210, 11), (105, 148, 70), (182, 257, 13), (215.9, 279.4, 1), (215.9, 355.6, 5))
 
 AS_SERVICE = False
-STATE = {"station": "", "connected": False, "last_error": "", "last_contact": 0, "jobs_done": 0, "log": []}
+STATE = {"station": "", "connected": False, "last_error": "", "last_contact": 0, "jobs_done": 0, "log": [], "sites": {}}
+PRINT_LOCK = threading.Lock()   # چند سایت هم‌زمان کار می‌فرستند ولی چاپگرها یکی‌یکی چاپ می‌کنند
 LOCK = threading.RLock()   # log() is also called while holding it
 STOP = threading.Event()
 
@@ -103,7 +106,59 @@ def load_config():
         log("config.json خوانده نشد: %s" % e, "err")
     if not isinstance(cfg.get("printers"), dict):
         cfg["printers"] = {}
+    return normalize_sites(cfg)
+
+
+def normalize_sites(cfg):
+    """کلید قدیمیِ api_url/token را به فهرست sites می‌برد و به هر سایت شناسه می‌دهد."""
+    sites = cfg.get("sites")
+    if not isinstance(sites, list):
+        sites = []
+    if not sites and str(cfg.get("api_url") or "").strip() and str(cfg.get("token") or "").strip():
+        sites.append({"name": "", "api_url": cfg["api_url"], "token": cfg["token"], "enabled": True})
+    out, seen = [], set()
+    for s_ in sites:
+        if not isinstance(s_, dict):
+            continue
+        url, tok = str(s_.get("api_url") or "").strip(), str(s_.get("token") or "").strip()
+        if not url and not tok:
+            continue
+        sid = str(s_.get("id") or "") or uuid.uuid4().hex[:8]
+        if sid in seen:
+            sid = uuid.uuid4().hex[:8]
+        seen.add(sid)
+        out.append({"id": sid, "name": str(s_.get("name") or "").strip(), "api_url": url, "token": tok,
+                    "enabled": s_.get("enabled", True) is not False, "printer": str(s_.get("printer") or "")})
+    cfg["sites"] = out
+    cfg["api_url"] = cfg["token"] = ""
     return cfg
+
+
+def add_site(cfg, url, token, name="", printer=""):
+    """سایت تازه را اضافه می‌کند؛ اگر همان نشانی یا همان توکن از قبل هست، همان را به‌روز می‌کند."""
+    url, token = str(url or "").strip(), str(token or "").strip()
+    if not url or not token:
+        return False
+    for s_ in cfg["sites"]:
+        if s_["token"] == token or s_["api_url"].rstrip("/") == url.rstrip("/"):
+            s_.update(api_url=url, token=token, enabled=True)
+            if name:
+                s_["name"] = name
+            return True
+    cfg["sites"].append({"id": uuid.uuid4().hex[:8], "name": str(name or "").strip(), "api_url": url, "token": token, "enabled": True, "printer": printer})
+    return True
+
+
+def site_label(site):
+    if site.get("name"):
+        return site["name"]
+    u = urllib.parse.urlparse(site.get("api_url") or "")
+    return u.netloc or site.get("id") or "سایت"
+
+
+def site_state(site):
+    with LOCK:
+        return STATE["sites"].setdefault(site["id"], {"station": "", "connected": False, "last_error": "", "last_contact": 0, "jobs_done": 0})
 
 
 def save_config(cfg):
@@ -472,9 +527,9 @@ def print_html(html, printer, copies, w_mm, h_mm, title):
 
 
 # ------------------------------------------------------------ گفت‌وگو با سایت
-def api(do, payload=None):
-    url = (CONFIG.get("api_url") or "").strip()
-    tok = (CONFIG.get("token") or "").strip()
+def api(do, payload=None, site=None):
+    url = ((site or {}).get("api_url") or "").strip()
+    tok = ((site or {}).get("token") or "").strip()
     if not url or not tok:
         raise RuntimeError("نشانی سایت یا توکن ایستگاه تنظیم نشده است (http://localhost:%s)." % CONFIG.get("web_port", 8766))
     sep = "&" if "?" in url else "?"
@@ -494,65 +549,93 @@ def api(do, payload=None):
     return data
 
 
-def report(job_id, status, error=""):
+def report(job_id, status, error="", site=None):
     for i in range(5):
         try:
-            api("status", {"id": job_id, "status": status, "error": error})
+            api("status", {"id": job_id, "status": status, "error": error}, site)
             return
         except Exception as e:
             log("اعلام نتیجه نشد (%s)؛ دوباره…" % e, "warn")
             time.sleep(2 * (i + 1))
 
 
-def handle_job(job):
+def handle_job(job, site):
     jid = job["id"]
     w, h, copies = num(job.get("w")), num(job.get("h")), int(job.get("copies") or 1)
-    data = decrypt_job(job["blob"], CONFIG["token"].strip())
+    data = decrypt_job(job["blob"], site["token"].strip())
     title = data.get("title") or "Invora"
-    printer = pick_printer(job.get("printer") or "")
+    printer = pick_printer(job.get("printer") or site.get("printer") or "")
     pcfg = printer_cfg(printer)
     if not paper_ok(pcfg, w, h):
         raise RuntimeError("کاغذ چاپگر «%s» (%g×%g) با اندازه‌ی این کار (%g×%g میلی‌متر) نمی‌خواند؛ کاغذ را عوض کنید یا در تنظیمات ایستگاه درستش کنید."
                            % (printer, num(pcfg["w"]), num(pcfg["h"]), w, h))
-    log("چاپ «%s» روی «%s» (%g×%g، %d نسخه)" % (title, printer, w, h, copies))
-    report(jid, "printing")
-    print_html(data.get("html") or "", printer, copies, w, h, title)
+    log("[%s] چاپ «%s» روی «%s» (%g×%g، %d نسخه)" % (site_label(site), title, printer, w, h, copies))
+    report(jid, "printing", "", site)
+    with PRINT_LOCK:
+        print_html(data.get("html") or "", printer, copies, w, h, title)
 
 
-def poll_loop():
+def poll_loop(site, stop):
+    """برای هر سایت یک رشته: از همان سایت کار می‌گیرد و نتیجه را به همان سایت می‌گوید."""
     last_hello = 0
-    while not STOP.is_set():
+    name = site_label(site)
+    while not STOP.is_set() and not stop.is_set():
+        ss = site_state(site)
         wait = max(2, int(num(CONFIG.get("poll_seconds"), 4)))
         try:
             if time.time() - last_hello > 60:
-                r = api("hello", {"printers": printers_report(), "version": VERSION, "host": socket.gethostname()})
+                r = api("hello", {"printers": printers_report(), "version": VERSION, "host": socket.gethostname()}, site)
                 with LOCK:
-                    if not STATE["connected"]:
-                        log("به سایت وصل شد — ایستگاه «%s»" % r.get("station", ""), "ok")
-                    STATE.update(connected=True, station=r.get("station", ""), last_error="")
+                    if not ss["connected"]:
+                        log("[%s] به سایت وصل شد — ایستگاه «%s»" % (name, r.get("station", "")), "ok")
+                    ss.update(connected=True, station=r.get("station", ""), last_error="")
                 last_hello = time.time()
-            r = api("claim")
+            r = api("claim", None, site)
             with LOCK:
-                STATE.update(connected=True, last_contact=time.time(), last_error="")
+                ss.update(connected=True, last_contact=time.time(), last_error="")
             job = r.get("job")
             if job:
                 try:
-                    handle_job(job)
-                    report(job["id"], "done")
+                    handle_job(job, site)
+                    report(job["id"], "done", "", site)
                     with LOCK:
-                        STATE["jobs_done"] += 1
-                    log("چاپ شد", "ok")
+                        ss["jobs_done"] += 1
+                    log("[%s] چاپ شد" % name, "ok")
                 except Exception as e:
-                    log("خطای چاپ: %s" % e, "err")
-                    report(job["id"], "error", str(e))
+                    log("[%s] خطای چاپ: %s" % (name, e), "err")
+                    report(job["id"], "error", str(e), site)
                 continue      # شاید کار دیگری هم در صف باشد
         except Exception as e:
             with LOCK:
-                if STATE["last_error"] != str(e):
-                    log(str(e), "err")
-                STATE.update(connected=False, last_error=str(e))
+                if ss["last_error"] != str(e):
+                    log("[%s] %s" % (name, e), "err")
+                ss.update(connected=False, last_error=str(e))
             wait = max(wait, 15)
-        STOP.wait(wait)
+        stop.wait(wait)
+
+
+def site_manager():
+    """سایت‌های فعالِ config را راه می‌اندازد؛ سایتی که حذف یا خاموش شود، رشته‌اش بسته می‌شود (بدون راه‌اندازی دوباره)."""
+    running = {}   # id -> (امضا، stop-event)
+    while not STOP.is_set():
+        want = {}
+        for s_ in CONFIG.get("sites") or []:
+            if s_.get("enabled", True) and s_.get("api_url") and s_.get("token"):
+                want[s_["id"]] = s_
+        for sid in list(running):
+            sig, ev = running[sid]
+            s_ = want.get(sid)
+            if s_ is None or (s_["api_url"], s_["token"], s_.get("name")) != sig:
+                ev.set()
+                del running[sid]
+        for sid, s_ in want.items():
+            if sid not in running:
+                ev = threading.Event()
+                running[sid] = ((s_["api_url"], s_["token"], s_.get("name")), ev)
+                threading.Thread(target=poll_loop, args=(s_, ev), daemon=True).start()
+        STOP.wait(3)
+    for _, ev in running.values():
+        ev.set()
 
 
 # ------------------------------------------------------------ صفحه‌ی تنظیمات (روی همین کامپیوتر)
@@ -563,8 +646,18 @@ def esc(s):
 def page_html(msg=""):
     names, sysdef = system_printers()
     with LOCK:
-        st = dict(STATE)
         logs = "\n".join(reversed(STATE["log"][-80:]))
+    srows = ""
+    for x in CONFIG.get("sites") or []:
+        ss = site_state(x)
+        k = esc(x["id"])
+        stt = ('<b class="ok">وصل — «%s»</b>' % esc(ss["station"])) if ss["connected"] else ('<b class="err">وصل نیست</b>' + ((' <small class="err">%s</small>' % esc(ss["last_error"])) if ss["last_error"] else ""))
+        srows += ('<tr><td><input name="s_name::%s" value="%s" size="14" placeholder="نام سایت"></td><td><input name="s_url::%s" value="%s" size="38" dir="ltr"></td>'
+                  '<td><input name="s_tok::%s" value="%s" size="26" dir="ltr"></td><td><input name="s_prn::%s" value="%s" size="14" placeholder="پیش‌فرض"></td>'
+                  '<td><input type="checkbox" name="s_on::%s"%s></td><td>%s<br><small>%d چاپ</small></td><td><label><input type="checkbox" name="s_del::%s"> حذف</label></td></tr>') % (
+            k, esc(x["name"]), k, esc(x["api_url"]), k, esc(x["token"]), k, esc(x.get("printer")), k, " checked" if x["enabled"] else "", stt, ss["jobs_done"], k)
+    total_done = sum(site_state(x)["jobs_done"] for x in CONFIG.get("sites") or [])
+    n_on = sum(1 for x in CONFIG.get("sites") or [] if site_state(x)["connected"])
     rows = ""
     for n in names:
         p = printer_cfg(n)
@@ -582,16 +675,16 @@ def page_html(msg=""):
             key, sel("method", [("auto", "خودکار"), ("gdi", "مستقیم (بدون برنامه‌ی جانبی)"), ("sumatra", "SumatraPDF"), ("tspl", "زبان TSPL (حرارتی)")]),
             key, sel("rotate", [("0", "۰°"), ("90", "۹۰°"), ("180", "۱۸۰°"), ("270", "۲۷۰°")]),
             key, " checked" if p["default"] else "", key, " checked" if p["enabled"] else "", key)
-    tok = CONFIG.get("token") or ""
     return """<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><title>ایستگاه چاپ Invora</title>
 <style>body{font:14px/1.8 Tahoma,Vazirmatn,sans-serif;background:#eef0ee;color:#1d2321;margin:0;padding:16px}.box{background:#fff;border:1px solid #d7dbd7;border-radius:12px;padding:16px;margin:0 auto 14px;max-width:1100px}
 h1{font-size:19px;margin:0 0 8px}h2{font-size:16px;margin:0 0 8px}table{width:100%%;border-collapse:collapse}td,th{border-bottom:1px solid #e3e6e3;padding:6px;text-align:right;vertical-align:top}
 input,select,button{font:inherit;padding:4px 8px;border:1px solid #c9cfcb;border-radius:7px}button{background:#1e5a55;color:#fff;border:0;cursor:pointer}.ok{color:#2c7149}.err{color:#a8261b}
 pre{background:#f6f7f5;border-radius:8px;padding:8px;max-height:300px;overflow:auto;direction:ltr;text-align:left;font-size:12px;white-space:pre-wrap}.msg{background:#e1edeb;border-radius:8px;padding:6px 10px}</style></head><body>
 <div class="box"><h1>ایستگاه چاپ Invora <small>نسخه %s</small></h1>%s
-<p>وضعیت: %s%s · کارهای چاپ‌شده از روشن شدن: %d</p>
-<form method="post" action="/save"><p><label>نشانی API سایت<br><input name="api_url" value="%s" size="70" dir="ltr" placeholder="https://example.com/print-api.php"></label></p>
-<p><label>توکن ایستگاه<br><input name="token" value="%s" size="50" dir="ltr"></label></p>
+<p>%d سایت تعریف شده، %d وصل · کارهای چاپ‌شده از روشن شدن: %d</p>
+<form method="post" action="/save"><h2>سایت‌هایی که به این ایستگاه چاپ وصل‌اند</h2>
+<table><tr><th>نام</th><th>نشانی API سایت</th><th>توکن ایستگاه</th><th>چاپگر پیش‌فرضِ این سایت</th><th>فعال</th><th>وضعیت</th><th></th></tr>%s
+<tr><td><input name="new_name" size="14" placeholder="سایت تازه"></td><td><input name="new_url" size="38" dir="ltr" placeholder="https://example.com/print-api.php"></td><td><input name="new_token" size="26" dir="ltr" placeholder="توکن ایستگاه"></td><td colspan="4"><small>برای اضافه کردن سایت دیگر، نشانی و توکن را اینجا بنویسید و «ذخیره» بزنید. (یا فایل ZIP همان سایت را اجرا کنید؛ به همین فهرست اضافه می‌شود.)</small></td></tr></table>
 <p><label>مسیر Edge/Chrome (اگر خودکار پیدا نشد)<br><input name="chrome_path" value="%s" size="70" dir="ltr" placeholder="%s"></label></p>
 <h2>چاپگرهای این کامپیوتر و کاغذ داخل هرکدام</h2>
 <table><tr><th>چاپگر</th><th>کاغذ</th><th>نوع</th><th>روش چاپ</th><th>چرخش</th><th>پیش‌فرض</th><th>فعال</th><th></th></tr>%s</table>
@@ -599,9 +692,8 @@ pre{background:#f6f7f5;border-radius:8px;padding:8px;max-height:300px;overflow:a
 <p><small>کاغذ هر چاپگر را درست بگذارید: کاری که اندازه‌اش با کاغذ نخواند چاپ نمی‌شود و خطایش در سایت دیده می‌شود. «مستقیم» یعنی بدون برنامه‌ی جانبی و با اندازه‌ی دقیق (روی ویندوز pywin32 و pypdfium2 لازم است). برای چاپگر حرارتی برچسب اگر اندازه‌ها جابه‌جا شد، «زبان TSPL» را امتحان کنید.</small></p></div>
 <div class="box"><h2>گزارش</h2><pre>%s</pre></div></body></html>""" % (
         VERSION, '<p class="msg">%s</p>' % esc(msg) if msg else "",
-        ('<b class="ok">وصل — ایستگاه «%s»</b>' % esc(st["station"])) if st["connected"] else '<b class="err">وصل نیست</b>',
-        (' — <span class="err">%s</span>' % esc(st["last_error"])) if st["last_error"] else "", st["jobs_done"],
-        esc(CONFIG.get("api_url")), esc(tok), esc(CONFIG.get("chrome_path")), esc(find_chrome() or "پیدا نشد"), rows or '<tr><td colspan="8">چاپگری پیدا نشد.</td></tr>', esc(logs))
+        len(CONFIG.get("sites") or []), n_on, total_done, srows,
+        esc(CONFIG.get("chrome_path")), esc(find_chrome() or "پیدا نشد"), rows or '<tr><td colspan="8">چاپگری پیدا نشد.</td></tr>', esc(logs))
 
 
 TEST_HTML = """<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><style>@page{size:%(w)smm %(h)smm;margin:0}html,body{margin:0}
@@ -625,7 +717,10 @@ class UI(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path.startswith("/state"):
             with LOCK:
-                return self._send(json.dumps({k: STATE[k] for k in ("station", "connected", "last_error", "jobs_done")}, ensure_ascii=False), ctype="application/json")
+                sites = [dict(site_state(x), id=x["id"], name=site_label(x)) for x in CONFIG.get("sites") or []]
+                agg = {"station": ", ".join(x["station"] for x in sites if x.get("station")), "connected": any(x["connected"] for x in sites),
+                       "last_error": next((x["last_error"] for x in sites if x["last_error"]), ""), "jobs_done": sum(x["jobs_done"] for x in sites), "sites": sites}
+                return self._send(json.dumps(agg, ensure_ascii=False), ctype="application/json")
         self._send(page_html())
 
     def do_POST(self):
@@ -634,8 +729,23 @@ class UI(BaseHTTPRequestHandler):
         g = lambda k, d="": (form.get(k) or [d])[0]
         msg = ""
         names, _ = system_printers()
-        for k in ("api_url", "token", "chrome_path"):
-            CONFIG[k] = g(k).strip()
+        CONFIG["chrome_path"] = g("chrome_path").strip()
+        keep = []
+        for x in CONFIG.get("sites") or []:      # همان دیکشنری‌ها به‌روز می‌شوند تا رشته‌های در حال کار مقدار تازه را ببینند
+            i = x["id"]
+            if ("s_del::" + i) in form:
+                continue
+            x["name"] = g("s_name::" + i).strip()
+            x["api_url"] = g("s_url::" + i).strip()
+            x["token"] = g("s_tok::" + i).strip()
+            x["printer"] = g("s_prn::" + i).strip()
+            x["enabled"] = ("s_on::" + i) in form
+            keep.append(x)
+        CONFIG["sites"] = keep
+        if g("new_url").strip() or g("new_token").strip():
+            if not add_site(CONFIG, g("new_url"), g("new_token"), g("new_name")):
+                self._send(page_html("برای سایت تازه هم نشانی و هم توکن لازم است."))
+                return
         default = g("default")
         for nm in names:
             p = printer_cfg(nm)
@@ -683,7 +793,7 @@ def run():
         log("Edge/Chrome پیدا نشد؛ بدون آن صفحه به PDF تبدیل نمی‌شود.", "warn")
     srv = start_ui()
     try:
-        poll_loop()
+        site_manager()
     finally:
         if srv:
             srv.shutdown()
@@ -871,11 +981,12 @@ def _merge_config(src_dir, dst_path):
         pass
     cfg = dict(DEFAULTS)
     cfg.update(old)
-    for k in ("api_url", "token"):
-        if str(new.get(k) or "").strip():
-            cfg[k] = new[k]
     if not isinstance(cfg.get("printers"), dict):
         cfg["printers"] = {}
+    normalize_sites(cfg)
+    normalize_sites(new)     # سایتِ فایل دانلودشده به فهرست سایت‌های نصب‌شده اضافه می‌شود (جایگزین نمی‌شود)
+    for s_ in new["sites"]:
+        add_site(cfg, s_["api_url"], s_["token"], s_["name"], s_.get("printer", ""))
     with open(dst_path, "w", encoding="utf-8") as f:
         json.dump(cfg, f, ensure_ascii=False, indent=2)
     return cfg

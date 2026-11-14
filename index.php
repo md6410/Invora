@@ -150,7 +150,7 @@ if (($rc = df_sess_get('rc')) !== null) {
 
 $app = @file_get_contents(__DIR__ . '/app.html');
 if ($app === false) { http_response_code(500); exit('app.html not found'); }
-$cfg = ['api' => df_base_path() . 'api.php', 'home' => df_base_path(), 'csrf' => df_csrf(), 'user' => $_SESSION['u'], 'admin' => !empty($_SESSION['admin']),
+$cfg = ['api' => df_base_path() . 'api.php', 'home' => df_base_path(), 'csrf' => df_csrf(), 'user' => $_SESSION['u'], 'admin' => !empty($_SESSION['admin']), 'perms' => !empty($_SESSION['admin']) ? null : (df_users()[$_SESSION['u']]['perms'] ?? null),
     'since' => (int)($_SESSION['since'] ?? 0) * 1000, 'prevLogin' => (int)($_SESSION['prev']['at'] ?? 0) * 1000, 'prevIp' => (string)($_SESSION['prev']['ip'] ?? ''), 'prevHow' => (string)($_SESSION['prev']['how'] ?? ''), 'how' => (string)($_SESSION['how'] ?? '')];
 $inject = df_icon_links() . '<script>window.DF_SERVER=' . json_encode($cfg, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . ';</script>';
 $pos = stripos($app, '</head>');

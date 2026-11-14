@@ -43,3 +43,4 @@ inc/gallery.php
 v.php
 inc/verify.php
 inc/captcha.php
+inc/mail.php

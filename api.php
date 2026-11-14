@@ -320,6 +320,53 @@ try {
             $r = sms_send((string)($in['mobile'] ?? ''), $k, array_intersect_key($vals, array_flip(DF_SMS_TPLS[$k][1])), 'آزمایش · ' . $user);
             df_json(['ok' => $r['ok'], 'error' => $r['ok'] ? '' : $r['msg'], 'msg' => $r['msg']], $r['ok'] ? 200 : 502);
         }
+        /* ---------- ایمیل و پیامک نامه‌ها ---------- */
+        case 'mail_get': {
+            if (!df_perm('letters')) df_json(['ok' => false, 'error' => 'دسترسی ندارید'], 403);
+            $c = mail_cfg($dek);
+            df_json(['ok' => true, 'mail' => ['host' => $c['host'], 'port' => (int)$c['port'], 'sec' => $c['sec'], 'user' => $c['user'], 'hasPass' => $c['pass'] !== '', 'from' => $c['from'], 'name' => $c['name'], 'reply' => $c['reply']]]);
+        }
+        case 'mail_set': {
+            if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
+            $c = mail_cfg($dek);
+            foreach (['host', 'user', 'name', 'reply'] as $k) if (isset($in[$k])) $c[$k] = trim((string)$in[$k]);
+            if (isset($in['port'])) $c['port'] = max(1, min(65535, (int)$in['port']));
+            if (isset($in['sec']) && in_array($in['sec'], ['ssl', 'tls', 'none'], true)) $c['sec'] = $in['sec'];
+            if (isset($in['from'])) { $f = trim((string)$in['from']); if ($f !== '' && !mail_valid($f)) df_json(['ok' => false, 'error' => 'نشانی فرستنده درست نیست.'], 400); $c['from'] = $f; }
+            if (isset($in['pass']) && (string)$in['pass'] !== '') $c['pass'] = (string)$in['pass'];
+            if (!empty($in['clearPass'])) $c['pass'] = '';
+            mail_cfg_save($c, $dek);
+            df_json(['ok' => true]);
+        }
+        case 'mail_send': {
+            if (!df_perm('letters')) df_json(['ok' => false, 'error' => 'دسترسی ندارید'], 403);
+            $c = mail_cfg($dek);
+            $to = mail_parse_addrs((string)($in['to'] ?? '')); $cc = mail_parse_addrs((string)($in['cc'] ?? ''));
+            if (!$to) df_json(['ok' => false, 'error' => 'نشانی ایمیل گیرنده درست نیست.'], 400);
+            $html = (string)($in['html'] ?? ''); if ($html === '' || strlen($html) > 6 * 1024 * 1024) df_json(['ok' => false, 'error' => 'متن ایمیل خالی یا بسیار بزرگ است.'], 400);
+            $att = [];
+            if (!empty($in['attachName'])) $att[] = ['name' => mb_substr((string)$in['attachName'], 0, 120), 'mime' => 'text/html; charset=UTF-8', 'data' => $html];
+            $subject = mb_substr(trim((string)($in['subject'] ?? '')), 0, 200);
+            $data = mail_build($c, $to, $cc, $subject, $html, $att);
+            $r = mail_smtp($c, array_merge(array_column($to, 'email'), array_column($cc, 'email')), $data);
+            df_json(['ok' => $r['ok'], 'error' => $r['ok'] ? '' : $r['msg'], 'msg' => $r['msg']], $r['ok'] ? 200 : 502);
+        }
+        case 'letter_sms': { /* لینک تأیید/دیدن نامه (QR) را با پیامک برای گیرنده یا رونوشت می‌فرستد */
+            if (!df_perm('letters')) df_json(['ok' => false, 'error' => 'دسترسی ندارید'], 403);
+            $t = (string)($in['tok'] ?? '');
+            if (!vf_valid_token($t) || !isset(vf_all()[vf_hash($t)])) df_json(['ok' => false, 'error' => 'این نامه هنوز نهایی و روی سرور ثبت نشده است.'], 404);
+            $r = sms_send((string)($in['mobile'] ?? ''), 'letter', ['LINK' => $t], 'لینک نامه · ' . $user);
+            df_json(['ok' => $r['ok'], 'error' => $r['ok'] ? '' : $r['msg'], 'msg' => $r['msg']], $r['ok'] ? 200 : 502);
+        }
+        case 'user_perms': { /* مدیر برای هر کاربر تعیین می‌کند کدام بخش‌ها را ببیند (null = همه) */
+            if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
+            $n = (string)($in['u'] ?? ''); $p = $in['perms'] ?? null;
+            $p = is_array($p) ? array_values(array_intersect(array_map('strval', $p), DF_PERMS)) : null;
+            $e = df_update('users.json', function (array &$d) use ($n, $p) { if (!isset($d['users'][$n])) return 'کاربر پیدا نشد.'; if ($p === null) unset($d['users'][$n]['perms']); else $d['users'][$n]['perms'] = $p; return null; }, ['users' => []]);
+            if ($e) df_json(['ok' => false, 'error' => $e], 400);
+            df_json(['ok' => true]);
+        }
+
         case 'sms_log':
             if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
             df_json(['ok' => true, 'items' => sms_log_read($dek)]);
@@ -400,7 +447,7 @@ try {
             if (!$admin) df_json(['ok' => false, 'error' => 'فقط مدیر'], 403);
             $out = [];
             foreach (df_users() as $n => $u) $out[] = ['u' => $n, 'admin' => !empty($u['admin']), 'created' => ($u['created'] ?? 0) * 1000, 'keyed' => !empty($u['wk']),
-                'mobile' => (string)($u['mobile'] ?? ''), 'smsDevs' => count(array_filter((array)($u['devs'] ?? []), fn($x) => !empty($x['sms'])))];
+                'mobile' => (string)($u['mobile'] ?? ''), 'perms' => $u['perms'] ?? null, 'smsDevs' => count(array_filter((array)($u['devs'] ?? []), fn($x) => !empty($x['sms'])))];
             $k = df_keys();
             df_json(['ok' => true, 'users' => $out, 'rcAt' => ($k['rkAt'] ?? 0) * 1000]);
         }

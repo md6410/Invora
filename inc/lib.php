@@ -11,6 +11,7 @@ require __DIR__ . '/crypto.php';
 require __DIR__ . '/update.php';
 require __DIR__ . '/passkey.php';
 require __DIR__ . '/sms.php';
+require __DIR__ . '/mail.php';
 require __DIR__ . '/print.php';
 require __DIR__ . '/gallery.php';
 require __DIR__ . '/verify.php';
@@ -139,6 +140,13 @@ function df_csrf(): string {
 }
 function df_csrf_ok(string $t): bool { return !empty($_SESSION['csrf']) && is_string($t) && hash_equals($_SESSION['csrf'], $t); }
 
+/* بخش‌هایی که مدیر می‌تواند برای هر کاربر باز یا بسته کند (مدیر همه را دارد؛ کاربری که perms ندارد هم همه را دارد) */
+const DF_PERMS = ['docs', 'acc', 'customers', 'phone', 'products', 'gal', 'letters', 'assets', 'hr', 'print', 'settings'];
+function df_perm(string $p): bool {
+    if (!empty($_SESSION['admin'])) return true;
+    $u = df_users()[$_SESSION['u'] ?? ''] ?? null;
+    return !is_array($u) || !is_array($u['perms'] ?? null) || in_array($p, $u['perms'], true);
+}
 function df_users(): array { $u = df_read('users.json', ['users' => []]); return is_array($u['users'] ?? null) ? $u['users'] : []; }
 function df_valid_username(string $u): bool { return (bool)preg_match('/^[A-Za-z0-9_.\-]{3,32}$/', $u); }
 function df_password_problem(string $p): ?string {

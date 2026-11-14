@@ -15,6 +15,7 @@ const DF_SMS_TPLS = [
     'otp'      => ['کد ورود', ['CODE', 'VERIFICATIONCODE']],
     'link'     => ['لینک فایل برای مشتری', ['LINK']],
     'link_pin' => ['لینک فایل همراه رمز', ['LINK', 'PIN']],
+    'letter'   => ['لینک نامه برای گیرنده (متن: ... نشانی سایت/v.php?t=#LINK#)', ['LINK']],
     'vcode'    => ['رمز دیدن سند با QR اصالت (اگر خالی بماند، الگوی «کد ورود» به کار می‌رود)', ['CODE', 'VERIFICATIONCODE']],
 ];
 
