@@ -71,6 +71,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$passOk) {
     }
 }
 
+/* امضای قرارداد: فقط بعد از رمزِ درستِ پیامک (یعنی با موبایلِ ثبت‌شده‌ی امضاکننده) و یک بار */
+if ($passOk && $_SERVER['REQUEST_METHOD'] === 'POST' && (string)($_POST['act'] ?? '') === 'sign') {
+    if (!df_csrf_ok((string)($_POST['csrf'] ?? ''))) vf_msg('مهلت صفحه تمام شده بود؛ صفحه را دوباره باز کنید.', 400);
+    if (!empty($r['sign']) && empty($r['signed']) && !empty($_POST['agree'])) {
+        $plain = df_dec((string)file_get_contents(vf_file($h)), vf_key($t), 'verify');
+        if ($plain !== null) {
+            $hash = hash('sha256', $plain);
+            $ua = mb_substr((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 200); $ip = df_ip();
+            $done = df_update('verify.json', function (array &$all) use ($h, $hash, $ip, $ua, $c) {
+                if (!isset($all[$h]) || isset($all[$h]['signed'])) return false;
+                $all[$h]['signed'] = ['t' => time(), 'ip' => $ip, 'ua' => $ua, 'hash' => $hash, 'to' => sms_mask($c['m'])];
+                return true;
+            });
+            if ($done) df_share_log($h, 'vf_sign', ['hash' => substr($hash, 0, 16)] + $dev);
+        }
+    }
+    header('Location: v.php?t=' . $t); exit;
+}
 if (!$passOk) {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') df_share_log($h, 'vf_open');
     $who = $c['m'] === '' ? '' : ($c['n'] !== '' ? '<b>' . df_h($c['n']) . '</b>' : 'رابطِ این سند') . ' به شمارهٔ <b dir="ltr" style="unicode-bidi:isolate">' . df_h(df_fa_num(sms_mask($c['m']))) . '</b>';
@@ -111,6 +129,15 @@ $html = preg_replace('~<script\b[^>]*>.*?</script>~is', '', $html);
 $when = !empty($r['upd']) ? df_fa_num(jdate_vf((int)$r['upd'])) : '';
 $bar = '<div class="bar" style="background:#e6f2ea;border-bottom:2px solid #2c7149"><b style="color:#2c7149">✓ این سند در سامانهٔ صادرکننده ثبت شده و اصل است' . ($when ? ' <small style="font-weight:400;color:#555">— آخرین به‌روزرسانی ' . df_h($when) . '</small>' : '') . '</b><span><button id="df-print">چاپ / ذخیرهٔ PDF</button></span></div>'
     . '<script nonce="' . $nonce . '">document.getElementById("df-print").addEventListener("click",function(){window.print()});</script>';
+$r = vf_all()[$h] ?? $r;
+if (!empty($r['sign'])) {
+    if (!empty($r['signed'])) {
+        $bar .= '<div class="bar" style="background:#e6f2ea;border-bottom:2px solid #2c7149"><b style="color:#2c7149">✓ این قرارداد در ' . df_h(df_fa_num(jdate_vf((int)$r['signed']['t']))) . ' با رمز پیامک‌شده به شمارهٔ ' . df_h(df_fa_num((string)($r['signed']['to'] ?? ''))) . ' امضا شد.</b> <small dir="ltr" style="unicode-bidi:isolate">SHA-256 ' . df_h(substr((string)$r['signed']['hash'], 0, 16)) . '</small></div>';
+    } else {
+        $bar .= '<form method="post" class="bar" style="background:#fff7e0;border-bottom:2px solid #b8860b;flex-wrap:wrap"><input type="hidden" name="csrf" value="' . df_h(df_csrf()) . '"><input type="hidden" name="act" value="sign">'
+            . '<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" name="agree" value="1" required> متن قرارداد را خواندم و می‌پذیرم و با رمز پیامک‌شده به موبایلم آن را امضا می‌کنم.</label><button>امضای قرارداد</button></form>';
+    }
+}
 $html = preg_replace('~<div class="bar">.*?</div>~s', '', $html, 1);
 $html = preg_replace('~<body>~', '<body>' . $bar, $html, 1);
 header('Content-Type: text/html; charset=utf-8');

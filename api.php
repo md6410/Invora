@@ -208,7 +208,7 @@ try {
             $html = isset($in['html']) ? (string)$in['html'] : null;
             if ($html !== null && ($html === '' || strlen($html) > 8 * 1024 * 1024)) df_json(['ok' => false, 'error' => 'bad input'], 400);
             df_log_keys_ensure($dek);
-            $r = vf_put($t, $doc, $html, trim((string)($in['name'] ?? '')), (string)($in['mobile'] ?? ''), !empty($in['dead']), $user);
+            $r = vf_put($t, $doc, $html, trim((string)($in['name'] ?? '')), (string)($in['mobile'] ?? ''), !empty($in['dead']), $user, !empty($in['sign']));
             if (!$r['ok']) df_json($r, 409);
             df_json(['ok' => true, 'vf' => vf_public($r['id'], vf_all()[$r['id']] ?? []), 'sms' => sms_ready()]);
         }
@@ -356,6 +356,14 @@ try {
             $t = (string)($in['tok'] ?? '');
             if (!vf_valid_token($t) || !isset(vf_all()[vf_hash($t)])) df_json(['ok' => false, 'error' => 'این نامه هنوز نهایی و روی سرور ثبت نشده است.'], 404);
             $r = sms_send((string)($in['mobile'] ?? ''), 'letter', ['LINK' => $t], 'لینک نامه · ' . $user);
+            df_json(['ok' => $r['ok'], 'error' => $r['ok'] ? '' : $r['msg'], 'msg' => $r['msg']], $r['ok'] ? 200 : 502);
+        }
+        case 'contract_sms': { /* لینک امضای قرارداد را برای کارمند پیامک می‌کند */
+            if (!df_perm('hr')) df_json(['ok' => false, 'error' => 'دسترسی ندارید'], 403);
+            $t = (string)($in['tok'] ?? '');
+            $rec = vf_valid_token($t) ? (vf_all()[vf_hash($t)] ?? null) : null;
+            if (!$rec || empty($rec['sign'])) df_json(['ok' => false, 'error' => 'این قرارداد هنوز برای امضا روی سرور ثبت نشده است.'], 404);
+            $r = sms_send((string)($in['mobile'] ?? ''), 'contract', ['LINK' => $t], 'امضای قرارداد · ' . $user);
             df_json(['ok' => $r['ok'], 'error' => $r['ok'] ? '' : $r['msg'], 'msg' => $r['msg']], $r['ok'] ? 200 : 502);
         }
         case 'user_perms': { /* مدیر برای هر کاربر تعیین می‌کند کدام بخش‌ها را ببیند (null = همه) */

@@ -25,16 +25,19 @@ function vf_file(string $h): string { return df_path('verify/' . $h . '.bin'); }
 function vf_all(): array { $a = df_read('verify.json', []); return is_array($a) ? $a : []; }
 
 /** نسخهٔ نمایشی و/یا رابطِ یک سند را می‌سازد یا به‌روز می‌کند */
-function vf_put(string $t, string $doc, ?string $html, string $name, string $mobile, bool $dead, string $user): array {
+function vf_put(string $t, string $doc, ?string $html, string $name, string $mobile, bool $dead, string $user, bool $sign = false): array {
     $h = vf_hash($t); $k = vf_key($t);
     $old = vf_all()[$h] ?? null;
+    /* سندی که امضا شده (قرارداد) دیگر عوض یا باطل نمی‌شود: اثر انگشت امضا به همان متن بسته است */
+    if ($old && !empty($old['signed'])) return ['ok' => false, 'error' => 'این سند امضا شده است و تغییر نمی‌کند.'];
     if ($old && ($old['doc'] ?? '') !== $doc) return ['ok' => false, 'error' => 'این کد برای سند دیگری است.'];
     if (!$old && $html === null) return ['ok' => false, 'error' => 'نسخهٔ سند فرستاده نشده است.'];
     $m = sms_mobile($mobile);
     if ($html !== null) df_write_atomic(vf_file($h), df_enc($html, $k, 'verify'));
-    df_update('verify.json', function (array &$all) use ($h, $k, $doc, $name, $m, $dead, $user) {
+    df_update('verify.json', function (array &$all) use ($h, $k, $doc, $name, $m, $dead, $user, $sign) {
         $r = $all[$h] ?? ['doc' => $doc, 'created' => time(), 'by' => $user, 'sms' => []];
         $r['ce'] = base64_encode(df_enc(json_encode(['n' => mb_substr($name, 0, 80), 'm' => $m], JSON_UNESCAPED_UNICODE), $k, 'contact'));
+        if ($sign) $r['sign'] = 1;
         $r['dead'] = $dead ? 1 : 0; $r['upd'] = time(); $r['ub'] = $user;
         $all[$h] = $r;
     });
@@ -46,7 +49,9 @@ function vf_contact(array $r, string $t): array {
     return ['n' => (string)($c['n'] ?? ''), 'm' => (string)($c['m'] ?? '')];
 }
 function vf_public(string $h, array $r): array {
-    return ['id' => $h, 'created' => ($r['created'] ?? 0) * 1000, 'upd' => ($r['upd'] ?? 0) * 1000, 'dead' => !empty($r['dead']),
+    $sg = $r['signed'] ?? null;
+    return ['sign' => !empty($r['sign']), 'sig' => $sg ? ['t' => (int)$sg['t'] * 1000, 'ip' => (string)($sg['ip'] ?? ''), 'hash' => (string)($sg['hash'] ?? '')] : null,
+        'id' => $h, 'created' => ($r['created'] ?? 0) * 1000, 'upd' => ($r['upd'] ?? 0) * 1000, 'dead' => !empty($r['dead']),
         'scans' => is_file(df_share_log_file($h)) ? count(file(df_share_log_file($h), FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES) ?: []) : 0];
 }
 
