@@ -532,6 +532,8 @@ try {
 } catch (InvalidArgumentException $e) {
     df_json(['ok' => false, 'error' => 'bad path'], 400);
 } catch (Throwable $e) {
-    error_log('daftar-factor api: ' . $e->getMessage());
-    df_json(['ok' => false, 'error' => 'server error'], 500);
+    error_log('daftar-factor api: ' . $a . ': ' . $e->getMessage());
+    /* the administrator gets the real cause (class, message, place) so it can be fixed; other users only see the short text */
+    $detail = !empty($admin) ? get_class($e) . ': ' . mb_substr($e->getMessage(), 0, 300) . ' @ ' . basename($e->getFile()) . ':' . $e->getLine() . ' (' . $a . ')' : '';
+    df_json(['ok' => false, 'error' => 'server error', 'detail' => $detail], 500);
 }

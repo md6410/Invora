@@ -14,7 +14,11 @@ if (!defined('DF')) { http_response_code(403); exit; }
 const GAL_CHUNK = 1048576;                 /* ۱ مگابایت */
 const GAL_MAX = 1024 * 1024 * 1024;        /* سقف هر فایل: ۱ گیگابایت */
 
-function gal_items(): array { return df_read('gallery.json', ['items' => []])['items'] ?? []; }
+function gal_items(): array {
+    $d = df_read('gallery.json', ['items' => []]);
+    $it = is_array($d) && isset($d['items']) && is_array($d['items']) ? $d['items'] : [];
+    return array_filter($it, 'is_array'); /* a damaged record must never take the whole gallery (and the upload page) down */
+}
 function gal_dir(string $id): string { return df_path('gallery/' . $id); }
 function gal_valid_id(string $id): bool { return (bool)preg_match('/^[a-f0-9]{20}$/', $id); }
 function gal_cenc(string $plain, string $k, string $aad): string {
@@ -59,8 +63,8 @@ function gal_have(string $id): array {
 function gal_space(): array {
     $items = gal_items(); $used = 0; $pending = 0;
     foreach ($items as $id => $it) {
-        $used += (int)$it['size'];
-        if (empty($it['done'])) $pending += max(0, (int)$it['size'] - count(gal_have((string)$id)) * GAL_CHUNK);
+        $used += (int)($it['size'] ?? 0);
+        if (empty($it['done'])) $pending += max(0, (int)($it['size'] ?? 0) - count(gal_have((string)$id)) * GAL_CHUNK);
     }
     $free = @disk_free_space(df_data_dir());
     $reserve = max(0, (int)DF_GALLERY_RESERVE_MB) * 1048576;
