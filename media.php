@@ -5,6 +5,8 @@ define('DF', 1);
 require __DIR__ . '/inc/lib.php';
 
 df_headers('api');
+/* the in-app viewer shows PDFs in an iframe of the same site: allow that (only same-origin), nothing else */
+if (!isset($_GET['dl']) && !isset($_GET['thumb'])) { header('X-Frame-Options: SAMEORIGIN'); header("Content-Security-Policy: frame-ancestors 'self'"); }
 df_session_start();
 if (!df_logged_in()) { http_response_code(401); header('Content-Type: text/plain; charset=utf-8'); exit('ابتدا وارد برنامه شوید.'); }
 $dek = df_dek();
