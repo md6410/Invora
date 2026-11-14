@@ -122,6 +122,19 @@ if (!$passOk) {
     exit;
 }
 
+$atts = vf_atts($r, $t);
+/* دانلود/دیدنِ یک ضمیمه — فقط بعد از رمزِ درست؛ همان QR و همان رمزِ نامه */
+if (isset($_GET['a'])) {
+    $x = (string)$_GET['a']; $a = null;
+    foreach ($atts as $e) if (($e['x'] ?? '') === $x) $a = $e;
+    if (!$a || !in_array($a['t'], ['f', 'd'], true)) vf_msg('این ضمیمه پیدا نشد.', 404);
+    df_share_log($h, 'vf_att', ['att' => mb_substr((string)$a['n'], 0, 60)] + $dev);
+    if ($a['t'] === 'f') gal_stream((string)$a['gid'], (string)base64_decode((string)$a['k']), (string)$a['type'], (string)($a['fn'] ?: $a['n']), !empty($_GET['dl']));
+    $d = df_dec((string)@file_get_contents(vf_afile($h, $x)), vf_key($t), 'attdoc');
+    if ($d === null) vf_msg('ضمیمه باز نشد. به صادرکنندهٔ نامه خبر دهید.', 500);
+    header('Content-Type: text/html; charset=utf-8');
+    echo preg_replace('~<script\b[^>]*>.*?</script>~is', '', $d); exit;
+}
 $html = df_dec((string)file_get_contents(vf_file($h)), vf_key($t), 'verify');
 if ($html === null) vf_msg('سند باز نشد. به صادرکنندهٔ سند خبر دهید.', 500);
 df_share_log($h, 'vf_view', $dev);
@@ -137,6 +150,20 @@ if (!empty($r['sign'])) {
         $bar .= '<form method="post" class="bar" style="background:#fff7e0;border-bottom:2px solid #b8860b;flex-wrap:wrap"><input type="hidden" name="csrf" value="' . df_h(df_csrf()) . '"><input type="hidden" name="act" value="sign">'
             . '<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" name="agree" value="1" required> متن قرارداد را خواندم و می‌پذیرم و با رمز پیامک‌شده به موبایلم آن را امضا می‌کنم.</label><button>امضای قرارداد</button></form>';
     }
+}
+if ($atts) {
+    $li = '';
+    foreach ($atts as $e) {
+        $pg = !empty($e['pg']) ? ' <small>(' . df_h(df_fa_num((string)$e['pg'])) . ' صفحه)</small>' : '';
+        $nt = !empty($e['note']) ? '<div style="font-size:12px;color:#666">' . df_h((string)$e['note']) . '</div>' : '';
+        if ($e['t'] === 'n') $act = '<span style="font-size:12px;color:#888">فقط ذکر شده — نسخهٔ جدا همراه نامه است</span>';
+        elseif ($e['t'] === 'd') $act = '<a href="v.php?t=' . df_h($t) . '&a=' . df_h((string)$e['x']) . '" target="_blank" rel="noopener">دیدن و چاپ</a>';
+        else $act = '<a href="v.php?t=' . df_h($t) . '&a=' . df_h((string)$e['x']) . '" target="_blank" rel="noopener">دیدن</a> · <a href="v.php?t=' . df_h($t) . '&a=' . df_h((string)$e['x']) . '&dl=1">دانلود' . (!empty($e['size']) ? ' (' . df_h(df_fa_num(number_format(max(1, (int)round((int)$e['size'] / 1024)))))  . ' کیلوبایت)' : '') . '</a>';
+        $li .= '<li style="padding:8px 0;border-top:1px solid #e3e3e3;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span><b>' . df_h((string)$e['n']) . '</b>' . $pg . $nt . '</span><span>' . $act . '</span></li>';
+    }
+    $panel = '<style>@media print{#df-atts{display:none}}#df-atts a{color:#1e5a55;font-weight:600}</style><div id="df-atts" dir="rtl" style="font-family:Tahoma,sans-serif;max-width:820px;margin:18px auto;padding:12px 16px;background:#f7f9f9;border:1px solid #cfdcdb;border-radius:10px;font-size:14px"><b>📎 ضمیمه‌های این نامه</b><ul style="list-style:none;margin:8px 0 0;padding:0">' . $li . '</ul></div>';
+    $bp = strripos($html, '</body>');
+    $html = $bp === false ? $html . $panel : substr_replace($html, $panel, $bp, 0);
 }
 $html = preg_replace('~<div class="bar">.*?</div>~s', '', $html, 1);
 $html = preg_replace('~<body>~', '<body>' . $bar, $html, 1);

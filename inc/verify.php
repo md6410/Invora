@@ -25,7 +25,42 @@ function vf_file(string $h): string { return df_path('verify/' . $h . '.bin'); }
 function vf_all(): array { $a = df_read('verify.json', []); return is_array($a) ? $a : []; }
 
 /** نسخهٔ نمایشی و/یا رابطِ یک سند را می‌سازد یا به‌روز می‌کند */
-function vf_put(string $t, string $doc, ?string $html, string $name, string $mobile, bool $dead, string $user, bool $sign = false): array {
+function vf_afile(string $h, string $x): string { return df_path('verify/' . $h . '_' . $x . '.bin'); }
+/** ضمیمه‌های یک نامه (رمزشده با کلیدِ همان QR): f = فایلِ گالری، d = سندِ HTML (نامه/فاکتور دیگر)، n = فقط ذکر در متن */
+function vf_atts(array $r, string $t): array {
+    if (empty($r['ae'])) return [];
+    $j = df_dec((string)base64_decode((string)$r['ae']), vf_key($t), 'atts');
+    $a = $j ? json_decode($j, true) : null;
+    return is_array($a) ? $a : [];
+}
+/** ورودیِ مرورگر را پاک می‌کند: [فهرستِ نهایی, htmlِ سندها به‌ازای شناسه] */
+function vf_atts_clean(array $in, string $dek): array {
+    $out = []; $docs = [];
+    foreach (array_slice(array_values($in), 0, 30) as $a) {
+        if (!is_array($a)) continue;
+        $t = (string)($a['t'] ?? 'n'); $n = mb_substr(trim((string)($a['n'] ?? '')), 0, 120);
+        if ($n === '' || !in_array($t, ['f', 'd', 'n'], true)) continue;
+        $x = preg_match('/^[a-f0-9]{8}$/', (string)($a['x'] ?? '')) ? (string)$a['x'] : bin2hex(random_bytes(4));
+        $e = ['x' => $x, 't' => $t, 'n' => $n, 'pg' => max(0, min(9999, (int)($a['pg'] ?? 0))), 'note' => mb_substr(trim((string)($a['note'] ?? '')), 0, 200)];
+        if ($t === 'f') {
+            $gid = (string)($a['gid'] ?? '');
+            if (!gal_valid_id($gid)) continue;
+            $pk = gal_pack([$gid], '', $dek);
+            $it = $pk['items'][0] ?? null;
+            if (!$it) continue;
+            $e += ['gid' => $gid, 'k' => $it['k'], 'type' => $it['type'], 'size' => $it['size'], 'fn' => $it['name']];
+        } elseif ($t === 'd') {
+            $h = (string)($a['html'] ?? '');
+            if ($h === '' || strlen($h) > 4 * 1024 * 1024) { if (empty($a['keep'])) continue; }
+            else $docs[$x] = $h;
+            $e['keep'] = 1;
+        }
+        $out[] = $e;
+    }
+    return [$out, $docs];
+}
+
+function vf_put(string $t, string $doc, ?string $html, string $name, string $mobile, bool $dead, string $user, bool $sign = false, ?array $atts = null, ?array $docs = null): array {
     $h = vf_hash($t); $k = vf_key($t);
     $old = vf_all()[$h] ?? null;
     /* سندی که امضا شده (قرارداد) دیگر عوض یا باطل نمی‌شود: اثر انگشت امضا به همان متن بسته است */
@@ -34,8 +69,19 @@ function vf_put(string $t, string $doc, ?string $html, string $name, string $mob
     if (!$old && $html === null) return ['ok' => false, 'error' => 'نسخهٔ سند فرستاده نشده است.'];
     $m = sms_mobile($mobile);
     if ($html !== null) df_write_atomic(vf_file($h), df_enc($html, $k, 'verify'));
-    df_update('verify.json', function (array &$all) use ($h, $k, $doc, $name, $m, $dead, $user, $sign) {
+    if ($atts !== null) {
+        $keep = [];
+        foreach ($atts as $a) if (($a['t'] ?? '') === 'd') {
+            $x = (string)$a['x'];
+            if (isset($docs[$x])) df_write_atomic(vf_afile($h, $x), df_enc($docs[$x], $k, 'attdoc'));
+            if (is_file(vf_afile($h, $x))) $keep[$x] = 1;
+        }
+        foreach ((array)glob(df_path('verify/' . $h . '_*.bin')) as $f) { $b = basename((string)$f, '.bin'); $x = substr($b, 65); if (!isset($keep[$x])) @unlink((string)$f); }
+        $atts = array_values(array_filter($atts, fn($a) => ($a['t'] ?? '') !== 'd' || isset($keep[(string)$a['x']])));
+    }
+    df_update('verify.json', function (array &$all) use ($h, $k, $doc, $name, $m, $dead, $user, $sign, $atts) {
         $r = $all[$h] ?? ['doc' => $doc, 'created' => time(), 'by' => $user, 'sms' => []];
+        if ($atts !== null) { if ($atts) $r['ae'] = base64_encode(df_enc(json_encode($atts, JSON_UNESCAPED_UNICODE), $k, 'atts')); else unset($r['ae']); }
         $r['ce'] = base64_encode(df_enc(json_encode(['n' => mb_substr($name, 0, 80), 'm' => $m], JSON_UNESCAPED_UNICODE), $k, 'contact'));
         if ($sign) $r['sign'] = 1;
         $r['dead'] = $dead ? 1 : 0; $r['upd'] = time(); $r['ub'] = $user;
@@ -51,7 +97,7 @@ function vf_contact(array $r, string $t): array {
 function vf_public(string $h, array $r): array {
     $sg = $r['signed'] ?? null;
     return ['sign' => !empty($r['sign']), 'sig' => $sg ? ['t' => (int)$sg['t'] * 1000, 'ip' => (string)($sg['ip'] ?? ''), 'hash' => (string)($sg['hash'] ?? '')] : null,
-        'id' => $h, 'created' => ($r['created'] ?? 0) * 1000, 'upd' => ($r['upd'] ?? 0) * 1000, 'dead' => !empty($r['dead']),
+        'id' => $h, 'created' => ($r['created'] ?? 0) * 1000, 'upd' => ($r['upd'] ?? 0) * 1000, 'dead' => !empty($r['dead']), 'att' => !empty($r['ae']),
         'scans' => is_file(df_share_log_file($h)) ? count(file(df_share_log_file($h), FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES) ?: []) : 0];
 }
 

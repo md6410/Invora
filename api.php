@@ -208,7 +208,9 @@ try {
             $html = isset($in['html']) ? (string)$in['html'] : null;
             if ($html !== null && ($html === '' || strlen($html) > 8 * 1024 * 1024)) df_json(['ok' => false, 'error' => 'bad input'], 400);
             df_log_keys_ensure($dek);
-            $r = vf_put($t, $doc, $html, trim((string)($in['name'] ?? '')), (string)($in['mobile'] ?? ''), !empty($in['dead']), $user, !empty($in['sign']));
+            $atts = null; $adocs = null;
+            if (isset($in['atts']) && is_array($in['atts'])) [$atts, $adocs] = vf_atts_clean($in['atts'], $dek);
+            $r = vf_put($t, $doc, $html, trim((string)($in['name'] ?? '')), (string)($in['mobile'] ?? ''), !empty($in['dead']), $user, !empty($in['sign']), $atts, $adocs);
             if (!$r['ok']) df_json($r, 409);
             df_json(['ok' => true, 'vf' => vf_public($r['id'], vf_all()[$r['id']] ?? []), 'sms' => sms_ready()]);
         }
